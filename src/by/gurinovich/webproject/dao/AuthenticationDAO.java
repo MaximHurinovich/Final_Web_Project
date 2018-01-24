@@ -2,15 +2,15 @@ package by.gurinovich.webproject.dao;
 
 import java.sql.*;
 
-public class AuthentificationDAO {
-    public static final String SQL_SELECT_USER =
+public class AuthenticationDAO {
+    private static final String SQL_SELECT_USER =
             "SELECT * FROM horseraces_db.personal_info WHERE username =? AND password =?";
 
-    Connection connection = null;
-    PreparedStatement preparedStatement = null;
-    ResultSet resultSet;
+    private Connection connection = null;
+    private PreparedStatement preparedStatement = null;
+    private ResultSet resultSet;
 
-    public AuthentificationDAO(){
+    public AuthenticationDAO(){
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         } catch (SQLException e) {

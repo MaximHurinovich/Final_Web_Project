@@ -1,6 +1,6 @@
 package by.gurinovich.webproject.command;
 
-import by.gurinovich.webproject.dao.AuthentificationDAO;
+import by.gurinovich.webproject.dao.AuthenticationDAO;
 import by.gurinovich.webproject.logic.LoginLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
@@ -17,7 +17,7 @@ public class LoginCommand implements ActionCommand {
         String login = request.getParameter(PARAM_NAME_LOGIN);
         String pass = request.getParameter(PARAM_NAME_PASSWORD);
         if (LoginLogic.checkLogin(login, pass)) {
-            AuthentificationDAO dao = new AuthentificationDAO();
+            AuthenticationDAO dao = new AuthenticationDAO();
             request.setAttribute("user", dao.userName(login, pass));
             page = ConfigurationManager.getProperty("path.page.main");
         } else {

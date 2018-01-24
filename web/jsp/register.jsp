@@ -11,6 +11,8 @@
     <title>Sign up</title>
 </head>
 <body>
+<h4><b>Registration:</b></h4>
+<hr/>
 <form name="signForm" method="POST" action="controller">
     <input type="hidden" name="command" value="signup"/>
     First name:<br/>
@@ -20,10 +22,6 @@
     <br/>Second name:<br/>
     <label>
         <input type="text" name="second_name" value=""/>
-    </label><br/>
-    E-mail:<br/>
-    <label>
-        <input type="text" name="e-mail" value=""/>
     </label><br/>
     Username:<br/>
     <label>
@@ -35,8 +33,23 @@
         <input type="password" name="password" value=""/>
     </label>
     <br/>
-
-
+    E-mail:<br/>
+    <label>
+        <input type="text" name="e-mail" value=""/>
+    </label><br/>
+    <hr/>
+    Please, enter your card information:<br/><br/>
+    Card number:<br/>
+    <label>
+        <input type="text" name="card_number" value=""/>
+    </label>
+    <br/>Card password:<br/>
+    <label>
+        <input type="password" name="card_password" value=""/>
+    </label><br/>
+    <input type="submit" value="Sign up"/>
+    <br/>
+    ${errorLoginPassMessage} <br/> ${wrongAction} <br/> ${nullPage} <br/>
 </form>
 </body>
 </html>
