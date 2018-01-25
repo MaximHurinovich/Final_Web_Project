@@ -1,5 +1,7 @@
 package by.gurinovich.webproject.dao;
 
+import by.gurinovich.webproject.util.ConnectionDB;
+
 import java.sql.*;
 
 public class AuthenticationDAO {

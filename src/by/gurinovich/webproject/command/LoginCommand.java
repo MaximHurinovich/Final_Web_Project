@@ -1,6 +1,7 @@
 package by.gurinovich.webproject.command;
 
 import by.gurinovich.webproject.dao.AuthenticationDAO;
+import by.gurinovich.webproject.dao.RacesDAO;
 import by.gurinovich.webproject.logic.LoginLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
@@ -13,15 +14,17 @@ public class LoginCommand implements ActionCommand {
 
     @Override
     public String execute(HttpServletRequest request) {
-        String page = null;
+        String page;
         String login = request.getParameter(PARAM_NAME_LOGIN);
         String pass = request.getParameter(PARAM_NAME_PASSWORD);
         if (LoginLogic.checkLogin(login, pass)) {
             AuthenticationDAO dao = new AuthenticationDAO();
+            RacesDAO racesDAO = new RacesDAO();
             request.setAttribute("user", dao.userName(login, pass));
+            request.setAttribute("racesList", racesDAO.getRaces());
             page = ConfigurationManager.getProperty("path.page.main");
         } else {
-            request.setAttribute("errorLoginPassMessage", MessageManager.getProperty("message.loginerror"));
+            request.setAttribute("errorLoginPassMessage",MessageManager.getProperty("message.loginerror"));
             page = ConfigurationManager.getProperty("path.page.login");
         }
         return page;

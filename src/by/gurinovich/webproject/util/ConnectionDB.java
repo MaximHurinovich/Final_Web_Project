@@ -1,4 +1,4 @@
-package by.gurinovich.webproject.dao;
+package by.gurinovich.webproject.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

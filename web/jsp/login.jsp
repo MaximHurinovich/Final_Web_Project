@@ -12,7 +12,7 @@
     <title>Index</title>
 </head>
 <body>
-    <%@include file="high_menu_bar.jsp"%>
+    <%@include file="../layout/high_menu_bar.jsp"%>
     <form name="loginForm" method="POST" action="controller">
         <input type="hidden" name="command" value="login"/>
         <fmt:message key = "jsp.login.login" /><br/>

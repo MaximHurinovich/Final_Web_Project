@@ -20,7 +20,7 @@ public class RegisterCommand implements ActionCommand {
 
     @Override
     public String execute(HttpServletRequest request) {
-        String page = null;
+        String page;
         String userName = request.getParameter(PARAM_NAME_USERNAME);
         String password = request.getParameter(PARAM_NAME_PASSWORD);
         String firstName = request.getParameter(PARAM_NAME_FIRSTNAME);

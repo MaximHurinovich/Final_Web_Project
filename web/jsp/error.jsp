@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<%@include file="high_menu_bar.jsp"%>
+<%@include file="../layout/high_menu_bar.jsp"%>
 <fmt:message key="jsp.error.requestfrom" /> ${pageContext.errorData.requestURI} <fmt:message key="jsp.error.failed" /> <br/>
 <fmt:message key="jsp.error.name" /> ${pageContext.errorData.servletName} <br/>
 <fmt:message key="jsp.error.status" /> ${pageContext.errorData.statusCode} <br/>
