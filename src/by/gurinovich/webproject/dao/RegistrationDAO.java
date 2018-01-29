@@ -1,5 +1,7 @@
 package by.gurinovich.webproject.dao;
 
+import by.gurinovich.webproject.proxy.ConnectionPool;
+import by.gurinovich.webproject.proxy.ProxyConnection;
 import by.gurinovich.webproject.util.ConnectionDB;
 
 import java.sql.*;
@@ -12,9 +14,9 @@ public class RegistrationDAO {
             "SELECT * FROM horseraces_db.personal_info WHERE username=?";
     private static final String SQL_CHECK_CARD =
             "SELECT * FROM horseraces_db.bank_imitation WHERE card_number=? AND card_password=?";
-    private Connection connection = null;
+    private ProxyConnection connection = null;
     private PreparedStatement preparedStatement = null;
-
+    private ConnectionPool pool = ConnectionPool.getInstance();
     public RegistrationDAO(){
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
@@ -26,7 +28,7 @@ public class RegistrationDAO {
     public boolean registerUser(String firstName, String secondName, String userName, String password, String email, String cardNumber, String cardPassword){
         try {
             if(checkUserName(userName) && checkCard(cardNumber, cardPassword)) {
-                connection = ConnectionDB.getConnection();
+                connection = pool.getConnection();
                 preparedStatement = connection.prepareStatement(SQL_CREATE_USER);
                 preparedStatement.setString(1, userName);
                 preparedStatement.setString(2, cardNumber);
@@ -53,7 +55,7 @@ public class RegistrationDAO {
 
     private boolean checkUserName(String userName){
         try{
-            connection = ConnectionDB.getConnection();
+            connection = pool.getConnection();
             preparedStatement = connection.prepareStatement(SQL_CHECK_USER);
             preparedStatement.setString(1, userName);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -75,7 +77,7 @@ public class RegistrationDAO {
 
     public boolean checkCard(String cardNumber, String cardPassword) {
         try {
-            connection = ConnectionDB.getConnection();
+            connection = pool.getConnection();
             preparedStatement = connection.prepareStatement(SQL_CHECK_CARD);
             preparedStatement.setString(1, cardNumber);
             preparedStatement.setString(2, cardPassword);
