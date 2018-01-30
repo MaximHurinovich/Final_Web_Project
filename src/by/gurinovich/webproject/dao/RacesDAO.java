@@ -1,9 +1,9 @@
 package by.gurinovich.webproject.dao;
 
+import by.gurinovich.webproject.entity.Horse;
 import by.gurinovich.webproject.entity.Race;
 import by.gurinovich.webproject.proxy.ConnectionPool;
 import by.gurinovich.webproject.proxy.ProxyConnection;
-import by.gurinovich.webproject.util.ConnectionDB;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,12 +11,13 @@ import java.util.GregorianCalendar;
 
 public class RacesDAO {
 
-    private static final String SQL_SELECT_USER =
-            "SELECT * FROM horseraces_db.races WHERE date=?";
+    private static final String SQL_SELECT_RACE =
+            "SELECT * FROM horseraces_db.race";
     private ProxyConnection connection = null;
-    private PreparedStatement preparedStatement = null;
+    private Statement preparedStatement = null;
     private ResultSet resultSet;
     private ConnectionPool pool = ConnectionPool.getInstance();
+
     public RacesDAO() {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
@@ -30,11 +31,13 @@ public class RacesDAO {
         Race race = null;
         try {
             connection = pool.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_SELECT_USER);
-            preparedStatement.setString(1, new GregorianCalendar().getTime().toString());
-            resultSet = preparedStatement.executeQuery();
+            preparedStatement = connection.prepareStatement(SQL_SELECT_RACE);
+            resultSet = preparedStatement.executeQuery(SQL_SELECT_RACE);
+            HorsesDAO horsesDAO = new HorsesDAO();
             while(resultSet.next()) {
-            //  race = new Race(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
+                int i = resultSet.getInt(1);
+                ArrayList<Horse> horses = horsesDAO.getHorses(i);
+                race = new Race(resultSet.getString(2), resultSet.getString(3), horses);
                 races.add(race);
             }
     } catch (SQLException e) {

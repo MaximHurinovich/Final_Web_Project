@@ -2,7 +2,6 @@ package by.gurinovich.webproject.dao;
 
 import by.gurinovich.webproject.proxy.ConnectionPool;
 import by.gurinovich.webproject.proxy.ProxyConnection;
-import by.gurinovich.webproject.util.ConnectionDB;
 
 import java.sql.*;
 
@@ -27,7 +26,6 @@ public class RegistrationDAO {
 
     public boolean registerUser(String firstName, String secondName, String userName, String password, String email, String cardNumber, String cardPassword){
         try {
-            if(checkUserName(userName) && checkCard(cardNumber, cardPassword)) {
                 connection = pool.getConnection();
                 preparedStatement = connection.prepareStatement(SQL_CREATE_USER);
                 preparedStatement.setString(1, userName);
@@ -38,7 +36,6 @@ public class RegistrationDAO {
                 preparedStatement.setString(6, password);
                 int i = preparedStatement.executeUpdate();
                 return i>0;
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -53,7 +50,7 @@ public class RegistrationDAO {
         return false;
     }
 
-    private boolean checkUserName(String userName){
+    public boolean checkUserName(String userName){
         try{
             connection = pool.getConnection();
             preparedStatement = connection.prepareStatement(SQL_CHECK_USER);

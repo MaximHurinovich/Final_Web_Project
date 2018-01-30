@@ -32,7 +32,7 @@ public class RegisterCommand implements ActionCommand {
             request.setAttribute("successMessage", MessageManager.getProperty("message.registration_success"));
             page = ConfigurationManager.getProperty("path.page.login");
         } else {
-            request.setAttribute("errorLoginPassMessage", MessageManager.getProperty("message.loginerror"));
+            request.setAttribute("errorLoginPassMessage", SignUpLogic.invalidateMessage(firstName, secondName, userName, password, email, cardNumber, cardPassword));
             page = ConfigurationManager.getProperty("path.page.register");
         }
         return page;

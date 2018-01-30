@@ -2,7 +2,6 @@ package by.gurinovich.webproject.dao;
 
 import by.gurinovich.webproject.proxy.ConnectionPool;
 import by.gurinovich.webproject.proxy.ProxyConnection;
-import by.gurinovich.webproject.util.ConnectionDB;
 
 import java.sql.*;
 
