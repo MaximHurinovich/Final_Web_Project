@@ -1,3 +1,5 @@
+
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
@@ -18,48 +20,61 @@
 <body>
 
 
-<div class="header">
-    <header>
-        <a href="#home" class="logo" data-scroll><img src="<c:url value="/resources/img/logo.jpg"/>" width="160" height="55"> </a>
-        <nav class="nav-collapse">
-
-            <ul>
-                <li>    <%@include file="../../layout/high_menu_bar.jsp"%>
-                </li>
-                <li><span style="color: white; padding-top: 10px"><b>Welcome</b>,<br/> ${user}!</span></li>
-                <li class="menu-item active"><a href="#home" data-scroll>Home</a></li>
-                <li class="menu-item"><a href="#about" data-scroll>Upcoming</a></li>
-                <li class="menu-item"><a href="#projects" data-scroll>Results</a></li>
-                <li class="menu-item"><a href="#blog" data-scroll>Statistic</a></li>
-                <li class="menu-item"><a href="http://www.google.com" target="_blank">About</a></li>
-                <li class="menu-item"><a href="#" target="_blank">Account</a></li>
-                <li class="menu-item">
-                    <a href="<c:url value="/jsp/controller?command=logout"/>">Log out</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-
-</div>
+<%@include file="/layout/header.jsp"%>
 <aside class="placeholder">
 </aside>
-<h2><b>Today's races:</b></h2>
+<h2><b>Available races:</b></h2>
 <br/>
 <table class="maintable">
+<tr>
+    <th>Cards</th>
+    <th>Dates</th>
+    <th>Horses</th>
+    <th>Make A Bet</th>
+</tr>
+<c:forEach items="${racesList}" var="race" varStatus="status">
     <tr>
-        <th>Cards</th>
-        <th>Races</th>
+    <td>${race.getCard()}</td>
+    <td>${race.getDate()}</td>
+    <td>
+    <table class="horsestable">
+    <tr>
+    <th>Name</th>
+    <th>Coeffitients</th>
     </tr>
-    <c:forEach items="${racesList}" var="race" varStatus="status">
+    <c:forEach items="${race.getHorses()}" var="horse" varStatus="status">
         <tr>
-            <td>${race.card}</td>
-            <td>${race.race}</td>
+            <td>${horse.getName()}</td>
+            <td>
+                <table class="betstable">
+                    <tr>
+                        <th>Winner</th>
+                        <th>Top 3</th>
+                        <th>Outsider</th>
+                    </tr>
+                    <tr>
+                        <td>${horse.getBets().getWinner()}</td>
+                        <td>${horse.getBets().getTop3()}</td>
+                        <td>${horse.getBets().getOutsider()}</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
     </c:forEach>
-</table>
+        </table>
 
-<footer class="footer">
-    All rights reserved. 2018(c) Gurinovich M.A.
-</footer>
-</body>
-</html>
+        </td>
+        <td>
+            <form name="betForm" method="POST" action="controller">
+                <input type="hidden" name="command" value="login"/>
+                <input type="hidden" name="race_id" value=${race.getDate()}/>
+                <input type="submit" value="" class="button"/>
+            </form>
+        </td>
+        </tr>
+</c:forEach>
+    </table>
+
+<%@include file="/layout/footer.jsp"%>
+    </body>
+    </html>

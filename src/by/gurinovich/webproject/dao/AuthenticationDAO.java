@@ -1,5 +1,6 @@
 package by.gurinovich.webproject.dao;
 
+import by.gurinovich.webproject.entity.User;
 import by.gurinovich.webproject.proxy.ConnectionPool;
 import by.gurinovich.webproject.proxy.ProxyConnection;
 
@@ -13,7 +14,8 @@ public class AuthenticationDAO {
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet;
     private ConnectionPool pool = ConnectionPool.getInstance();
-    public AuthenticationDAO(){
+
+    public AuthenticationDAO() {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         } catch (SQLException e) {
@@ -21,6 +23,7 @@ public class AuthenticationDAO {
         }
 
     }
+
     public boolean authenticateUser(String login, String password) {
 
         try {
@@ -70,5 +73,28 @@ public class AuthenticationDAO {
         }
         return buffer.toString();
 
+    }
+
+    public User createUser(String userName, String password) {
+        User user = null;
+        String firstName, secondName, cardNumber, email;
+        double amount;
+        try {
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement(SQL_SELECT_USER);
+            preparedStatement.setString(1, userName);
+            preparedStatement.setString(2, password);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.last();
+            firstName = resultSet.getString(5);
+            secondName = resultSet.getString(6);
+            email = resultSet.getString(7);
+            amount = resultSet.getDouble(8);
+            cardNumber = resultSet.getString(2);
+            user = new User(userName, password, firstName, secondName, cardNumber, email, amount);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 }

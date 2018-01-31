@@ -2,6 +2,7 @@ package by.gurinovich.webproject.command;
 
 import by.gurinovich.webproject.dao.AuthenticationDAO;
 import by.gurinovich.webproject.dao.RacesDAO;
+import by.gurinovich.webproject.entity.User;
 import by.gurinovich.webproject.logic.LoginLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
@@ -20,8 +21,9 @@ public class LoginCommand implements ActionCommand {
         if (LoginLogic.checkLogin(login, pass)) {
             AuthenticationDAO dao = new AuthenticationDAO();
             RacesDAO racesDAO = new RacesDAO();
-            request.setAttribute("user", dao.userName(login, pass));
-            request.setAttribute("racesList", racesDAO.getRaces());
+            request.getSession().setAttribute("user", dao.userName(login, pass));
+            request.getSession().setAttribute("racesList", racesDAO.getRaces());
+            request.getSession().setAttribute("userfull", dao.createUser(login, pass));
             page = ConfigurationManager.getProperty("path.page.main");
         } else {
             request.setAttribute("errorLoginPassMessage",MessageManager.getProperty("message.loginerror"));

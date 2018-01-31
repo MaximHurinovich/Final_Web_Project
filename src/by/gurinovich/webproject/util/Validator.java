@@ -1,6 +1,6 @@
 package by.gurinovich.webproject.util;
 
-public class RegisterValidator {
+public class Validator {
     public static final String USERNAME_REGEX = "^^\\S([^\\ ]){1,25}$";
     public static final String PASSWORD_REGEX = "^(\\S){8,25}$";
     public static final String EMAIL_REGEX = "^(\\S){1,25}@(\\w){2,8}.(\\w){2,6}$";

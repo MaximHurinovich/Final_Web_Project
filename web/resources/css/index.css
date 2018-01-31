@@ -62,7 +62,7 @@ body {
     -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
     color: #37302a;
-    background-image: url(/resources/img/background.jpg);
+    background: url(/resources/img/background.jpg);
     background-size: cover;
     font: normal 100%/1.4 sans-serif;
 }
@@ -193,4 +193,53 @@ header {
 .footer{
     height: 20px;
     background-color: #f4421a;
+    color: antiquewhite;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+}
+
+.maintable, td, th{
+    border: 1px solid black;
+   color: antiquewhite;
+}
+
+.maintable{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    height: 50px;
+    background-color: antiquewhite;
+    color: black;
+}
+
+.horsestable{
+    border-collapse: collapse;
+    width: 100%;
+}
+.betstable{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td{
+    text-align: center;
+}
+
+.button {
+    background: url(/resources/img/dollar.jpg);
+    background-size: 60px 50px;
+    border: 2px solid #f4421a;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 70%;
 }
