@@ -31,8 +31,7 @@
     <input type="text" name="secondname" value="<%out.print(((User) request.getSession().getAttribute("userfull")).getSecondName());%>"><br/>
     <b>Email:</b><br/>
     <input type="text" name="email" value="<%out.print(((User) request.getSession().getAttribute("userfull")).getEmail());%>"><br/>
-    <b>Card number:</b><br/>
-    <input type="text" name="cardnumber" value="<%out.print(((User) request.getSession().getAttribute("userfull")).getCardNumber());%>"><br/>
+    <input type="hidden" name="cardnumber" value="<%out.print(((User) request.getSession().getAttribute("userfull")).getCardNumber());%>"><br/>
 </label>
     <input type="submit" value="Submit">
 </form><br/>

@@ -45,7 +45,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <b>Money to transfer:</b>
+                            <b>Add to account</b>
                         </td>
                         <td>
                             <input type="text" name="money" value="">
@@ -54,15 +54,34 @@
                 </table>
             </td>
             <td>
-                <form class="edit" method="post" action="/jsp/controller">
                     <input type="hidden" name="command" value="acceptadd">
                     <input type="submit" value="Add">
-                </form>
+
             </td>
+            <td>
+
         </tr>
     </table>
 
 </form><br/>
+<form class="edit" method="post" action="/jsp/controller">
+    <table>
+        <tr>
+            <td>
+                <b>Return from account:</b>
+            </td>
+            <td>
+                <input type="text" name="retmoney" value="">
+            </td>
+            <td>
+                <input type="hidden" name="command" value="returnmoney">
+                <input type="submit" value="Return">
+            </td>
+        </tr>
+    </table>
+</form>
+</td>
+
 ${addMessage}<br/>
 <%@include file="/layout/footer.jsp"%>
 </body>

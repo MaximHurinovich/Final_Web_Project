@@ -3,6 +3,7 @@ package by.gurinovich.webproject.entity;
 import java.util.ArrayList;
 
 public class Race {
+    private int id;
     private String card;
     private String date;
     private ArrayList<Horse> horses;
@@ -11,6 +12,14 @@ public class Race {
         this.card = card;
         this.date = date;
         this.horses = horses;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCard() {

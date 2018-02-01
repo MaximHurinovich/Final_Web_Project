@@ -20,8 +20,8 @@
                 </li>
                 <li><span style="color: white; padding-top: 10px"><b>Welcome</b>,<br/> ${user}!</span></li>
                 <li class="menu-item"><a href="/jsp/controller?command=home" data-scroll>Home</a></li>
-                <li class="menu-item"><a href="#projects" data-scroll>Results</a></li>
-                <li class="menu-item"><a href="#blog" data-scroll>Statistic</a></li>
+                <li class="menu-item"><a href="/jsp/controller?command=results" data-scroll>Results</a></li>
+                <li class="menu-item"><a href="/jsp/controller?command=mybets" data-scroll>My Bets</a></li>
                 <li class="menu-item"><a href="/jsp/controller?command=about" data-scroll>About</a>
                 </li>
                 <li class="menu-item"><a href="<c:url value="/jsp/controller?command=account"/>" data-scroll>Account</a></li>

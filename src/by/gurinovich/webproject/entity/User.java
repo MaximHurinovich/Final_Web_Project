@@ -1,6 +1,5 @@
 package by.gurinovich.webproject.entity;
 
-import by.gurinovich.webproject.dao.AuthenticationDAO;
 
 public class User {
     private String username;

@@ -1,16 +1,18 @@
-package by.gurinovich.webproject.util;
+package by.gurinovich.webproject.pool;
+
+import by.gurinovich.webproject.resource.ConfigurationManager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class ConnectionDB {
-    private static String url = "jdbc:mysql://localhost:3306/horseraces_db?autoReconnect=true&useSSL=false";
-    private static String userName = "root";
-    private static String userPassword = "RozovieRozi11";
+class ConnectionDB {
+    private static String url = ConfigurationManager.getProperty("cn.url");
+    private static String userName = ConfigurationManager.getProperty("cn.root");
+    private static String userPassword = ConfigurationManager.getProperty("cn.password");
 
-    public static Connection getConnection() throws SQLException {
+    static Connection getConnection() throws SQLException {
         Properties properties = new Properties();
         properties.put("user", userName);
         properties.put("password", userPassword);

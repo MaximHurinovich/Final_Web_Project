@@ -38,4 +38,11 @@ public class Bet {
     }
 
 
+    public int getBookmakerID() {
+        return bookmakerID;
+    }
+
+    public void setBookmakerID(int bookmakerID) {
+        this.bookmakerID = bookmakerID;
+    }
 }

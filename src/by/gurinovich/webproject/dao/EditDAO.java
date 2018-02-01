@@ -1,9 +1,8 @@
 package by.gurinovich.webproject.dao;
 
-import by.gurinovich.webproject.proxy.ConnectionPool;
-import by.gurinovich.webproject.proxy.ProxyConnection;
+import by.gurinovich.webproject.pool.ConnectionPool;
+import by.gurinovich.webproject.pool.ProxyConnection;
 
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -13,16 +12,7 @@ public class EditDAO {
         private ProxyConnection connection = null;
     private ConnectionPool pool = ConnectionPool.getInstance();
 
-        public EditDAO() {
-            try {
-                DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public boolean updateProfile(String userName, String firstName, String secondName, String email, String cardNumber){
-            try {
+        public boolean updateProfile(String userName, String firstName, String secondName, String email, String cardNumber) throws SQLException {
                 connection = pool.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_PROFILE);
                 preparedStatement.setString(1, firstName);
@@ -31,16 +21,12 @@ public class EditDAO {
                 preparedStatement.setString(4, cardNumber);
                 preparedStatement.setString(5, userName);
                 int i = preparedStatement.executeUpdate();
-                return i>0;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }finally {
-                try {
+
+            preparedStatement.close();
+            if(connection!=null){
                     connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+
             }
-            return false;
+            return i>0;
         }
 }

@@ -1,4 +1,4 @@
-package by.gurinovich.webproject.proxy;
+package by.gurinovich.webproject.pool;
 
 import java.sql.*;
 import java.util.Map;
@@ -13,7 +13,7 @@ public class ProxyConnection implements Connection {
 
 
     @Override
-    public void close() throws SQLException {
+    public void close()  {
         ConnectionPool.getInstance().releaseConnection(this);
     }
 

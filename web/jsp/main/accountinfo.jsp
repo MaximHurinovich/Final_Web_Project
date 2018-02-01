@@ -70,11 +70,12 @@
 </table>
 <hr/>
 <span style="color: antiquewhite"> <b>Current amount:</b>
-    <%out.print(((User) request.getSession().getAttribute("userfull")).getAmount());%></span><br/>
+    <%out.print(((User) request.getSession().getAttribute("userfull")).getAmount());%>$</span><br/>
 <form class="add" method="post" action="/jsp/controller">
     <input type="hidden" name="command" value="addmoney">
-    <input type="submit" value="Add money">
+    <input type="submit" value="Money Transfer">
 </form>
+
 <%@include file="/layout/footer.jsp" %>
 </body>
 </html>

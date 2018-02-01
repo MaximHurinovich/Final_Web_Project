@@ -1,5 +1,6 @@
 
 
+
 package by.gurinovich.webproject.filter;
 
 import javax.servlet.*;
@@ -19,15 +20,20 @@ public class PageRedirectSecurityFilter implements Filter{
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+        if (httpRequest.getSession().getAttribute("userfull")==null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPath);
+        }else{
             chain.doFilter(request, response);
+        }
 
     }
 
     public void destroy() {
     }
 }
+
 
 

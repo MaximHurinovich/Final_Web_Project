@@ -1,7 +1,9 @@
 package by.gurinovich.webproject.command;
 
+import by.gurinovich.webproject.servlet.Router;
+
 import javax.servlet.http.HttpServletRequest;
 
 public interface ActionCommand {
-    String execute(HttpServletRequest request);
+    Router execute(HttpServletRequest request);
 }

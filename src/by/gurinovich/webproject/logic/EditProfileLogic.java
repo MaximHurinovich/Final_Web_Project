@@ -1,9 +1,13 @@
 package by.gurinovich.webproject.logic;
 
+import by.gurinovich.webproject.dao.EditDAO;
+import by.gurinovich.webproject.entity.User;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.util.Validator;
 
-public class AcceptEditLogic {
+import java.sql.SQLException;
+
+public class EditProfileLogic {
     public static boolean checkData(String firstName, String secondName, String email, String cardNumber){
         Validator validator = new Validator();
         return validator.checkString(firstName, Validator.NAME_REGEX)&& validator.checkString(secondName, Validator.NAME_REGEX) &&
@@ -22,5 +26,15 @@ public class AcceptEditLogic {
             return MessageManager.getProperty("message.carderror");
         }
         else return MessageManager.getProperty("message.unknownerror");
+    }
+
+    public static boolean updateProfile(String userName, String firstName, String secondName, String email, String cardNumber){
+        EditDAO dao = new EditDAO();
+        try {
+            return dao.updateProfile(userName, firstName, secondName, email, cardNumber);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

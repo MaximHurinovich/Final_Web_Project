@@ -1,6 +1,4 @@
-package by.gurinovich.webproject.proxy;
-
-import by.gurinovich.webproject.util.ConnectionDB;
+package by.gurinovich.webproject.pool;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,44 +16,47 @@ public class ConnectionPool {
     public static ConnectionPool getInstance() {
         if (!instanceCreated.get()) {
             lock.lock();
-            try {
                 if (instance == null) {
                     instance = new ConnectionPool();
                     instanceCreated.set(true);
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                lock.unlock();
+            lock.unlock();
             }
-        }
         return instance;
     }
 
 
-    private ConnectionPool() throws SQLException {
-        DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+    private ConnectionPool()  {
+        try {
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
         connectionQueue = new ArrayBlockingQueue<>(POOL_SIZE);
         for (int i = 0; i < POOL_SIZE; i++) {
             ProxyConnection connection = new ProxyConnection(ConnectionDB.getConnection());
             connectionQueue.offer(connection);
         }
-    }
-
-
-
-    public void releaseConnection(ProxyConnection connection) throws SQLException{
-        if (connection.getAutoCommit()){
-            try {
-                connectionQueue.put(connection);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
 
-    public ProxyConnection getConnection(){
+    public void releaseConnection(ProxyConnection connection) {
+        try {
+            if (connection.getAutoCommit()) {
+
+                connectionQueue.put(connection);
+            }
+        } catch (InterruptedException | SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+
+
+    public ProxyConnection getConnection() {
         ProxyConnection connection = null;
         try {
             connection = connectionQueue.take();
@@ -66,10 +67,15 @@ public class ConnectionPool {
     }
 
 
-    public void destroyConnection() throws InterruptedException, SQLException {
-        for (int i=0; i<POOL_SIZE; i++){
-            ProxyConnection connection = connectionQueue.take();
-            connection.closeConnection();
+    public void destroyConnection() {
+        for (int i = 0; i < POOL_SIZE; i++) {
+            ProxyConnection connection = null;
+            try {
+                connection = connectionQueue.take();
+                connection.closeConnection();
+            } catch (InterruptedException | SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

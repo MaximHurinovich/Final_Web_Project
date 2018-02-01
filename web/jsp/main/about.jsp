@@ -19,12 +19,13 @@
 
 <%@include file="/layout/header.jsp"%>
 <aside class="placeholder"></aside>
-
+<span style="color: antiquewhite; ">
 <b>Home</b> - main page with all available races and bets.<br/>
 <b>Results</b> - list of done races.<br/>
-<b>Statistic</b> - list of bets of specific user.<br/>
+<b>My bets</b> - list of bets of specific user.<br/>
 <b>Account</b> - info and possible changes of account.<br/>
 <b>Log out</b> - leave account. <br/>
+    </span>
 <hr/>
 <br/>
 <%@include file="/layout/footer.jsp"%>

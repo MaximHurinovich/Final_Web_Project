@@ -24,14 +24,18 @@ public class Controller extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String page = null;
+        String page;
 
         ActionFactory client = new ActionFactory()  ;
         ActionCommand command = client.defineCommand(request);
-        page = command.execute(request);
-        if (page != null) {
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
-            dispatcher.forward(request, response);
+        Router router = command.execute(request);
+        if (router.getPage() != null) {
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(router.getPage());
+            if(router.getRoute()== Router.RouteType.FORWARD) {
+                dispatcher.forward(request, response);
+            }else{
+                response.sendRedirect(request.getContextPath() + router.getPage());
+            }
         } else {
             page = ConfigurationManager.getProperty("path.page.index");
             request.getSession().setAttribute("nullPage", MessageManager.getProperty("message.nullpage"));

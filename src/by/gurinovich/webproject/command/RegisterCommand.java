@@ -4,6 +4,7 @@ package by.gurinovich.webproject.command;
 import by.gurinovich.webproject.logic.SignUpLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
+import by.gurinovich.webproject.servlet.Router;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,7 +20,8 @@ public class RegisterCommand implements ActionCommand {
 
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
         String page;
         String userName = request.getParameter(PARAM_NAME_USERNAME);
         String password = request.getParameter(PARAM_NAME_PASSWORD);
@@ -31,10 +33,14 @@ public class RegisterCommand implements ActionCommand {
         if (SignUpLogic.checkRegistration(firstName, secondName, userName, password, email, cardNumber, cardPassword)) {
             request.setAttribute("successMessage", MessageManager.getProperty("message.registration_success"));
             page = ConfigurationManager.getProperty("path.page.login");
+            router.setPage(page);
+            router.setRoute(Router.RouteType.REDIRECT);
         } else {
             request.setAttribute("errorLoginPassMessage", SignUpLogic.invalidateMessage(firstName, secondName, userName, password, email, cardNumber, cardPassword));
             page = ConfigurationManager.getProperty("path.page.register");
+            router.setPage(page);
         }
-        return page;
+
+        return router;
     }
 }

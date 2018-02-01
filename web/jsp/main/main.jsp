@@ -23,6 +23,7 @@
 <%@include file="/layout/header.jsp"%>
 <aside class="placeholder">
 </aside>
+${betMessage}
 <h2><b>Available races:</b></h2>
 <br/>
 <table class="maintable">
@@ -66,15 +67,16 @@
         </td>
         <td>
             <form name="betForm" method="POST" action="controller">
-                <input type="hidden" name="command" value="login"/>
-                <input type="hidden" name="race_id" value=${race.getDate()}/>
+                <input type="hidden" name="command" value="bet"/>
+                <input type="hidden" name="race_id" value="${race.getId()}">
                 <input type="submit" value="" class="button"/>
             </form>
         </td>
         </tr>
 </c:forEach>
     </table>
-
+<aside class="placeholder">
+</aside>
 <%@include file="/layout/footer.jsp"%>
     </body>
     </html>

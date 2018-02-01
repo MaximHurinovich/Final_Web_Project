@@ -13,6 +13,22 @@ public enum CommandEnum {
         {
             this.command = new AddMoneyCommand();
         }
+    }, RETURNMONEY{
+        {
+            this.command = new ReturnMoneyCommand();
+        }
+    },MYBETS{
+        {
+            this.command = new MyBetsCommand();
+        }
+    },BET{
+        {
+            this.command = new BetCommand();
+        }
+    }, ACCEPTBET{
+        {
+            this.command = new AcceptBetCommand();
+        }
     }, EDIT {
         {
             this.command = new EditCommand();
@@ -36,6 +52,10 @@ public enum CommandEnum {
     },HOME {
         {
             this.command = new HomeCommand();
+        }
+    },RESULTS {
+        {
+            this.command = new ResultsCommand();
         }
     }, SIGNUP{
         {

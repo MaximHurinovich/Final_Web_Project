@@ -8,13 +8,18 @@
                 background: url("/resources/img/background.jpg");
                 background-size: cover;
             }
+
+
             .login{
-                margin: 10% 50%;
-                background-color: antiquewhite;
-            }
-            .register{
-                margin: 10% 48%;
-                background-color: antiquewhite;
+                border: 3px solid #f4421a;
+                color: black;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
             }
 
         </style>
@@ -22,12 +27,13 @@
     <body>
     <%@include file="/layout/high_menu_bar.jsp"%>
 
-    <label class="login">
-    <a href="${pageContext.request.contextPath}/jsp/login.jsp"><fmt:message key = "jsp.index.login" /></a>
-    </label>
     <br/>
-    <label class="register">
-    <a href="${pageContext.request.contextPath}/jsp/register.jsp"><fmt:message key = "jsp.login.signup" /></a>
-    </label>
+    <form>
+
+        <input class="login" type="button" value="<fmt:message key = "jsp.index.login" />" onClick='location.href="/jsp/login.jsp"'>
+    </form>
+    <form>
+        <input class="login" type="button" value="<fmt:message key = "jsp.login.signup" />" onClick='location.href="/jsp/register.jsp"'>
+    </form>
     </body>
     </html>
