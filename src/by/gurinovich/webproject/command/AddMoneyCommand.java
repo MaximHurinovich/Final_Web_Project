@@ -1,8 +1,7 @@
 package by.gurinovich.webproject.command;
 
-import by.gurinovich.webproject.dao.CardDAO;
 import by.gurinovich.webproject.entity.User;
-import by.gurinovich.webproject.logic.AddMoneyLogic;
+import by.gurinovich.webproject.logic.UserLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.servlet.Router;
 
@@ -13,9 +12,10 @@ public class AddMoneyCommand implements ActionCommand {
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
+        UserLogic userLogic = new UserLogic();
         User user = ((User)request.getSession().getAttribute(PARAM_USER));
         request.getSession().setAttribute("cardAmount",
-                AddMoneyLogic.getCardAmount(user.getCardNumber()));
+                userLogic.getCardAmount(user.getCardNumber()));
         router.setPage(ConfigurationManager.getProperty("path.page.addmoney"));
         return router;
     }

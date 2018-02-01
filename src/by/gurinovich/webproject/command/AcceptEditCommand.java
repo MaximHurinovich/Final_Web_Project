@@ -1,7 +1,7 @@
 package by.gurinovich.webproject.command;
 
 import by.gurinovich.webproject.entity.User;
-import by.gurinovich.webproject.logic.EditProfileLogic;
+import by.gurinovich.webproject.logic.UserLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
@@ -17,13 +17,15 @@ public class AcceptEditCommand implements ActionCommand {
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
+        UserLogic userLogic = new UserLogic();
         String page;
         String firstName = request.getParameter(PARAM_FIRSTNAME);
         String secondName = request.getParameter(PARAM_SECONDNAME);
         String email = request.getParameter(PARAM_EMAIL);
         String cardNumber =request.getParameter(PARAM_CARD_NUMBER);
-        if(EditProfileLogic.checkData(firstName,secondName, email, cardNumber)){
-            if(EditProfileLogic.updateProfile(((User)request.getSession().getAttribute(PARAM_USER)).getUsername(), firstName, secondName, email, cardNumber))
+        if(userLogic.checkData(firstName,secondName, email, cardNumber)){
+            if(userLogic.updateProfile(((User)request.getSession().getAttribute(PARAM_USER)).getUsername(),
+                    firstName, secondName, email, cardNumber))
             {
                 ((User) request.getSession().getAttribute(PARAM_USER)).setFirstName(firstName);
                 ((User) request.getSession().getAttribute(PARAM_USER)).setSecondName(secondName);
@@ -39,7 +41,7 @@ public class AcceptEditCommand implements ActionCommand {
             }
         }
         else{
-            request.setAttribute("editMessage", EditProfileLogic.invalidateMessage(firstName, secondName, email, cardNumber));
+            request.setAttribute("editMessage", userLogic.invalidateMessage(firstName, secondName, email, cardNumber));
             page = ConfigurationManager.getProperty("path.page.edit");
             router.setPage(page);
         }
