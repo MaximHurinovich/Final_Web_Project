@@ -25,7 +25,14 @@ public class AcceptBetCommand implements ActionCommand {
         UserLogic userLogic = new UserLogic();
         String horseName = request.getParameter(PARAM_HORSE_NAME);
         String bet = request.getParameter(PARAM_BET_TYPE);
-        Double amount = Double.valueOf(request.getParameter(PARAM_AMOUNT));
+        String amountParameter = request.getParameter(PARAM_AMOUNT);
+        if(amountParameter.isEmpty()){
+            request.setAttribute(PARAM_ERROR_BET, MessageManager.getProperty("message.infoerror"));
+            router.setPage(ConfigurationManager.getProperty("path.page.bet"));
+            return router;
+        }
+        Double amount = Double.valueOf(amountParameter);
+
         Integer raceId = (Integer)request.getSession().getAttribute(ATTRIBUTE_RACE_ID);
         ArrayList<Horse> horses = userLogic.getHorses(raceId);
         int horse_id = 0;
@@ -35,7 +42,7 @@ public class AcceptBetCommand implements ActionCommand {
             }
         }
         User user = (User)request.getSession().getAttribute(PARAM_USER);
-        if(userLogic.addNewBet(user.getUsername(), raceId, horse_id, bet, amount)&& userLogic.updateAccountBet(user.getUsername(), user.getAmount(),amount)){
+        if(userLogic.addNewBet(user.getUsername(), raceId, horse_id, bet, amount)&& userLogic.updateAccountBet(user.getUsername(), user.getAmount(),amount)) {
             request.setAttribute(ATTRIBUTE_BET_MESSAGE, MessageManager.getProperty("message.betsuccess"));
             router.setPage(ConfigurationManager.getProperty("path.page.main"));
             router.setRoute(Router.RouteType.REDIRECT);

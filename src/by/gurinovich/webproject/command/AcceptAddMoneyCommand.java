@@ -15,6 +15,11 @@ public class AcceptAddMoneyCommand implements ActionCommand {
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
         UserLogic userLogic = new UserLogic();
+        if(request.getParameter(PARAM_MONEY).isEmpty()){
+            request.setAttribute("addMessage", MessageManager.getProperty("message.infoerror"));
+            router.setPage(ConfigurationManager.getProperty("path.page.addmoney"));
+            return router;
+        }
         double sum = Double.valueOf(request.getParameter(PARAM_MONEY));
         User user = (User) request.getSession().getAttribute("userfull");
         if(userLogic.addMoney(sum, user.getAmount(),
@@ -26,7 +31,7 @@ public class AcceptAddMoneyCommand implements ActionCommand {
             router.setRoute(Router.RouteType.REDIRECT);
             return router;
         }else{
-            MessageManager.getProperty("message.unknowncommand");
+            request.setAttribute("addMessage", MessageManager.getProperty("message.infoerror"));
             router.setPage(ConfigurationManager.getProperty("path.page.addmoney"));
             return router;
         }

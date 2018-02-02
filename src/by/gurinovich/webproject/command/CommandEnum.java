@@ -1,15 +1,8 @@
 package by.gurinovich.webproject.command;
 
 public enum CommandEnum {
-    ABOUT {
-        {
-            this.command = new AboutCommand();
-        }
-    }, ACCOUNT {
-        {
-            this.command = new AccountCommand();
-        }
-    }, ADDMONEY {
+
+    ADDMONEY {
         {
             this.command = new AddMoneyCommand();
         }
@@ -21,7 +14,19 @@ public enum CommandEnum {
         {
             this.command = new MyBetsCommand();
         }
-    },BET{
+    }, BANUSER{
+        {
+            this.command = new AdminBanCommand();
+        }
+    }, MAKEADMIN{
+        {
+            this.command = new MakeAdminCommand();
+        }
+    }, MAKEBOOKMAKER{
+        {
+            this.command = new MakeBookmakerCommand();
+        }
+    }, BET{
         {
             this.command = new BetCommand();
         }
@@ -33,7 +38,11 @@ public enum CommandEnum {
         {
             this.command = new EditCommand();
         }
-    }, ACCEPTADD {
+    }, DELETERACE {
+        {
+            this.command = new AdminDeleteRaceCommand();
+        }
+    },  ACCEPTADD {
         {
             this.command = new AcceptAddMoneyCommand();
         }
@@ -49,11 +58,7 @@ public enum CommandEnum {
         {
             this.command = new LogoutCommand();
         }
-    },HOME {
-        {
-            this.command = new HomeCommand();
-        }
-    },RESULTS {
+    }, RESULTS {
         {
             this.command = new ResultsCommand();
         }

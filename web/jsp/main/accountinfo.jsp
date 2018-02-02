@@ -33,7 +33,7 @@
                     <td>
                         <%out.print(((User) request.getSession().getAttribute("userfull")).getFirstName());%>
                     </td>
-                <tr/>
+                </tr>
                 <tr>
                     <td>
                         <b>Second name:</b>

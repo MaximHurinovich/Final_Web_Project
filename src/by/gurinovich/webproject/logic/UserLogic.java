@@ -1,10 +1,7 @@
 package by.gurinovich.webproject.logic;
 
 import by.gurinovich.webproject.dao.*;
-import by.gurinovich.webproject.entity.Horse;
-import by.gurinovich.webproject.entity.Odd;
-import by.gurinovich.webproject.entity.Race;
-import by.gurinovich.webproject.entity.User;
+import by.gurinovich.webproject.entity.*;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.util.Validator;
 
@@ -17,7 +14,7 @@ public class UserLogic {
         RacesDAO dao = new RacesDAO();
         Race race = null;
         try {
-            race = dao.getRace(id);
+            race = dao.getRace(id, true);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,8 +32,11 @@ public class UserLogic {
         return horses;
     }
 
-    public boolean addNewBet(String username, int raceId, int horseId, String betType, double amount){
+    public boolean addNewBet(String username, int raceId, int horseId, String betType, Double amount){
         BetsDAO dao = new BetsDAO();
+        if(amount <= 0 || betType.isEmpty() || horseId == 0){
+            return false;
+        }
         try {
             return dao.addNewBet(username, raceId, horseId, betType, amount);
         } catch (SQLException e) {
@@ -45,10 +45,10 @@ public class UserLogic {
         return false;
     }
 
-    public  boolean updateAccountBet(String username, double amount, double bet){
+    public  boolean updateAccountBet(String username, double amount, Double bet){
         CardDAO dao = new CardDAO();
         try {
-            if(bet<=amount) {
+            if(bet<=amount&&bet>0) {
                 return dao.updateAccoundBet(username, amount, bet);
             }
         } catch (SQLException e) {
@@ -58,7 +58,7 @@ public class UserLogic {
     }
 
     private  boolean checkMoney(double amount, double cardAmount){
-        return amount <= cardAmount;
+        return amount <= cardAmount&&amount>0;
     }
 
     public boolean addMoney(double amount, double currentAmount, double cardAmount, String cardNumber){
@@ -132,49 +132,6 @@ public class UserLogic {
         return false;
     }
 
-    public boolean checkLogin(String enterLogin, String enterPass) {
-        AuthenticationDAO dao = new AuthenticationDAO();
-        try {
-            return dao.authenticateUser(enterLogin, enterPass);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public String userName(String login, String password){
-        AuthenticationDAO dao = new AuthenticationDAO();
-        String username = null;
-        try {
-            username = dao.userName(login, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return username;
-    }
-
-    public  ArrayList<Race> getRaces(){
-        RacesDAO dao = new RacesDAO();
-        ArrayList<Race> races = null;
-        try {
-            races =  dao.getRaces();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return races;
-    }
-
-    public  User createUser(String login, String password){
-        AuthenticationDAO dao = new AuthenticationDAO();
-        User user = null;
-        try {
-            user = dao.createUser(login, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return user;
-    }
-
 
     public  ArrayList<Odd> getActiveOdds(String username){
         BetsDAO dao = new BetsDAO();
@@ -222,35 +179,6 @@ public class UserLogic {
         }
         return results;
     }
-    public boolean checkRegistration(String firstName, String secondName, String userName, String password, String email, String cardNumber, String cardPassword){
-        RegistrationDAO dao = new RegistrationDAO();
-        try {
-            if(dao.checkCard(cardNumber, cardPassword) && dao.checkUserName(userName)) {
-                return dao.registerUser(firstName, secondName, userName, password, email, cardNumber, cardPassword);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
-    public String invalidateMessage(String firstName, String secondName, String userName, String password, String email, String cardNumber, String cardPassword){
-        Validator validator = new Validator();
-        if(!validator.checkString(firstName, Validator.NAME_REGEX)||!validator.checkString(secondName, Validator.NAME_REGEX)){
-            return MessageManager.getProperty("message.nameerror");
-        }
-        else if(!validator.checkString(userName, Validator.USERNAME_REGEX)){
-            return MessageManager.getProperty("message.usernameerror");
-        }
-        else if(!validator.checkString(password, Validator.PASSWORD_REGEX)){
-            return MessageManager.getProperty("message.passworderror");
-        }
-        else if(!validator.checkString(email, Validator.EMAIL_REGEX)){
-            return MessageManager.getProperty("message.emailerror");
-        }
-        else if(!validator.checkString(cardNumber, Validator.CARD_REGEX)|| !validator.checkString(cardPassword, Validator.CARD_REGEX)){
-            return MessageManager.getProperty("message.carderror");
-        }
-        else return MessageManager.getProperty("message.unknownerror");
-    }
+
 }

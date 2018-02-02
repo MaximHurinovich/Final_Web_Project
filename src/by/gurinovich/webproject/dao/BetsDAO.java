@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class BetsDAO {
 
     private static final String SQL_SELECT_BETS =
-            "SELECT bookmaker,winner,top_3,outsider FROM horseraces_db.bets ORDER BY id_horse";
+            "SELECT * FROM horseraces_db.bets ORDER BY id_horse";
     private static final String SQL_SELECT_USER_ODDS =
             "SELECT * FROM horseraces_db.user_odds WHERE username=?";
     private static final String SQL_SELECT_HORSE_ACTIVE =
@@ -32,7 +32,7 @@ public class BetsDAO {
         Statement statement = connection.prepareStatement(SQL_SELECT_BETS);
             resultSet = statement.executeQuery(SQL_SELECT_BETS);
             while(resultSet.next()) {
-                bet = new Bet(resultSet.getInt(1), resultSet.getDouble(2), resultSet.getDouble(3), resultSet.getDouble(4));
+                bet = new Bet(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getDouble(4), resultSet.getDouble(5), resultSet.getInt(2));
                 bets.add(bet);
             }
         statement.close();
@@ -47,6 +47,7 @@ public class BetsDAO {
     public ArrayList<Odd> getOdds(String username) throws SQLException {
         ArrayList<Odd> odds= new ArrayList<>();
         Odd odd;
+        RacesDAO dao = new RacesDAO();
         PreparedStatement preparedStatement;
         connection = pool.getConnection();
         preparedStatement = connection.prepareStatement(SQL_SELECT_USER_ODDS);
@@ -58,7 +59,7 @@ public class BetsDAO {
                 preparedStatement.setString(1, String.valueOf(resultSet.getInt(4)));
                 ResultSet horse = preparedStatement.executeQuery();
                 horse.next();
-                odd = new Odd(resultSet.getString(3), horse.getString(1),
+                odd = new Odd(dao.getRace(resultSet.getInt(3), true).getDate(), horse.getString(1),
                         resultSet.getString(5), resultSet.getDouble(6), true);
                 odds.add(odd);
             }else{
@@ -66,7 +67,7 @@ public class BetsDAO {
                 preparedStatement.setString(1, String.valueOf(resultSet.getInt(4)));
                 ResultSet horse = preparedStatement.executeQuery();
                 horse.next();
-                odd = new Odd(resultSet.getString(3), horse.getString(1),
+                odd = new Odd(dao.getRace(resultSet.getInt(3), false).getDate(), horse.getString(1),
                         resultSet.getString(5), resultSet.getDouble(6), false);
                 if(TRUE.equals(resultSet.getString(8))) {
                     odd.setSuccess(true);

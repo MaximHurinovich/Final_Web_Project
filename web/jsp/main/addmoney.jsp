@@ -34,7 +34,7 @@
                         <td>
                             <%out.print(((User) request.getSession().getAttribute("userfull")).getAmount());%>
                         </td>
-                    <tr/>
+                    </tr>
                     <tr>
                         <td>
                             <b>Card amount:</b>
@@ -48,7 +48,9 @@
                             <b>Add to account</b>
                         </td>
                         <td>
-                            <input type="text" name="money" value="">
+                            <label>
+                                <input type="text" name="money" value="">
+                            </label>
                         </td>
                     </tr>
                 </table>
@@ -71,7 +73,9 @@
                 <b>Return from account:</b>
             </td>
             <td>
-                <input type="text" name="retmoney" value="">
+                <label>
+                    <input type="text" name="retmoney" value="">
+                </label>
             </td>
             <td>
                 <input type="hidden" name="command" value="returnmoney">
@@ -80,7 +84,6 @@
         </tr>
     </table>
 </form>
-</td>
 
 ${addMessage}<br/>
 <%@include file="/layout/footer.jsp"%>

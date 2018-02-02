@@ -14,6 +14,14 @@ public class RacesDAO {
             "SELECT * FROM horseraces_db.race";
     private static final String SQL_SELECT_RACE_BY_ID =
             "SELECT * FROM horseraces_db.race WHERE idrace=?";
+    private static final String SQL_SELECT_RESULT_BY_ID =
+            "SELECT * FROM horseraces_db.history_race WHERE idrace=?";
+    private static final String SQL_DELETE_ACTIVE_RACE =
+            "DELETE FROM horseraces_db.race WHERE idrace=?";
+    private static final String SQL_DELETE_ACTIVE_HORSES =
+            "DELETE FROM horseraces_db.horses WHERE race_number=?";
+    private static final String SQL_DELETE_BETS =
+            "DELETE FROM horseraces_db.bets WHERE id_horse=?";
     private ProxyConnection connection = null;
     private ResultSet resultSet;
     private ConnectionPool pool = ConnectionPool.getInstance();
@@ -39,10 +47,15 @@ public class RacesDAO {
             return races;
         }
 
-        public Race getRace(int id) throws SQLException {
+        public Race getRace(int id, boolean isActive) throws SQLException {
             Race race = null;
+            PreparedStatement preparedStatement;
                 connection = pool.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_RACE_BY_ID);
+                if(isActive)
+                    preparedStatement = connection.prepareStatement(SQL_SELECT_RACE_BY_ID);
+                else{
+                    preparedStatement = connection.prepareStatement(SQL_SELECT_RESULT_BY_ID);
+                }
                 preparedStatement.setInt(1, id);
                 resultSet = preparedStatement.executeQuery();
                 HorsesDAO horsesDAO = new HorsesDAO();
@@ -56,4 +69,30 @@ public class RacesDAO {
 
             return race;
         }
+
+        public boolean deleteRace(int id) throws SQLException{
+            boolean check = true;
+            connection = pool.getConnection();
+            HorsesDAO dao = new HorsesDAO();
+            ArrayList<Horse> horses = dao.getHorses(id);
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_BETS);
+            for(Horse horse: horses){
+                preparedStatement.setInt(1, horse.getHorseId());
+                preparedStatement.executeUpdate();
+            }
+            preparedStatement = connection.prepareStatement(SQL_DELETE_ACTIVE_HORSES);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            preparedStatement = connection.prepareStatement(SQL_DELETE_ACTIVE_RACE);
+            preparedStatement.setInt(1, id);
+            if(preparedStatement.executeUpdate()==0){
+                check = false;
+            }
+            preparedStatement.close();
+            if(connection!=null){
+                connection.close();
+            }
+            return check;
+        }
+
     }

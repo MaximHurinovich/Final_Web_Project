@@ -243,3 +243,14 @@ td{
     cursor: pointer;
     border-radius: 70%;
 }
+
+.upperadmin{
+    border: none;
+    width: 100%;
+    text-align: left;
+}
+
+.addRace{
+    padding: 30px 15px;
+    border: 2px solid red;
+}

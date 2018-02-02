@@ -8,7 +8,7 @@ import java.sql.*;
 public class RegistrationDAO {
 
     private static final String SQL_CREATE_USER =
-            "INSERT INTO horseraces_db.personal_info VALUES(?,?,NULL,NULL,?,?,?,0,?,'u')";
+            "INSERT INTO horseraces_db.personal_info VALUES(?,?,NULL,NULL,?,?,?,0,?,'u','0')";
     private static final String SQL_CHECK_USER =
             "SELECT * FROM horseraces_db.personal_info WHERE username=?";
     private static final String SQL_CHECK_CARD =

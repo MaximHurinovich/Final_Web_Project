@@ -5,12 +5,14 @@ public class Bet {
     private double top3;
     private double outsider;
     private int bookmakerID;
+    private int horseID;
 
-    public Bet(int bookmakerID, double winner, double top3, double outsider) {
+    public Bet(int bookmakerID, double winner, double top3, double outsider, int horseID) {
         this.bookmakerID = bookmakerID;
         this.winner = winner;
         this.top3 = top3;
         this.outsider = outsider;
+        this.horseID = horseID;
     }
 
     public double getWinner() {
@@ -44,5 +46,13 @@ public class Bet {
 
     public void setBookmakerID(int bookmakerID) {
         this.bookmakerID = bookmakerID;
+    }
+
+    public int getHorseID() {
+        return horseID;
+    }
+
+    public void setHorseID(int horseID) {
+        this.horseID = horseID;
     }
 }

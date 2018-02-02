@@ -26,8 +26,14 @@ public class HorsesDAO {
             ArrayList<Bet> bets = betsDAO.getBets();
             int i = 0;
             while(resultSet.next()) {
-                Bet bet = bets.get(i);
-                horse = new Horse(resultSet.getInt(2), resultSet.getString(3), bet);
+                Bet temp = null;
+                for(Bet bet: bets){
+                    if (bet.getHorseID()==resultSet.getInt(1)){
+                        temp = bet;
+                        break;
+                    }
+                }
+                horse = new Horse(resultSet.getInt(2), resultSet.getString(3), temp);
                 horse.setHorseId(resultSet.getInt(1));
                 horses.add(horse);
                 i++;
