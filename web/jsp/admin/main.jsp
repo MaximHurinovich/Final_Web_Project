@@ -26,13 +26,12 @@
 <table class="upperadmin">
     <tr>
         <td><h2><b>Available races:</b></h2></td>
-        <td> <form name="addRaceForm" method="POST" action="/jsp/controller">
-            <input type="hidden" name="command" value="addRace"/>
-            <input type="submit" value="Add Race" class="addRace"/>
-        </form></td>
+        <td>
+            <input class="addRace" type="button" value="Add race" onClick='location.href="/jsp/admin/add_race.jsp"'>
+        </td>
     </tr>
 </table>
-${adminDeleteMessage}
+
 <br/>
 <table class="maintable">
     <tr>
@@ -80,13 +79,6 @@ ${adminDeleteMessage}
                 </form>
             </td>
             <td>
-                <form name="editRaceForm" method="POST" action="/jsp/controller">
-                    <input type="hidden" name="command" value="editrace"/>
-                    <input type="hidden" name="race_id" value="${race.getId()}">
-                    <input type="submit" value="Edit"/>
-                </form>
-            </td>
-            <td>
                 <form name="deleteRaceForm" method="POST" action="/jsp/controller">
                     <input type="hidden" name="command" value="deleterace"/>
                     <input type="hidden" name="race_id" value="${race.getId()}">
@@ -95,7 +87,8 @@ ${adminDeleteMessage}
             </td>
         </tr>
     </c:forEach>
-</table>
+</table><br/>
+${adminMessage}<br/>
 <aside class="placeholder">
 </aside>
 <%@include file="/layout/footer.jsp"%>

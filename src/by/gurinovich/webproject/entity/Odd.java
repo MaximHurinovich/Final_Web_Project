@@ -1,14 +1,17 @@
 package by.gurinovich.webproject.entity;
 
 public class Odd {
+    private String username;
     private String date;
+    private int horseId;
     private String horseName;
     private String type;
     private double odd;
     private boolean isActive;
-    private boolean isSuccess;
+    private boolean isSuccess = false;
 
-    public Odd(String date, String horseName, String type, double odd, boolean isActive) {
+    public Odd(String username, String date, String horseName, String type, double odd, boolean isActive) {
+        this.username = username;
         this.date = date;
         this.horseName = horseName;
         this.type = type;
@@ -62,5 +65,21 @@ public class Odd {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public int getHorseId() {
+        return horseId;
+    }
+
+    public void setHorseId(int horseId) {
+        this.horseId = horseId;
     }
 }

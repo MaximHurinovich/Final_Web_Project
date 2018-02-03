@@ -34,9 +34,25 @@ public enum CommandEnum {
         {
             this.command = new AcceptBetCommand();
         }
-    }, EDIT {
+    }, ADMINBETS{
+        {
+            this.command = new AdminBetsCommand();
+        }
+    },EDIT {
         {
             this.command = new EditCommand();
+        }
+    }, ADDRACE {
+        {
+            this.command = new AdminAddRaceCommand();
+        }
+    }, RUNRACE {
+        {
+            this.command = new AdminRunRaceCommand();
+        }
+    },ADDHORSE {
+        {
+            this.command = new AdminAddHorseCommand();
         }
     }, DELETERACE {
         {

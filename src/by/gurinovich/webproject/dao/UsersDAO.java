@@ -1,9 +1,6 @@
 package by.gurinovich.webproject.dao;
 
-import by.gurinovich.webproject.entity.Admin;
-import by.gurinovich.webproject.entity.Bookmaker;
-import by.gurinovich.webproject.entity.Person;
-import by.gurinovich.webproject.entity.User;
+import by.gurinovich.webproject.entity.*;
 import by.gurinovich.webproject.id.IDGenerator;
 import by.gurinovich.webproject.pool.ConnectionPool;
 import by.gurinovich.webproject.pool.ProxyConnection;
@@ -14,12 +11,16 @@ import java.util.ArrayList;
 public class UsersDAO {
     private final String SQL_SELECT_USER =
             "SELECT * FROM horseraces_db.personal_info WHERE username =? AND password =?";
+    private final String SQL_SELECT_AMOUNT =
+            "SELECT amount FROM horseraces_db.personal_info WHERE username =?";
     private final String SQL_BAN_USER =
             "UPDATE horseraces_db.personal_info SET is_banned='1' WHERE username =?";
     private final String SQL_MAKE_ADMIN =
             "UPDATE horseraces_db.personal_info SET role='a',id_card=NULL,amount=NULL WHERE username=?";
     private final String SQL_MAKE_BOOKMAKER =
             "UPDATE horseraces_db.personal_info SET role='b',id_card=NULL,amount=NULL,id_bookmaker=? WHERE username=?";
+    private final String SQL_USER_WIN =
+            "UPDATE horseraces_db.personal_info SET amount=ROUND(?,2) WHERE username =?";
     private ProxyConnection connection = null;
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet;
@@ -163,5 +164,34 @@ public class UsersDAO {
         preparedStatement.close();
         connection.close();
         return result!=0;
+    }
+
+    public boolean winningBet(String username, double odd, int horseId, String type) throws SQLException {
+        BetsDAO betsDAO = new BetsDAO();
+        Bet bet;
+        bet = betsDAO.getBet(horseId);
+        double win = odd;
+        if("win".equals(type)){
+            win*=bet.getWinner();
+        }else if("top3".equals(type)){
+            win*=bet.getTop3();
+        }else{
+            win*=bet.getOutsider();
+        }
+        connection = pool.getConnection();
+        preparedStatement = connection.prepareStatement(SQL_SELECT_AMOUNT);
+        preparedStatement.setString(1, username);
+        resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        double currentAmount = resultSet.getDouble(1);
+        preparedStatement = connection.prepareStatement(SQL_USER_WIN);
+        preparedStatement.setDouble(1,currentAmount + win);
+        preparedStatement.setString(2, username);
+        int result = preparedStatement.executeUpdate();
+        preparedStatement.close();
+        if(connection!=null){
+            connection.close();
+        }
+        return result>0;
     }
 }

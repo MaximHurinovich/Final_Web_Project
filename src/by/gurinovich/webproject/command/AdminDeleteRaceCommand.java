@@ -30,7 +30,7 @@ public class AdminDeleteRaceCommand implements ActionCommand {
             request.getSession().setAttribute(ATTRIBUTE_RACES_LIST, races);
             router.setRoute(Router.RouteType.REDIRECT);
         }else {
-            request.setAttribute("adminDeleteMessage", MessageManager.getProperty("message.unknownerror"));
+            request.setAttribute("adminMessage", MessageManager.getProperty("message.unknownerror"));
         }
         router.setPage(ConfigurationManager.getProperty("path.page.admin.main"));
         return router;

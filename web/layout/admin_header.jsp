@@ -21,6 +21,7 @@
                 <li><span style="color: white; padding-top: 10px"><b>Welcome</b>,<br/> ${user}!</span></li>
                 <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/admin/main.jsp" data-scroll>Home</a></li>
                 <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/admin/users.jsp" data-scroll>Users</a></li>
+                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/controller?command=adminbets" data-scroll>Active Bets</a></li>
                 <li class="menu-item"><a href="<c:url value="/jsp/admin/account_info.jsp"/>" data-scroll>Account</a></li>
                 <li class="menu-item">
                     <a href="<c:url value="/jsp/controller?command=logout"/>">Log out</a>

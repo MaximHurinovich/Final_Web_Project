@@ -29,6 +29,12 @@ public class Horse {
         this.place = place;
     }
 
+    public Horse(int horseId, int raceId, String name) {
+        this.horseId = horseId;
+        this.raceId = raceId;
+        this.name = name;
+    }
+
     public int getPlace() {
         return place;
     }

@@ -40,11 +40,8 @@ public class ResultsDAO {
                 races.add(race);
                 horses.clear();
             }
-        if(preparedStatement !=null){
-            preparedStatement.close();
-        }
-            if(connection !=null)
-                connection.close();
+        preparedStatement.close();
+        connection.close();
 
 
         return races;

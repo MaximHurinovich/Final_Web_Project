@@ -2,15 +2,23 @@ package by.gurinovich.webproject.dao;
 
 import by.gurinovich.webproject.entity.Bet;
 import by.gurinovich.webproject.entity.Horse;
+import by.gurinovich.webproject.id.IDGenerator;
 import by.gurinovich.webproject.pool.ConnectionPool;
 import by.gurinovich.webproject.pool.ProxyConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class HorsesDAO {
     private static final String SQL_SELECT_HORSES =
             "SELECT * FROM horseraces_db.horses WHERE race_number=?";
+    private static final String SQL_ADD_HORSES =
+            "INSERT INTO horseraces_db.horses VALUES(?,?,?)";
+    private static final String SQL_ADD_RESULT_HORSES =
+            "INSERT INTO horseraces_db.history_horses VALUES(?,?,?,?)";
+    private static final String SQL_ID_RESULT =
+            "SELECT MAX(id_horse) FROM horseraces_db.history_horses";
     private ProxyConnection connection = null;
     private ConnectionPool pool = ConnectionPool.getInstance();
 
@@ -43,5 +51,36 @@ public class HorsesDAO {
                 connection.close();
 
         return horses;
+    }
+
+    public boolean addHorses(int raceId, HashSet<String> names) throws SQLException {
+        connection = pool.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_HORSES);
+        preparedStatement.setInt(2, raceId);
+        int result = 0;
+        for(String name: names){
+            preparedStatement.setInt(1, IDGenerator.generateID());
+            preparedStatement.setString(3, name);
+            result = preparedStatement.executeUpdate();
+        }
+        preparedStatement.close();
+        connection.close();
+        return result>0;
+    }
+
+    public boolean addResultHorses(ArrayList<Horse> horses, int resultId) throws SQLException {
+        connection = pool.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_RESULT_HORSES);
+        preparedStatement.setInt(3, resultId);
+        int result = 0;
+        for(Horse horse: horses){
+            preparedStatement.setInt(1, horse.getHorseId());
+            preparedStatement.setString(2, horse.getName());
+            preparedStatement.setInt(4, horse.getPlace());
+            result = preparedStatement.executeUpdate();
+        }
+        preparedStatement.close();
+        connection.close();
+        return result>0;
     }
 }

@@ -1,9 +1,12 @@
 package by.gurinovich.webproject.dao;
 
+import by.gurinovich.webproject.exception.TechnicalException;
 import by.gurinovich.webproject.entity.Horse;
 import by.gurinovich.webproject.entity.Race;
+import by.gurinovich.webproject.id.IDGenerator;
 import by.gurinovich.webproject.pool.ConnectionPool;
 import by.gurinovich.webproject.pool.ProxyConnection;
+import by.gurinovich.webproject.util.Validator;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,6 +25,12 @@ public class RacesDAO {
             "DELETE FROM horseraces_db.horses WHERE race_number=?";
     private static final String SQL_DELETE_BETS =
             "DELETE FROM horseraces_db.bets WHERE id_horse=?";
+    private static final String SQL_ADD_RACE =
+            "INSERT INTO horseraces_db.race VALUES(?,?,?)";
+    private static final String SQL_ADD_RESULT_RACE =
+            "INSERT INTO horseraces_db.history_race VALUES(?,?,?)";
+    private static final String SQL_PREVIOUS_ID_RESULTS =
+            "SELECT MAX(idrace) FROM horseraces_db.history_race";
     private ProxyConnection connection = null;
     private ResultSet resultSet;
     private ConnectionPool pool = ConnectionPool.getInstance();
@@ -95,4 +104,43 @@ public class RacesDAO {
             return check;
         }
 
+        public int addNewRace(String card, String date) throws SQLException, TechnicalException {
+            Validator validator = new Validator();
+            if(!validator.checkString(date, Validator.DATE_REGEX)){
+                throw new TechnicalException();
+            }
+            connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_RACE);
+            int raceId = IDGenerator.generateID();
+            preparedStatement.setInt(1, raceId);
+            preparedStatement.setString(2, card);
+            preparedStatement.setString(3, date);
+            int result = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            if(connection!=null)
+            connection.close();
+            if(result>0)
+                return raceId;
+            else{
+                throw new SQLException();
+            }
+        }
+
+        public int addResults(Race race) throws SQLException{
+            connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_PREVIOUS_ID_RESULTS);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            int resultId = resultSet.getInt(1)+1;
+            preparedStatement = connection.prepareStatement(SQL_ADD_RESULT_RACE);
+            preparedStatement.setInt(1, resultId);
+            preparedStatement.setString(2, race.getCard());
+            preparedStatement.setString(3, race.getDate());
+            int result = preparedStatement.executeUpdate();
+            if(result>0){
+                return resultId;
+            }else{
+                throw new SQLException();
+            }
+        }
     }

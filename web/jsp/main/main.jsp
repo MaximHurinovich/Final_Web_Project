@@ -66,7 +66,7 @@ ${betMessage}
 
         </td>
         <td>
-            <form name="betForm" method="POST" action="controller">
+            <form name="betForm" method="POST" action="/jsp/controller">
                 <input type="hidden" name="command" value="bet"/>
                 <input type="hidden" name="race_id" value="${race.getId()}">
                 <input type="submit" value="" class="button"/>
