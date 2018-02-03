@@ -43,14 +43,6 @@ public class Horse {
         this.place = place;
     }
 
-    public int getRaceId() {
-        return raceId;
-    }
-
-    public void setRaceId(int raceId) {
-        this.raceId = raceId;
-    }
-
     public String getName() {
         return name;
     }

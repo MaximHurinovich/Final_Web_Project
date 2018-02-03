@@ -6,39 +6,39 @@ public enum CommandEnum {
         {
             this.command = new AddMoneyCommand();
         }
-    }, RETURNMONEY{
+    }, RETURNMONEY {
         {
             this.command = new ReturnMoneyCommand();
         }
-    },MYBETS{
+    }, MYBETS {
         {
             this.command = new MyBetsCommand();
         }
-    }, BANUSER{
+    }, BANUSER {
         {
             this.command = new AdminBanCommand();
         }
-    }, MAKEADMIN{
+    }, MAKEADMIN {
         {
             this.command = new MakeAdminCommand();
         }
-    }, MAKEBOOKMAKER{
+    }, MAKEBOOKMAKER {
         {
             this.command = new MakeBookmakerCommand();
         }
-    }, BET{
+    }, BET {
         {
             this.command = new BetCommand();
         }
-    }, ACCEPTBET{
+    }, ACCEPTBET {
         {
             this.command = new AcceptBetCommand();
         }
-    }, ADMINBETS{
+    }, ADMINBETS {
         {
             this.command = new AdminBetsCommand();
         }
-    },EDIT {
+    }, EDIT {
         {
             this.command = new EditCommand();
         }
@@ -50,7 +50,7 @@ public enum CommandEnum {
         {
             this.command = new AdminRunRaceCommand();
         }
-    },ADDHORSE {
+    }, ADDHORSE {
         {
             this.command = new AdminAddHorseCommand();
         }
@@ -58,7 +58,7 @@ public enum CommandEnum {
         {
             this.command = new AdminDeleteRaceCommand();
         }
-    },  ACCEPTADD {
+    }, ACCEPTADD {
         {
             this.command = new AcceptAddMoneyCommand();
         }
@@ -66,7 +66,7 @@ public enum CommandEnum {
         {
             this.command = new AcceptEditCommand();
         }
-    },LOGIN {
+    }, LOGIN {
         {
             this.command = new LoginCommand();
         }
@@ -78,7 +78,7 @@ public enum CommandEnum {
         {
             this.command = new ResultsCommand();
         }
-    }, SIGNUP{
+    }, SIGNUP {
         {
             this.command = new RegisterCommand();
         }

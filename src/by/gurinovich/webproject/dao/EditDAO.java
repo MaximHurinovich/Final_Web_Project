@@ -7,26 +7,23 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class EditDAO {
-        private static final String SQL_UPDATE_PROFILE =
-                "UPDATE horseraces_db.personal_info SET first_name=?, second_name=?, email=?, id_card=? WHERE username=?";
-        private ProxyConnection connection = null;
+    private static final String SQL_UPDATE_PROFILE =
+            "UPDATE horseraces_db.personal_info SET first_name=?, second_name=?, email=?, id_card=? WHERE username=?";
     private ConnectionPool pool = ConnectionPool.getInstance();
 
-        public boolean updateProfile(String userName, String firstName, String secondName, String email, String cardNumber) throws SQLException {
-                connection = pool.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_PROFILE);
-                preparedStatement.setString(1, firstName);
-                preparedStatement.setString(2, secondName);
-                preparedStatement.setString(3, email);
-                preparedStatement.setString(4, cardNumber);
-                preparedStatement.setString(5, userName);
-                int i = preparedStatement.executeUpdate();
+    public boolean updateProfile(String userName, String firstName, String secondName, String email, String cardNumber) throws SQLException {
+        ProxyConnection connection = pool.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_PROFILE);
+        preparedStatement.setString(1, firstName);
+        preparedStatement.setString(2, secondName);
+        preparedStatement.setString(3, email);
+        preparedStatement.setString(4, cardNumber);
+        preparedStatement.setString(5, userName);
+        int i = preparedStatement.executeUpdate();
 
-            preparedStatement.close();
-            if(connection!=null){
-                    connection.close();
+        preparedStatement.close();
+        connection.close();
 
-            }
-            return i>0;
-        }
+        return i > 0;
+    }
 }

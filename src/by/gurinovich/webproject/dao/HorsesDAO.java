@@ -17,8 +17,6 @@ public class HorsesDAO {
             "INSERT INTO horseraces_db.horses VALUES(?,?,?)";
     private static final String SQL_ADD_RESULT_HORSES =
             "INSERT INTO horseraces_db.history_horses VALUES(?,?,?,?)";
-    private static final String SQL_ID_RESULT =
-            "SELECT MAX(id_horse) FROM horseraces_db.history_horses";
     private ProxyConnection connection = null;
     private ConnectionPool pool = ConnectionPool.getInstance();
 
@@ -40,6 +38,9 @@ public class HorsesDAO {
                         temp = bet;
                         break;
                     }
+                }
+                if(temp==null){
+                    return null;
                 }
                 horse = new Horse(resultSet.getInt(2), resultSet.getString(3), temp);
                 horse.setHorseId(resultSet.getInt(1));

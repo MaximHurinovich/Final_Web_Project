@@ -16,24 +16,24 @@ public class ConnectionPool {
     public static ConnectionPool getInstance() {
         if (!instanceCreated.get()) {
             lock.lock();
-                if (instance == null) {
-                    instance = new ConnectionPool();
-                    instanceCreated.set(true);
-                }
-            lock.unlock();
+            if (instance == null) {
+                instance = new ConnectionPool();
+                instanceCreated.set(true);
             }
+            lock.unlock();
+        }
         return instance;
     }
 
 
-    private ConnectionPool()  {
+    private ConnectionPool() {
         try {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-        connectionQueue = new ArrayBlockingQueue<>(POOL_SIZE);
-        for (int i = 0; i < POOL_SIZE; i++) {
-            ProxyConnection connection = new ProxyConnection(ConnectionDB.getConnection());
-            connectionQueue.offer(connection);
-        }
+            connectionQueue = new ArrayBlockingQueue<>(POOL_SIZE);
+            for (int i = 0; i < POOL_SIZE; i++) {
+                ProxyConnection connection = new ProxyConnection(ConnectionDB.getConnection());
+                connectionQueue.offer(connection);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,14 +54,12 @@ public class ConnectionPool {
     }
 
 
-
-
     public ProxyConnection getConnection() {
         ProxyConnection connection = null;
         try {
             connection = connectionQueue.take();
         } catch (InterruptedException e) {
-            e.printStackTrace();//connection->daoexception->receiver-service->command_exception->error_page
+            e.printStackTrace();
         }
         return connection;
     }
@@ -69,7 +67,7 @@ public class ConnectionPool {
 
     public void destroyConnection() {
         for (int i = 0; i < POOL_SIZE; i++) {
-            ProxyConnection connection = null;
+            ProxyConnection connection;
             try {
                 connection = connectionQueue.take();
                 connection.closeConnection();

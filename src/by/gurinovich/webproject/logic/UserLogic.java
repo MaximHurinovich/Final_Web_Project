@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class UserLogic {
 
-    public  Race getRace(int id){
+    public Race getRace(int id) {
         RacesDAO dao = new RacesDAO();
         Race race = null;
         try {
@@ -21,7 +21,7 @@ public class UserLogic {
         return race;
     }
 
-    public  ArrayList<Horse> getHorses(int raceId){
+    public ArrayList<Horse> getHorses(int raceId) {
         HorsesDAO dao = new HorsesDAO();
         ArrayList<Horse> horses = null;
         try {
@@ -32,9 +32,9 @@ public class UserLogic {
         return horses;
     }
 
-    public boolean addNewBet(String username, int raceId, int horseId, String betType, Double amount){
+    public boolean addNewBet(String username, int raceId, int horseId, String betType, Double amount) {
         BetsDAO dao = new BetsDAO();
-        if(amount <= 0 || betType.isEmpty() || horseId == 0){
+        if (amount <= 0 || betType.isEmpty() || horseId == 0) {
             return false;
         }
         try {
@@ -45,10 +45,10 @@ public class UserLogic {
         return false;
     }
 
-    public  boolean updateAccountBet(String username, double amount, Double bet){
+    public boolean updateAccountBet(String username, double amount, Double bet) {
         CardDAO dao = new CardDAO();
         try {
-            if(bet<=amount&&bet>0) {
+            if (bet <= amount && bet > 0) {
                 return dao.updateAccoundBet(username, amount, bet);
             }
         } catch (SQLException e) {
@@ -57,41 +57,42 @@ public class UserLogic {
         return false;
     }
 
-    private  boolean checkMoney(double amount, double cardAmount){
-        return amount <= cardAmount&&amount>0;
+    private boolean checkMoney(double amount, double cardAmount) {
+        return amount <= cardAmount && amount > 0;
     }
 
-    public boolean addMoney(double amount, double currentAmount, double cardAmount, String cardNumber){
+    public boolean addMoney(double amount, double currentAmount, double cardAmount, String cardNumber) {
         CardDAO dao = new CardDAO();
         try {
-            return checkMoney(amount, cardAmount)&& dao.updateCardToAccount(cardNumber, cardAmount, amount, currentAmount);
+            return checkMoney(amount, cardAmount) && dao.updateCardToAccount(cardNumber, cardAmount, amount, currentAmount);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    public boolean returnMoney(double amount, double currentAmount, double cardAmount, String cardNumber){
+    public boolean returnMoney(double amount, double currentAmount, double cardAmount, String cardNumber) {
         CardDAO dao = new CardDAO();
         try {
-            return checkMoney(amount, currentAmount)&& dao.updateAccountToCard(cardNumber, cardAmount, amount, currentAmount);
+            return checkMoney(amount, currentAmount) && dao.updateAccountToCard(cardNumber, cardAmount, amount, currentAmount);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
-    public double getAccountAmount(String cardNumber){
+
+    public double getAccountAmount(String cardNumber) {
         CardDAO dao = new CardDAO();
         double amount = 0;
         try {
-            amount= dao.getAccountAmount(cardNumber);
+            amount = dao.getAccountAmount(cardNumber);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return amount;
     }
 
-    public double getCardAmount(String cardNumber){
+    public double getCardAmount(String cardNumber) {
         CardDAO dao = new CardDAO();
         double amount = 0;
         try {
@@ -102,27 +103,24 @@ public class UserLogic {
         return amount;
     }
 
-    public boolean checkData(String firstName, String secondName, String email, String cardNumber){
+    public boolean checkData(String firstName, String secondName, String email, String cardNumber) {
         Validator validator = new Validator();
-        return validator.checkString(firstName, Validator.NAME_REGEX)&& validator.checkString(secondName, Validator.NAME_REGEX) &&
+        return validator.checkString(firstName, Validator.NAME_REGEX) && validator.checkString(secondName, Validator.NAME_REGEX) &&
                 validator.checkString(email, Validator.EMAIL_REGEX) && validator.checkString(cardNumber, Validator.CARD_REGEX);
     }
 
-    public String invalidateMessage(String firstName, String secondName, String email, String cardNumber){
+    public String invalidateMessage(String firstName, String secondName, String email, String cardNumber) {
         Validator validator = new Validator();
-        if(!validator.checkString(firstName, Validator.NAME_REGEX)||!validator.checkString(secondName, Validator.NAME_REGEX)){
+        if (!validator.checkString(firstName, Validator.NAME_REGEX) || !validator.checkString(secondName, Validator.NAME_REGEX)) {
             return MessageManager.getProperty("message.nameerror");
-        }
-        else if(!validator.checkString(email, Validator.EMAIL_REGEX)){
+        } else if (!validator.checkString(email, Validator.EMAIL_REGEX)) {
             return MessageManager.getProperty("message.emailerror");
-        }
-        else if(!validator.checkString(cardNumber, Validator.CARD_REGEX)){
+        } else if (!validator.checkString(cardNumber, Validator.CARD_REGEX)) {
             return MessageManager.getProperty("message.carderror");
-        }
-        else return MessageManager.getProperty("message.unknownerror");
+        } else return MessageManager.getProperty("message.unknownerror");
     }
 
-    public boolean updateProfile(String userName, String firstName, String secondName, String email, String cardNumber){
+    public boolean updateProfile(String userName, String firstName, String secondName, String email, String cardNumber) {
         EditDAO dao = new EditDAO();
         try {
             return dao.updateProfile(userName, firstName, secondName, email, cardNumber);
@@ -133,7 +131,7 @@ public class UserLogic {
     }
 
 
-    public  ArrayList<Odd> getActiveOdds(String username){
+    public ArrayList<Odd> getActiveOdds(String username) {
         BetsDAO dao = new BetsDAO();
         ArrayList<Odd> odds = null;
         try {
@@ -143,15 +141,15 @@ public class UserLogic {
         }
         ArrayList<Odd> out = new ArrayList<>();
         if (odds != null) {
-            for (Odd odd: odds) {
-                if(odd.isActive())
+            for (Odd odd : odds) {
+                if (odd.isActive())
                     out.add(odd);
             }
         }
         return out;
     }
 
-    public ArrayList<Odd> getPassiveOdds(String username){
+    public ArrayList<Odd> getPassiveOdds(String username) {
         BetsDAO dao = new BetsDAO();
         ArrayList<Odd> odds = null;
         try {
@@ -161,19 +159,19 @@ public class UserLogic {
         }
         ArrayList<Odd> out = new ArrayList<>();
         if (odds != null) {
-            for (Odd odd: odds) {
-                if(!odd.isActive())
+            for (Odd odd : odds) {
+                if (!odd.isActive())
                     out.add(odd);
             }
         }
         return out;
     }
 
-    public ArrayList<Race> results(){
+    public ArrayList<Race> results() {
         ResultsDAO dao = new ResultsDAO();
         ArrayList<Race> results = null;
         try {
-            results= dao.getResults();
+            results = dao.getResults();
         } catch (SQLException e) {
             e.printStackTrace();
         }

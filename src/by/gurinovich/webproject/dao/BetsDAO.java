@@ -34,19 +34,20 @@ public class BetsDAO {
     private ConnectionPool pool = ConnectionPool.getInstance();
 
     ArrayList<Bet> getBets() throws SQLException {
-        ArrayList<Bet> bets= new ArrayList<>();
+        ArrayList<Bet> bets = new ArrayList<>();
         Bet bet;
-            connection = pool.getConnection();
+        connection = pool.getConnection();
         Statement statement = connection.prepareStatement(SQL_SELECT_BETS);
-            resultSet = statement.executeQuery(SQL_SELECT_BETS);
-            while(resultSet.next()) {
-                bet = new Bet(resultSet.getInt(1), resultSet.getDouble(3), resultSet.getDouble(4), resultSet.getDouble(5), resultSet.getInt(2));
-                bets.add(bet);
-            }
+        resultSet = statement.executeQuery(SQL_SELECT_BETS);
+        while (resultSet.next()) {
+            bet = new Bet(resultSet.getInt(1), resultSet.getDouble(3),
+                    resultSet.getDouble(4), resultSet.getDouble(5), resultSet.getInt(2));
+            bets.add(bet);
+        }
         statement.close();
 
-        if(connection!=null)
-                connection.close();
+        if (connection != null)
+            connection.close();
 
 
         return bets;
@@ -66,7 +67,7 @@ public class BetsDAO {
     }
 
     public ArrayList<Odd> getOdds(String username) throws SQLException {
-        ArrayList<Odd> odds= new ArrayList<>();
+        ArrayList<Odd> odds = new ArrayList<>();
         Odd odd;
         RacesDAO dao = new RacesDAO();
         PreparedStatement preparedStatement;
@@ -74,23 +75,25 @@ public class BetsDAO {
         preparedStatement = connection.prepareStatement(SQL_SELECT_USER_ODDS_BY_USERNAME);
         preparedStatement.setString(1, username);
         resultSet = preparedStatement.executeQuery();
-        while(resultSet.next()) {
-            if(TRUE.equals(resultSet.getString(7))) {
+        while (resultSet.next()) {
+            if (TRUE.equals(resultSet.getString(7))) {
                 preparedStatement = connection.prepareStatement(SQL_SELECT_HORSE_ACTIVE);
                 preparedStatement.setString(1, String.valueOf(resultSet.getInt(4)));
                 ResultSet horse = preparedStatement.executeQuery();
                 horse.next();
-                odd = new Odd(resultSet.getString(2), dao.getRace(resultSet.getInt(3), true).getDate(), horse.getString(1),
+                odd = new Odd(resultSet.getString(2), dao.getRace(resultSet.getInt(3),
+                        true).getDate(), horse.getString(1),
                         resultSet.getString(5), resultSet.getDouble(6), true);
                 odds.add(odd);
-            }else{
+            } else {
                 preparedStatement = connection.prepareStatement(SQL_SELECT_HORSE_NONACTIVE);
                 preparedStatement.setString(1, String.valueOf(resultSet.getInt(4)));
                 ResultSet horse = preparedStatement.executeQuery();
                 horse.next();
-                odd = new Odd(resultSet.getString(2), dao.getRace(resultSet.getInt(3), false).getDate(), horse.getString(1),
+                odd = new Odd(resultSet.getString(2), dao.getRace(resultSet.getInt(3),
+                        false).getDate(), horse.getString(1),
                         resultSet.getString(5), resultSet.getDouble(6), false);
-                if(TRUE.equals(resultSet.getString(8))) {
+                if (TRUE.equals(resultSet.getString(8))) {
                     odd.setSuccess(true);
                 }
                 odd.setHorseId(resultSet.getInt(4));
@@ -99,15 +102,15 @@ public class BetsDAO {
             }
         }
 
-            if(connection!=null)
-                connection.close();
+        if (connection != null)
+            connection.close();
 
 
         return odds;
     }
 
     public ArrayList<Odd> getOdds(int raceId) throws SQLException {
-        ArrayList<Odd> odds= new ArrayList<>();
+        ArrayList<Odd> odds = new ArrayList<>();
         Odd odd;
         RacesDAO dao = new RacesDAO();
         PreparedStatement preparedStatement;
@@ -115,24 +118,24 @@ public class BetsDAO {
         preparedStatement = connection.prepareStatement(SQL_SELECT_USER_ODDS_BY_RACE);
         preparedStatement.setInt(1, raceId);
         resultSet = preparedStatement.executeQuery();
-        while(resultSet.next()) {
-                preparedStatement = connection.prepareStatement(SQL_SELECT_HORSE_ACTIVE);
-                preparedStatement.setString(1, String.valueOf(resultSet.getInt(4)));
-                ResultSet horse = preparedStatement.executeQuery();
-                horse.next();
-                String date = dao.getRace(resultSet.getInt(3), true).getDate();
-                String name =horse.getString(1);
-                String typeOfOdd = resultSet.getString(5);
-                double amount = resultSet.getDouble(6);
-                String username = resultSet.getString(2);
-                odd = new Odd(username, date, name, typeOfOdd, amount, true);
-                odd.setOdd(amount);
-                odd.setHorseId(resultSet.getInt(4));
-                odds.add(odd);
-            }
-                preparedStatement.close();
+        while (resultSet.next()) {
+            preparedStatement = connection.prepareStatement(SQL_SELECT_HORSE_ACTIVE);
+            preparedStatement.setString(1, String.valueOf(resultSet.getInt(4)));
+            ResultSet horse = preparedStatement.executeQuery();
+            horse.next();
+            String date = dao.getRace(resultSet.getInt(3), true).getDate();
+            String name = horse.getString(1);
+            String typeOfOdd = resultSet.getString(5);
+            double amount = resultSet.getDouble(6);
+            String username = resultSet.getString(2);
+            odd = new Odd(username, date, name, typeOfOdd, amount, true);
+            odd.setOdd(amount);
+            odd.setHorseId(resultSet.getInt(4));
+            odds.add(odd);
+        }
+        preparedStatement.close();
 
-        if(connection!=null)
+        if (connection != null)
             connection.close();
 
 
@@ -140,20 +143,20 @@ public class BetsDAO {
     }
 
     public ArrayList<Odd> getOdds() throws SQLException {
-        ArrayList<Odd> odds= new ArrayList<>();
+        ArrayList<Odd> odds = new ArrayList<>();
         Odd odd;
         RacesDAO dao = new RacesDAO();
         PreparedStatement preparedStatement;
         connection = pool.getConnection();
         Statement statement = connection.prepareStatement(SQL_SELECT_USER_ODDS);
         resultSet = statement.executeQuery(SQL_SELECT_USER_ODDS);
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             preparedStatement = connection.prepareStatement(SQL_SELECT_HORSE_ACTIVE);
             preparedStatement.setString(1, String.valueOf(resultSet.getInt(4)));
             ResultSet horse = preparedStatement.executeQuery();
             horse.next();
             String date = dao.getRace(resultSet.getInt(3), true).getDate();
-            String name =horse.getString(1);
+            String name = horse.getString(1);
             String typeOfOdd = resultSet.getString(5);
             double amount = resultSet.getDouble(6);
             String username = resultSet.getString(2);
@@ -163,14 +166,14 @@ public class BetsDAO {
         }
         statement.close();
 
-        if(connection!=null)
+        if (connection != null)
             connection.close();
 
 
         return odds;
     }
 
-    public boolean addNewBet(String username, int raceId, int horseId, String betType, double amount) throws SQLException{
+    public boolean addNewBet(String username, int raceId, int horseId, String betType, double amount) throws SQLException {
         connection = pool.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_BET);
         preparedStatement.setString(1, username);
@@ -180,18 +183,18 @@ public class BetsDAO {
         preparedStatement.setDouble(5, amount);
         int result = preparedStatement.executeUpdate();
         preparedStatement.close();
-        if(connection!=null)
+        if (connection != null)
             connection.close();
-        return result>0;
+        return result > 0;
     }
 
     public boolean updateOdds(ArrayList<Odd> odds, int raceID, int resultID) throws SQLException {
         connection = pool.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_ODDS);
         int result = 0;
-        for(Odd odd: odds) {
+        for (Odd odd : odds) {
             preparedStatement.setString(1, odd.isSuccess() ? "true" : "false");
-            preparedStatement.setInt(2,resultID);
+            preparedStatement.setInt(2, resultID);
             preparedStatement.setInt(3, raceID);
             preparedStatement.setInt(4, odd.getHorseId());
             preparedStatement.setString(5, odd.getType());
@@ -199,6 +202,6 @@ public class BetsDAO {
         }
         preparedStatement.close();
         connection.close();
-        return result>0;
+        return result > 0;
     }
 }

@@ -10,7 +10,6 @@ public class User extends Person {
         super(username, password, firstName, secondName, email);
         this.cardNumber = cardNumber;
         this.amount = amount;
-        super.setRole("u");
     }
 
 

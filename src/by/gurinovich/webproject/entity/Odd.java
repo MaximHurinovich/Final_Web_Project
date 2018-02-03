@@ -39,10 +39,6 @@ public class Odd {
         return horseName;
     }
 
-    public void setHorseName(String horseName) {
-        this.horseName = horseName;
-    }
-
     public String getType() {
         return type;
     }

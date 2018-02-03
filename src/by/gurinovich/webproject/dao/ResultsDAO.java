@@ -19,27 +19,27 @@ public class ResultsDAO {
     private ConnectionPool pool = ConnectionPool.getInstance();
 
     public ArrayList<Race> getResults() throws SQLException {
-        ArrayList<Race> races= new ArrayList<>();
+        ArrayList<Race> races = new ArrayList<>();
         Race race;
         Horse horse;
         ProxyConnection connection = pool.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_RESULT_RACES);
         ResultSet raceSet = preparedStatement.executeQuery(SQL_SELECT_RESULT_RACES);
-            while(raceSet.next()) {
-                int i = raceSet.getInt(1);
-                preparedStatement = connection.prepareStatement(SQL_SELECT_RESULT_HORSES);
-                preparedStatement.setInt(1, i);
-                ResultSet horseSet = preparedStatement.executeQuery();
-                ArrayList<Horse> horses = new ArrayList<>();
-                while (horseSet.next()){
-                    horse = new Horse(horseSet.getInt(3), horseSet.getString(2), horseSet.getInt(4));
-                    horses.add(horse);
-                }
-                ArrayList<Horse> temp = new ArrayList<>(horses);
-                race = new Race(raceSet.getString(2), raceSet.getString(3), temp);
-                races.add(race);
-                horses.clear();
+        while (raceSet.next()) {
+            int i = raceSet.getInt(1);
+            preparedStatement = connection.prepareStatement(SQL_SELECT_RESULT_HORSES);
+            preparedStatement.setInt(1, i);
+            ResultSet horseSet = preparedStatement.executeQuery();
+            ArrayList<Horse> horses = new ArrayList<>();
+            while (horseSet.next()) {
+                horse = new Horse(horseSet.getInt(3), horseSet.getString(2), horseSet.getInt(4));
+                horses.add(horse);
             }
+            ArrayList<Horse> temp = new ArrayList<>(horses);
+            race = new Race(raceSet.getString(2), raceSet.getString(3), temp);
+            races.add(race);
+            horses.clear();
+        }
         preparedStatement.close();
         connection.close();
 

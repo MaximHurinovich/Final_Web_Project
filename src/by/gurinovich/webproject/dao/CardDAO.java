@@ -22,72 +22,73 @@ public class CardDAO {
     private ConnectionPool pool = ConnectionPool.getInstance();
 
     public double getAccountAmount(String cardNumber) throws SQLException {
-        double amount = 0.0;
-            connection = pool.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_SELECT_PROFILE_AMOUNT);
-            preparedStatement.setString(1, cardNumber);
-            resultSet = preparedStatement.executeQuery();
+        double amount;
+        connection = pool.getConnection();
+        preparedStatement = connection.prepareStatement(SQL_SELECT_PROFILE_AMOUNT);
+        preparedStatement.setString(1, cardNumber);
+        resultSet = preparedStatement.executeQuery();
 
-            resultSet.last();
-            amount = resultSet.getDouble(1);
-        if(preparedStatement!=null){
+        resultSet.last();
+        amount = resultSet.getDouble(1);
+        if (preparedStatement != null) {
             preparedStatement.close();
         }
-            if(connection!=null)
-                connection.close();
+        if (connection != null)
+            connection.close();
 
         return amount;
     }
-    public double getCardAmount(String cardNumber) throws SQLException {
-        double amount = 0.0;
-            connection = pool.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_SELECT_CARD);
-            preparedStatement.setString(1, cardNumber);
-            resultSet = preparedStatement.executeQuery();
 
-            resultSet.next();
-            amount = resultSet.getDouble(1);
-        if(preparedStatement!=null){
+    public double getCardAmount(String cardNumber) throws SQLException {
+        double amount;
+        connection = pool.getConnection();
+        preparedStatement = connection.prepareStatement(SQL_SELECT_CARD);
+        preparedStatement.setString(1, cardNumber);
+        resultSet = preparedStatement.executeQuery();
+
+        resultSet.next();
+        amount = resultSet.getDouble(1);
+        if (preparedStatement != null) {
             preparedStatement.close();
         }
-            if(connection!=null)
-                connection.close();
+        if (connection != null)
+            connection.close();
 
         return amount;
     }
 
     public boolean updateCardToAccount(String cardNumber, double amount, double sum, double accountSum) throws SQLException {
-            connection = pool.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_UPDATE_MONEY_CARD);
-            preparedStatement.setDouble(1, amount - sum);
-            preparedStatement.setString(2, cardNumber);
-            int i = preparedStatement.executeUpdate();
-            preparedStatement = connection.prepareStatement(SQL_UPDATE_MONEY_PROFILE);
-            preparedStatement.setDouble(1, accountSum + sum);
-            preparedStatement.setString(2, cardNumber);
-            int y = preparedStatement.executeUpdate();
-        if(preparedStatement!=null) {
+        connection = pool.getConnection();
+        preparedStatement = connection.prepareStatement(SQL_UPDATE_MONEY_CARD);
+        preparedStatement.setDouble(1, amount - sum);
+        preparedStatement.setString(2, cardNumber);
+        int i = preparedStatement.executeUpdate();
+        preparedStatement = connection.prepareStatement(SQL_UPDATE_MONEY_PROFILE);
+        preparedStatement.setDouble(1, accountSum + sum);
+        preparedStatement.setString(2, cardNumber);
+        int y = preparedStatement.executeUpdate();
+        if (preparedStatement != null) {
             preparedStatement.close();
         }
-            if(connection!=null){
-                connection.close();
+        if (connection != null) {
+            connection.close();
         }
-        return i>0&&y>0;
+        return i > 0 && y > 0;
     }
 
     public boolean updateAccountToCard(String cardNumber, double amount, double sum, double accountSum) throws SQLException {
         return updateCardToAccount(cardNumber, amount, -sum, accountSum);
     }
 
-    public boolean updateAccoundBet(String userName, double currentAmount, double bet) throws SQLException{
+    public boolean updateAccoundBet(String userName, double currentAmount, double bet) throws SQLException {
         connection = pool.getConnection();
         preparedStatement = connection.prepareStatement(SQL_UPDATE_MONEY_BET);
         preparedStatement.setDouble(1, currentAmount - bet);
         preparedStatement.setString(2, userName);
         int i = preparedStatement.executeUpdate();
         preparedStatement.close();
-        if(connection!=null)
+        if (connection != null)
             connection.close();
-        return i>0;
+        return i > 0;
     }
 }

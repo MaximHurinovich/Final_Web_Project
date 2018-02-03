@@ -16,9 +16,9 @@ class ConnectionDB {
         Properties properties = new Properties();
         properties.put("user", userName);
         properties.put("password", userPassword);
-        properties.put("autoReconnect", "true");
-        properties.put("characterEncoding", "UTF-8");
-        properties.put("useUnicode", "true");
+        properties.put("autoReconnect", ConfigurationManager.getProperty("cn.autoreconnect"));
+        properties.put("characterEncoding", ConfigurationManager.getProperty("cn.encoding"));
+        properties.put("useUnicode", ConfigurationManager.getProperty("cn.unicode"));
         return DriverManager.getConnection(url, properties);
     }
 }

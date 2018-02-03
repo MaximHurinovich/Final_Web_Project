@@ -6,6 +6,7 @@ import by.gurinovich.webproject.logic.UserLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
+import by.gurinovich.webproject.util.Constant;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,7 +18,6 @@ public class RegisterCommand implements ActionCommand {
     private static final String PARAM_NAME_PASSWORD = "password";
     private static final String PARAM_NAME_CARD_NUMBER = "card_number";
     private static final String PARAM_NAME_CARD_PASSWORD = "card_password";
-
 
 
     @Override
@@ -33,12 +33,12 @@ public class RegisterCommand implements ActionCommand {
         String cardNumber = request.getParameter(PARAM_NAME_CARD_NUMBER);
         String cardPassword = request.getParameter(PARAM_NAME_CARD_PASSWORD);
         if (logic.checkRegistration(firstName, secondName, userName, password, email, cardNumber, cardPassword)) {
-            request.setAttribute("successMessage", MessageManager.getProperty("message.registration_success"));
+            request.setAttribute(Constant.ATTRIBUTE_SUCCESS_MESSAGE, MessageManager.getProperty("message.registration_success"));
             page = ConfigurationManager.getProperty("path.page.login");
             router.setPage(page);
             router.setRoute(Router.RouteType.REDIRECT);
         } else {
-            request.setAttribute("errorLoginPassMessage", logic.invalidateMessage(firstName, secondName, userName, password, email, cardNumber, cardPassword));
+            request.setAttribute(Constant.ATTRIBUTE_ERROR_LOGIN_MESSAGE, logic.invalidateMessage(firstName, secondName, userName, password, email, cardNumber, cardPassword));
             page = ConfigurationManager.getProperty("path.page.register");
             router.setPage(page);
         }
