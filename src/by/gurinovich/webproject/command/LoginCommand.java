@@ -1,6 +1,8 @@
 package by.gurinovich.webproject.command;
 
 import by.gurinovich.webproject.entity.Person;
+import by.gurinovich.webproject.exception.CommandException;
+import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.logic.DefaultLogic;
 import by.gurinovich.webproject.logic.UserLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
@@ -15,7 +17,7 @@ public class LoginCommand implements ActionCommand {
     private static final String PARAM_NAME_USERS = "usersList";
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) throws CommandException {
         Router router = new Router();
         DefaultLogic logic = new DefaultLogic();
         String page;
@@ -23,7 +25,12 @@ public class LoginCommand implements ActionCommand {
         String pass = request.getParameter(Constant.PARAM_NAME_PASSWORD);
         if (logic.checkLogin(login, pass)) {
             request.getSession().setAttribute(Constant.ATTRIBUTE_USER_NAME, logic.userName(login, pass));
-            request.getSession().setAttribute(Constant.ATTRIBUTE_NAME_RACES_LIST, logic.getRaces());
+            try {
+                request.getSession().setAttribute(Constant.ATTRIBUTE_NAME_RACES_LIST, logic.getRaces());
+            } catch (LogicalException e) {
+                throw new CommandException(e.getMessage());
+
+            }
             Person user = logic.createUser(login, pass);
             if (user.isBanned()) {
                 request.setAttribute(Constant.ATTRIBUTE_ERROR_LOGIN_MESSAGE, MessageManager.getProperty("message.ban"));
@@ -34,7 +41,11 @@ public class LoginCommand implements ActionCommand {
             if (Constant.BOOKMAKER_ROLE.equals(user.getRole()))
                 page = ConfigurationManager.getProperty("path.page.bookmaker.main");
             else if (Constant.ADMIN_ROLE.equals(user.getRole())) {
-                request.getSession().setAttribute(Constant.ATTRIBUTE_NAME_USER_LIST, logic.getUsers());
+                try {
+                    request.getSession().setAttribute(Constant.ATTRIBUTE_NAME_USER_LIST, logic.getUsers());
+                } catch (LogicalException e) {
+                    throw new CommandException(e.getMessage());
+                }
                 page = ConfigurationManager.getProperty("path.page.admin.main");
             } else {
                 page = ConfigurationManager.getProperty("path.page.main");

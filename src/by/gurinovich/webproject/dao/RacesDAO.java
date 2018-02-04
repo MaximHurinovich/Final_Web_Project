@@ -1,6 +1,6 @@
 package by.gurinovich.webproject.dao;
 
-import by.gurinovich.webproject.exception.TechnicalException;
+import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.entity.Horse;
 import by.gurinovich.webproject.entity.Race;
 import by.gurinovich.webproject.id.IDGenerator;
@@ -131,10 +131,10 @@ public class RacesDAO {
         return check;
     }
 
-    public int addNewRace(String card, String date) throws SQLException, TechnicalException {
+    public int addNewRace(String card, String date) throws SQLException {
         Validator validator = new Validator();
         if (!validator.checkString(date, Validator.DATE_REGEX)) {
-            throw new TechnicalException();
+            throw new SQLException();
         }
         connection = pool.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADD_RACE);

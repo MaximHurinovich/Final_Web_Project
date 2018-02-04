@@ -2,6 +2,8 @@ package by.gurinovich.webproject.command;
 
 import by.gurinovich.webproject.entity.Horse;
 import by.gurinovich.webproject.entity.User;
+import by.gurinovich.webproject.exception.CommandException;
+import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.logic.UserLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
@@ -15,7 +17,7 @@ public class AcceptBetCommand implements ActionCommand {
 
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) throws CommandException {
         Router router = new Router();
         UserLogic userLogic = new UserLogic();
         String horseName = request.getParameter(Constant.PARAM_NAME_HORSE);
@@ -29,7 +31,13 @@ public class AcceptBetCommand implements ActionCommand {
         Double amount = Double.valueOf(amountParameter);
 
         Integer raceId = (Integer) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_RACE_ID);
-        ArrayList<Horse> horses = userLogic.getHorses(raceId);
+        ArrayList<Horse> horses;
+        try {
+            horses = userLogic.getHorses(raceId);
+        } catch (LogicalException e) {
+            throw new CommandException(e.getMessage());
+
+        }
         int horse_id = 0;
         for (Horse horse : horses) {
             if (horse.getName().equals(horseName)) {
@@ -37,15 +45,19 @@ public class AcceptBetCommand implements ActionCommand {
             }
         }
         User user = (User) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER);
-        if (userLogic.addNewBet(user.getUsername(), raceId, horse_id, bet, amount) && userLogic.updateAccountBet(user.getUsername(), user.getAmount(), amount)) {
-            request.setAttribute(Constant.ATTRIBUTE_BET_MESSAGE, MessageManager.getProperty("message.betsuccess"));
-            router.setPage(ConfigurationManager.getProperty("path.page.main"));
-            router.setRoute(Router.RouteType.REDIRECT);
-            return router;
-        } else {
-            request.setAttribute(Constant.ATTRIBUTE_ERROR_BET, MessageManager.getProperty("message.infoerror"));
-            router.setPage(ConfigurationManager.getProperty("path.page.bet"));
-            return router;
+        try {
+            if (userLogic.addNewBet(user.getUsername(), raceId, horse_id, bet, amount) && userLogic.updateAccountBet(user.getUsername(), user.getAmount(), amount)) {
+                request.setAttribute(Constant.ATTRIBUTE_BET_MESSAGE, MessageManager.getProperty("message.betsuccess"));
+                router.setPage(ConfigurationManager.getProperty("path.page.main"));
+                router.setRoute(Router.RouteType.REDIRECT);
+                return router;
+            } else {
+                request.setAttribute(Constant.ATTRIBUTE_ERROR_BET, MessageManager.getProperty("message.infoerror"));
+                router.setPage(ConfigurationManager.getProperty("path.page.bet"));
+                return router;
+            }
+        } catch (LogicalException e) {
+            throw new CommandException(e.getMessage());
         }
     }
 }

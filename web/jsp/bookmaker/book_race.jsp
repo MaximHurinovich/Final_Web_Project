@@ -32,7 +32,7 @@
 <h2><b>Book race:</b></h2>
 
 <br/>
-<form name="runRaceForm" method="POST" action="/jsp/controller">
+<form name="runRaceForm" method="POST" action="${pageContext.request.contextPath}/jsp/controller">
 <table class="maintable">
     <tr>
         <th>Horse</th>
@@ -70,7 +70,6 @@
 </table><br/>
 </form>
 ${bookMessage}<br/>
-${bookraces}
 <aside class="placeholder">
 </aside>
 <%@include file="/layout/footer.jsp"%>

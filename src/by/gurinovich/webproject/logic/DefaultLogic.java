@@ -5,6 +5,7 @@ import by.gurinovich.webproject.dao.RacesDAO;
 import by.gurinovich.webproject.dao.RegistrationDAO;
 import by.gurinovich.webproject.entity.Person;
 import by.gurinovich.webproject.entity.Race;
+import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.util.Validator;
 
@@ -56,24 +57,24 @@ public class DefaultLogic {
         return false;
     }
 
-    public ArrayList<Race> getRaces() {
+    public ArrayList<Race> getRaces() throws LogicalException {
         RacesDAO dao = new RacesDAO();
         ArrayList<Race> races = null;
         try {
             races = dao.getRaces();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new LogicalException(e.getMessage() + e.getSQLState());
         }
         return races;
     }
 
-    public ArrayList<Person> getUsers() {
+    public ArrayList<Person> getUsers() throws LogicalException {
         UsersDAO dao = new UsersDAO();
-        ArrayList<Person> users = new ArrayList<>();
+        ArrayList<Person> users;
         try {
             users = dao.getUsers();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new LogicalException(e.getMessage() + e.getSQLState());
         }
         return users;
     }

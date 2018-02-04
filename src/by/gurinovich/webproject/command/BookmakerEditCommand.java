@@ -1,6 +1,7 @@
 package by.gurinovich.webproject.command;
 
-import by.gurinovich.webproject.entity.User;
+import by.gurinovich.webproject.entity.Admin;
+import by.gurinovich.webproject.entity.Bookmaker;
 import by.gurinovich.webproject.exception.CommandException;
 import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.logic.UserLogic;
@@ -11,8 +12,7 @@ import by.gurinovich.webproject.util.Constant;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class AcceptEditCommand implements ActionCommand {
-
+public class BookmakerEditCommand implements ActionCommand {
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
         Router router = new Router();
@@ -24,17 +24,16 @@ public class AcceptEditCommand implements ActionCommand {
         String cardNumber = request.getParameter(Constant.PARAM_NAME_CARD_NUMBER);
         if (userLogic.checkData(firstName, secondName, email, cardNumber)) {
             try {
-                if (userLogic.updateProfile(((User) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).getUsername(),
+                if (userLogic.updateProfile(((Bookmaker) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).getUsername(),
                         firstName, secondName, email, cardNumber)) {
-                    ((User) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setFirstName(firstName);
-                    ((User) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setSecondName(secondName);
-                    ((User) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setEmail(email);
-                    ((User) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setCardNumber(cardNumber);
-                    page = ConfigurationManager.getProperty("path.page.account");
+                    ((Bookmaker) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setFirstName(firstName);
+                    ((Bookmaker) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setSecondName(secondName);
+                    ((Bookmaker) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setEmail(email);
+                    page = ConfigurationManager.getProperty("path.page.bookmaker.accountinfo");
                     router.setPage(page);
                 } else {
                     request.setAttribute(Constant.ATTRIBUTE_EDIT_MESSAGE, MessageManager.getProperty("message.wrongaction"));
-                    page = ConfigurationManager.getProperty("path.page.edit");
+                    page = ConfigurationManager.getProperty("path.page.bookmaker.edit");
                     router.setPage(page);
                 }
             } catch (LogicalException e) {
@@ -43,7 +42,7 @@ public class AcceptEditCommand implements ActionCommand {
             }
         } else {
             request.setAttribute(Constant.ATTRIBUTE_EDIT_MESSAGE, userLogic.invalidateMessage(firstName, secondName, email, cardNumber));
-            page = ConfigurationManager.getProperty("path.page.edit");
+            page = ConfigurationManager.getProperty("path.page.bookmaker.edit");
             router.setPage(page);
         }
         return router;

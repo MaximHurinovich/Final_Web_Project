@@ -4,23 +4,23 @@ import by.gurinovich.webproject.dao.BetsDAO;
 import by.gurinovich.webproject.dao.RacesDAO;
 import by.gurinovich.webproject.entity.Horse;
 import by.gurinovich.webproject.entity.Race;
+import by.gurinovich.webproject.exception.LogicalException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class BookmakerLogic {
 
-    public ArrayList<Race> getRaces(){
+    public ArrayList<Race> getRaces() throws LogicalException {
         RacesDAO racesDAO = new RacesDAO();
         try {
             return racesDAO.getBookmakerRaces();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new LogicalException(e.getMessage() + e.getSQLState());
         }
-        return null;
     }
 
-    public boolean setBets(Race race, String[] wins, String[] top3s, String[] outsiders, int bookmakerID){
+    public boolean setBets(Race race, String[] wins, String[] top3s, String[] outsiders, int bookmakerID) throws LogicalException {
         Double[] winBets = new Double[race.getHorses().size()];
         Double[] top3Bets = new Double[race.getHorses().size()];
         Double[] outsiderBets = new Double[race.getHorses().size()];
@@ -38,8 +38,7 @@ public class BookmakerLogic {
         try {
             return dao.setBets(horsesID, winBets, top3Bets, outsiderBets, bookmakerID);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new LogicalException(e.getMessage() + e.getSQLState());
         }
-        return false;
     }
 }

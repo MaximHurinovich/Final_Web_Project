@@ -78,7 +78,15 @@ public enum CommandEnum {
         {
             this.command = new AcceptEditCommand();
         }
-    }, LOGIN {
+    }, ADMIN_EDIT {
+        {
+            this.command = new AdminEditCommand();
+        }
+    }, BOOKMAKER_EDIT {
+        {
+            this.command = new BookmakerEditCommand();
+        }
+    },LOGIN {
         {
             this.command = new LoginCommand();
         }

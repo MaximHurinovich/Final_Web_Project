@@ -1,6 +1,7 @@
 package by.gurinovich.webproject.command;
 
 
+import by.gurinovich.webproject.exception.CommandException;
 import by.gurinovich.webproject.logic.DefaultLogic;
 import by.gurinovich.webproject.logic.UserLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
@@ -21,7 +22,7 @@ public class RegisterCommand implements ActionCommand {
 
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) throws CommandException{
         Router router = new Router();
         DefaultLogic logic = new DefaultLogic();
         String page;

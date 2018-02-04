@@ -80,7 +80,7 @@ public class CardDAO {
         return updateCardToAccount(cardNumber, amount, -sum, accountSum);
     }
 
-    public boolean updateAccoundBet(String userName, double currentAmount, double bet) throws SQLException {
+    public boolean updateAccountBet(String userName, double currentAmount, double bet) throws SQLException {
         connection = pool.getConnection();
         preparedStatement = connection.prepareStatement(SQL_UPDATE_MONEY_BET);
         preparedStatement.setDouble(1, currentAmount - bet);

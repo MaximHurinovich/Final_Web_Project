@@ -2,6 +2,8 @@ package by.gurinovich.webproject.command;
 
 import by.gurinovich.webproject.entity.Bookmaker;
 import by.gurinovich.webproject.entity.Race;
+import by.gurinovich.webproject.exception.CommandException;
+import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.logic.BookmakerLogic;
 import by.gurinovich.webproject.logic.DefaultLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
@@ -10,12 +12,11 @@ import by.gurinovich.webproject.servlet.Router;
 import by.gurinovich.webproject.util.Constant;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 
 public class AcceptBookRaceCommand implements ActionCommand {
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) throws CommandException {
         Router router = new Router();
         BookmakerLogic logic = new BookmakerLogic();
         String[] winBets = request.getParameterValues(Constant.PARAM_NAME_WIN_BETS);
@@ -49,10 +50,15 @@ public class AcceptBookRaceCommand implements ActionCommand {
         if(!check){
             request.setAttribute(Constant.ATTRIBUTE_BOOKMAKER_MESSAGE, MessageManager.getProperty("message.infoerror"));
             router.setPage(ConfigurationManager.getProperty("path.page.bookmaker.bookrace"));
-        }else if(logic.setBets(race, winBets, top3Bets, outsiderBets, bookmakerID)){
-            request.setAttribute(Constant.ATTRIBUTE_BOOKMAKER_MESSAGE, MessageManager.getProperty("message.betsuccess"));
-            request.setAttribute(Constant.ATTRIBUTE_NAME_RACES_LIST, new DefaultLogic().getRaces());
-            router.setPage(ConfigurationManager.getProperty("path.page.bookmaker.main"));
+        }else try {
+            if(logic.setBets(race, winBets, top3Bets, outsiderBets, bookmakerID)){
+                request.setAttribute(Constant.ATTRIBUTE_BOOKMAKER_MESSAGE, MessageManager.getProperty("message.betsuccess"));
+                request.setAttribute(Constant.ATTRIBUTE_NAME_RACES_LIST, new DefaultLogic().getRaces());
+                router.setPage(ConfigurationManager.getProperty("path.page.bookmaker.main"));
+            }
+        } catch (LogicalException e) {
+            throw new CommandException(e.getMessage());
+
         }
         return router;
     }

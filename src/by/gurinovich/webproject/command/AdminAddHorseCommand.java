@@ -1,6 +1,7 @@
 package by.gurinovich.webproject.command;
 
 import by.gurinovich.webproject.entity.Horse;
+import by.gurinovich.webproject.exception.CommandException;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
@@ -15,7 +16,7 @@ public class AdminAddHorseCommand implements ActionCommand {
 
 
     @Override
-    public Router execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) throws CommandException {
         Router router = new Router();
         String horseName = request.getParameter(Constant.PARAM_HORSE_NAME);
         if (horseName == null) {
