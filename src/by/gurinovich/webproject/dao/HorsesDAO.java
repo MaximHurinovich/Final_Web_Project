@@ -23,33 +23,66 @@ public class HorsesDAO {
     public ArrayList<Horse> getHorses(int race) throws SQLException {
         ArrayList<Horse> horses= new ArrayList<>();
         Horse horse;
+        connection = pool.getConnection();
+        PreparedStatement statement = connection.prepareStatement(SQL_SELECT_HORSES);
+        statement.setString(1, String.valueOf(race));
+        ResultSet resultSet = statement.executeQuery();
+        BetsDAO  betsDAO = new BetsDAO();
+        ArrayList<Bet> bets = betsDAO.getBets();
+        int i = 0;
+        while(resultSet.next()) {
+            Bet temp = null;
+            for(Bet bet: bets){
+                if (bet.getHorseID()==resultSet.getInt(1)){
+                    temp = bet;
+                    break;
+                }
+            }
+            if(temp==null){
+                return null;
+            }
+            horse = new Horse(resultSet.getInt(2), resultSet.getString(3), temp);
+            horse.setHorseId(resultSet.getInt(1));
+            horses.add(horse);
+            i++;
+        }
+        statement.close();
+        if(connection!=null)
+            connection.close();
 
-            connection = pool.getConnection();
-            PreparedStatement statement = connection.prepareStatement(SQL_SELECT_HORSES);
-            statement.setString(1, String.valueOf(race));
-            ResultSet resultSet = statement.executeQuery();
-            BetsDAO  betsDAO = new BetsDAO();
-            ArrayList<Bet> bets = betsDAO.getBets();
-            int i = 0;
-            while(resultSet.next()) {
-                Bet temp = null;
-                for(Bet bet: bets){
-                    if (bet.getHorseID()==resultSet.getInt(1)){
-                        temp = bet;
-                        break;
-                    }
+        return horses;
+    }
+
+    public ArrayList<Horse> getBookmakerHorses(int race) throws SQLException {
+        ArrayList<Horse> horses = new ArrayList<>();
+        Horse horse;
+        connection = pool.getConnection();
+        PreparedStatement statement = connection.prepareStatement(SQL_SELECT_HORSES);
+        statement.setString(1, String.valueOf(race));
+        ResultSet resultSet = statement.executeQuery();
+        BetsDAO  betsDAO = new BetsDAO();
+        ArrayList<Bet> bets = betsDAO.getBets();
+        int i = 0;
+        while(resultSet.next()) {
+            Bet temp = null;
+            for(Bet bet: bets){
+                if (bet.getHorseID()==resultSet.getInt(1)){
+                    temp = bet;
+                    break;
                 }
-                if(temp==null){
-                    return null;
-                }
+            }
+            if(temp==null){
                 horse = new Horse(resultSet.getInt(2), resultSet.getString(3), temp);
                 horse.setHorseId(resultSet.getInt(1));
                 horses.add(horse);
                 i++;
+            }else{
+                return null;
             }
+        }
         statement.close();
         if(connection!=null)
-                connection.close();
+            connection.close();
 
         return horses;
     }

@@ -17,6 +17,10 @@ public class Constant {
     public static final String PARAM_NAME_CARD = "card";
     public static final String PARAM_NAME_DATE = "date";
     public static final String PARAM_NAME_RETURN_MONEY = "retmoney";
+    public static final String PARAM_NAME_WIN_BETS = "winList";
+    public static final String PARAM_NAME_TOP3_BETS = "top3List";
+    public static final String PARAM_NAME_OUTSIDER_BETS = "outsiderList";
+
     ////////////////////////
     public static final String ATTRIBUTE_NAME_USER = "userfull";
     public static final String ATTRIBUTE_NAME_CARD_AMOUNT = "cardAmount";
@@ -30,6 +34,8 @@ public class Constant {
     public static final String ATTRIBUTE_NAME_ACTIVE_ODDS = "activeOdds";
     public static final String ATTRIBUTE_NAME_NONACTIVE_ODDS = "nonactiveOdds";
     public static final String ATTRIBUTE_NAME_RESULTS_LIST = "resultList";
+    public static final String ATTRIBUTE_NAME_BOOKMAKER_RACE = "bookraces";
+    public static final String ATTRIBUTE_BOOKING_RACE = "bookingRace";
 
     ////////////////////////
     public static final String ATTRIBUTE_MESSAGE_ADD_MONEY = "addMessage";
@@ -43,6 +49,7 @@ public class Constant {
     public static final String ATTRIBUTE_ERROR_LOGIN_MESSAGE = "errorLoginPassMessage";
     public static final String ATTRIBUTE_SUCCESS_MESSAGE = "successMessage";
     public static final String ATTRIBUTE_NULL_PAGE = "nullPage";
+    public static final String ATTRIBUTE_BOOKMAKER_MESSAGE = "bookMessage";
 
     public static final String BOOKMAKER_ROLE = "b";
     public static final String ADMIN_ROLE = "a";

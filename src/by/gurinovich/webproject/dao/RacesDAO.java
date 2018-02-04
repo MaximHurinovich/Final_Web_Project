@@ -59,6 +59,30 @@ public class RacesDAO {
         return races;
     }
 
+    public ArrayList<Race> getBookmakerRaces() throws SQLException {
+        ArrayList<Race> races = new ArrayList<>();
+        Race race;
+        connection = pool.getConnection();
+        Statement statement = connection.prepareStatement(SQL_SELECT_RACE);
+        resultSet = statement.executeQuery(SQL_SELECT_RACE);
+        HorsesDAO horsesDAO = new HorsesDAO();
+        while (resultSet.next()) {
+            int i = resultSet.getInt(1);
+            ArrayList<Horse> horses = horsesDAO.getBookmakerHorses(i);
+            if (horses == null) {
+                continue;
+            }
+            race = new Race(resultSet.getString(2), resultSet.getString(3), horses);
+            race.setId(resultSet.getInt(1));
+            races.add(race);
+        }
+        statement.close();
+        connection.close();
+
+
+        return races;
+    }
+
     public Race getRace(int id, boolean isActive) throws SQLException {
         Race race = null;
         PreparedStatement preparedStatement;

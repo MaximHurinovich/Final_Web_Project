@@ -66,4 +66,12 @@ public class Horse {
     public void setHorseId(int horseId) {
         this.horseId = horseId;
     }
+
+    public int getRaceId() {
+        return raceId;
+    }
+
+    public void setRaceId(int raceId) {
+        this.raceId = raceId;
+    }
 }

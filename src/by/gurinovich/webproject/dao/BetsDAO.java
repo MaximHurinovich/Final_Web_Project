@@ -28,6 +28,8 @@ public class BetsDAO {
             "SELECT * FROM horseraces_db.user_odds WHERE race_id=? AND is_active='true'";
     private static final String SQL_UPDATE_USER_ODDS =
             "UPDATE horseraces_db.user_odds SET is_active='false',success=?,race_id=? WHERE race_id=? AND horse_id=? AND type=?";
+    private static final String SQL_INSERT_BETS =
+            "INSERT INTO horseraces_db.bets VALUES(?,?,?,?,?)";
     private static final String TRUE = "true";
     private ProxyConnection connection = null;
     private ResultSet resultSet;
@@ -203,5 +205,20 @@ public class BetsDAO {
         preparedStatement.close();
         connection.close();
         return result > 0;
+    }
+
+    public boolean setBets(ArrayList<Integer> horsesID, Double[] winBets, Double[] top3Bets, Double[] outsiderBets, int bookmakerID) throws SQLException {
+        connection = pool.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_BETS);
+        preparedStatement.setInt(1, bookmakerID);
+        int result = 0;
+        for(int i = 0; i < horsesID.size(); i++){
+            preparedStatement.setInt(2, horsesID.get(i));
+            preparedStatement.setDouble(3, winBets[i]);
+            preparedStatement.setDouble(4, top3Bets[i]);
+            preparedStatement.setDouble(5, outsiderBets[i]);
+            result = preparedStatement.executeUpdate();
+        }
+        return result>0;
     }
 }

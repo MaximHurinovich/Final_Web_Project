@@ -26,6 +26,18 @@ public enum CommandEnum {
         {
             this.command = new MakeBookmakerCommand();
         }
+    }, BOOKRACE {
+        {
+            this.command = new BookRaceCommand();
+        }
+    }, SETBOOKING {
+        {
+            this.command = new AcceptBookRaceCommand();
+        }
+    },BOOKRACES {
+        {
+            this.command = new BookmakerRacesCommand();
+        }
     }, BET {
         {
             this.command = new BetCommand();

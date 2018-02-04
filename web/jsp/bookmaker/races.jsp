@@ -11,7 +11,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Horse Racing Bets</title>
+    <title>Book races</title>
     <style type="text/css">
         <%@include file="/resources/css/index.css"%>
     </style>
@@ -32,36 +32,25 @@
         <th>Dates</th>
         <th>Horses</th>
     </tr>
-    <c:forEach items="${racesList}" var="race" varStatus="status">
+    <c:forEach items="${bookraces}" var="race" varStatus="status">
         <tr>
             <td>${race.getCard()}</td>
             <td>${race.getDate()}</td>
             <td>
                 <table class="horsestable">
-                    <tr>
-                        <th>Name</th>
-                        <th>Coeffitients</th>
-                    </tr>
                     <c:forEach items="${race.getHorses()}" var="horse" varStatus="status">
                         <tr>
                             <td>${horse.getName()}</td>
-                            <td>
-                                <table class="betstable">
-                                    <tr>
-                                        <th>Winner</th>
-                                        <th>Top 3</th>
-                                        <th>Outsider</th>
-                                    </tr>
-                                    <tr>
-                                        <td>${horse.getBets().getWinner()}</td>
-                                        <td>${horse.getBets().getTop3()}</td>
-                                        <td>${horse.getBets().getOutsider()}</td>
-                                    </tr>
-                                </table>
-                            </td>
                         </tr>
                     </c:forEach>
                 </table>
+            </td>
+            <td>
+                <form name="runRaceForm" method="POST" action="/jsp/controller">
+                    <input type="hidden" name="command" value="bookrace"/>
+                    <input type="hidden" name="race_id" value="${race.getId()}">
+                    <input type="submit" value="Book race"/>
+                </form>
             </td>
         </tr>
     </c:forEach>
