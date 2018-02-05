@@ -23,7 +23,7 @@
 <%@include file="/layout/bookmaker_header.jsp"%>
 <aside class="placeholder">
 </aside>
-<h3><b>Account info</b></h3>
+<h3><b><fmt:message key="jsp.accountinfo.title" bundle="${var}"/></b></h3>
 <br/>
 
 <table>
@@ -32,7 +32,7 @@
             <table>
                 <tr>
                     <td>
-                        <b>First name:</b>
+                        <b><fmt:message key="jsp.register.firstname" bundle="${var}"/></b>
                     </td>
                     <td>
                         <%out.print(((Bookmaker) request.getSession().getAttribute("userfull")).getFirstName());%>
@@ -40,7 +40,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <b>Second name:</b>
+                        <b><fmt:message key="jsp.accountinfo.secondname" bundle="${var}"/></b>
                     </td>
                     <td>
                         <%out.print(((Bookmaker) request.getSession().getAttribute("userfull")).getSecondName());%>
@@ -48,7 +48,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <b>Email:</b>
+                        <b><fmt:message key="jsp.register.email" bundle="${var}"/></b>
                     </td>
                     <td>
                         <%out.print(((Bookmaker) request.getSession().getAttribute("userfull")).getEmail());%>
@@ -57,7 +57,7 @@
             </table>
         </td>
         <td>
-            <input class="login" type="button" value="Edit" onClick='location.href="/jsp/bookmaker/edit_account.jsp"'>
+            <input class="login" type="button" value="<fmt:message key="jsp.button.edit" bundle="${var}"/>" onClick='location.href="/jsp/bookmaker/edit_account.jsp"'>
 
         </td>
     </tr>

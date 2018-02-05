@@ -1,16 +1,16 @@
 package by.gurinovich.webproject.logic;
 
-import by.gurinovich.webproject.dao.BetsDAO;
-import by.gurinovich.webproject.dao.HorsesDAO;
-import by.gurinovich.webproject.dao.RacesDAO;
-import by.gurinovich.webproject.dao.UsersDAO;
+import by.gurinovich.webproject.dao.BetDAO;
+import by.gurinovich.webproject.dao.HorseDAO;
+import by.gurinovich.webproject.dao.RaceDAO;
+import by.gurinovich.webproject.dao.UserDAO;
 import by.gurinovich.webproject.entity.Horse;
 import by.gurinovich.webproject.entity.Odd;
 import by.gurinovich.webproject.entity.Race;
+import by.gurinovich.webproject.exception.DAOException;
 import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.util.Constant;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,78 +18,78 @@ import java.util.HashSet;
 public class AdminLogic {
 
     public boolean deleteRace(int id) throws LogicalException {
-        RacesDAO dao = new RacesDAO();
+        RaceDAO dao = new RaceDAO();
         try {
             return dao.deleteRace(id);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
     }
 
     public boolean banUser(String username) throws LogicalException {
-        UsersDAO dao = new UsersDAO();
+        UserDAO dao = new UserDAO();
         try {
             return dao.banUser(username);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
         }
     }
 
     public boolean makeAdmin(String username) throws LogicalException {
-        UsersDAO dao = new UsersDAO();
+        UserDAO dao = new UserDAO();
         try {
             return dao.makeAdmin(username);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
         }
     }
 
     public boolean makeBookmaker(String username) throws LogicalException {
-        UsersDAO dao = new UsersDAO();
+        UserDAO dao = new UserDAO();
         try {
             return dao.makeBookmaker(username);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
         }
     }
 
     public boolean addNewRace(String card, String date, HashSet<String> horses) throws LogicalException {
-        RacesDAO racesDAO = new RacesDAO();
-        HorsesDAO horsesDAO = new HorsesDAO();
+        RaceDAO raceDAO = new RaceDAO();
+        HorseDAO horseDAO = new HorseDAO();
         int raceID = 0;
         try {
-            raceID = racesDAO.addNewRace(card, date);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+            raceID = raceDAO.addNewRace(card, date);
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
 
         }
         if (raceID == 0) {
             return false;
         }
         try {
-            return horsesDAO.addHorses(raceID, horses);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+            return horseDAO.addHorses(raceID, horses);
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
 
         }
     }
 
     public boolean runRace(int raceId) throws LogicalException {
-        BetsDAO betsDAO = new BetsDAO();
-        HorsesDAO horsesDAO = new HorsesDAO();
-        UsersDAO usersDAO = new UsersDAO();
-        RacesDAO racesDAO = new RacesDAO();
+        BetDAO betDAO = new BetDAO();
+        HorseDAO horseDAO = new HorseDAO();
+        UserDAO userDAO = new UserDAO();
+        RaceDAO raceDAO = new RaceDAO();
         ArrayList<Odd> raceOdds = new ArrayList<>();
         try {
-            raceOdds = betsDAO.getOdds(raceId);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+            raceOdds = betDAO.getOdds(raceId);
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
         }
         ArrayList<Horse> horses;
         try {
-            horses = horsesDAO.getHorses(raceId);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+            horses = horseDAO.getHorses(raceId);
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
         }
         ArrayList<Integer> places = new ArrayList<>();
         for (int i = 0; i < horses.size(); i++) {
@@ -115,40 +115,40 @@ public class AdminLogic {
             }
             if (odd.isSuccess()) {
                 try {
-                    usersDAO.winningBet(odd.getUsername(), odd.getOdd(), odd.getHorseId(), odd.getType());
-                } catch (SQLException e) {
-                    throw new LogicalException(e.getMessage() + e.getSQLState());
+                    userDAO.winningBet(odd.getUsername(), odd.getOdd(), odd.getHorseId(), odd.getType());
+                } catch (DAOException e) {
+                    throw new LogicalException(e.getMessage());
                 }
             }
         }
         Race race;
         int resultId;
         try {
-            race = racesDAO.getRace(raceId, true);
-            resultId = racesDAO.addResults(race);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+            race = raceDAO.getRace(raceId, true);
+            resultId = raceDAO.addResults(race);
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
         }
         try {
-            horsesDAO.addResultHorses(horses, resultId);
-            betsDAO.updateOdds(raceOdds, raceId, resultId);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+            horseDAO.addResultHorses(horses, resultId);
+            betDAO.updateOdds(raceOdds, raceId, resultId);
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
         }
         try {
-            return racesDAO.deleteRace(raceId);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+            return raceDAO.deleteRace(raceId);
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
         }
     }
 
     public ArrayList<Odd> getOdds() throws LogicalException {
-        BetsDAO dao = new BetsDAO();
+        BetDAO dao = new BetDAO();
         ArrayList<Odd> odds;
         try {
             odds = dao.getOdds();
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
         }
         return odds;
     }

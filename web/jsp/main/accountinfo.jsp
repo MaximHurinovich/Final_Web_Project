@@ -19,7 +19,7 @@
 <body>
 <%@include file="/layout/header.jsp" %>
 <aside class="placeholder"></aside>
-<h3><b>Account info</b></h3>
+<h3><b><fmt:message key="jsp.accountinfo.title" bundle="${var}"/></b></h3>
 <br/>
 
 <table>
@@ -28,7 +28,7 @@
             <table>
                 <tr>
                     <td>
-                        <b>First name:</b>
+                        <b><fmt:message key="jsp.accountinfo.firstname" bundle="${var}"/></b>
                     </td>
                     <td>
                         <%out.print(((User) request.getSession().getAttribute("userfull")).getFirstName());%>
@@ -36,7 +36,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <b>Second name:</b>
+                        <b><fmt:message key="jsp.accountinfo.secondname" bundle="${var}"/></b>
                     </td>
                     <td>
                         <%out.print(((User) request.getSession().getAttribute("userfull")).getSecondName());%>
@@ -44,7 +44,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <b>Email:</b>
+                        <b><fmt:message key="jsp.accountinfo.email" bundle="${var}"/></b>
                     </td>
                     <td>
                         <%out.print(((User) request.getSession().getAttribute("userfull")).getEmail());%>
@@ -52,7 +52,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <b>Card number:</b>
+                        <b><fmt:message key="jsp.accountinfo.cardnumber" bundle="${var}"/>Card number:</b>
                     </td>
                     <td>
                         <%out.print(((User) request.getSession().getAttribute("userfull")).getCardNumber());%>
@@ -61,19 +61,19 @@
             </table>
         </td>
         <td>
-            <form class="edit" method="post" action="/jsp/controller">
+            <form class="edit" method="post" action="${pageContext.request.contextPath}/jsp/controller">
                 <input type="hidden" name="command" value="edit">
-                <input type="submit" value="Edit">
+                <input type="submit" value="<fmt:message key="jsp.button.edit" bundle="${var}"/>">
             </form>
         </td>
     </tr>
 </table>
 <hr/>
-<span style="color: antiquewhite"> <b>Current amount:</b>
+<span style="color: antiquewhite"> <b><fmt:message key="jsp.accountinfo.currentamount" bundle="${var}"/></b>
     <%out.print(((User) request.getSession().getAttribute("userfull")).getAmount());%>$</span><br/>
-<form class="add" method="post" action="/jsp/controller">
+<form class="add" method="post" action="${pageContext.request.contextPath}/jsp/controller">
     <input type="hidden" name="command" value="addmoney">
-    <input type="submit" value="Money Transfer">
+    <input type="submit" value="<fmt:message key="jsp.button.money" bundle="${var}"/>">
 </form>
 
 <%@include file="/layout/footer.jsp" %>

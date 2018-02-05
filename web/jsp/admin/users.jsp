@@ -23,41 +23,41 @@
 <%@include file="/layout/admin_header.jsp"%>
 <aside class="placeholder">
 </aside>
-<h3><b>List of users:</b></h3>
+<h3><b><fmt:message key="jsp.header.users" bundle="${var}"/></b></h3>
 ${adminMessage}
 <br/>
 <table class="maintable">
     <tr>
-        <th>Username</th>
-        <th>First name</th>
-        <th>Second name</th>
-        <th>E-mail</th>
+        <th><fmt:message key="jsp.register.username" bundle="${var}"/></th>
+        <th><fmt:message key="jsp.register.firstname" bundle="${var}"/></th>
+        <th><fmt:message key="jsp.accountinfo.secondname" bundle="${var}"/></th>
+        <th><fmt:message key="jsp.register.email" bundle="${var}"/></th>
     </tr>
     <c:forEach items="${usersList}" var="user" varStatus="status">
         <tr>
-            <td>${user.getUsername()}</td>
-            <td>${user.getFirstName()}</td>
-            <td>${user.getSecondName()}</td>
-            <td>${user.getEmail()}</td>
+            <td>${user.username}</td>
+            <td>${user.firstName}</td>
+            <td>${user.secondName}</td>
+            <td>${user.email}</td>
             <td>
-                <form name="runRaceForm" method="POST" action="/jsp/controller">
+                <form name="runRaceForm" method="POST" action="${pageContext.request.contextPath}/jsp/controller">
                     <input type="hidden" name="command" value="makeadmin"/>
-                    <input type="hidden" name="username" value="${user.getUsername()}">
-                    <input type="submit" value="Make admin"/>
+                    <input type="hidden" name="username" value="${user.username}">
+                    <input type="submit" value="<fmt:message key="jsp.button.admin" bundle="${var}"/>"/>
                 </form>
             </td>
             <td>
-                <form name="editRaceForm" method="POST" action="/jsp/controller">
+                <form name="editRaceForm" method="POST" action="${pageContext.request.contextPath}/jsp/controller">
                     <input type="hidden" name="command" value="makebookmaker"/>
-                    <input type="hidden" name="username" value="${user.getUsername()}">
-                    <input type="submit" value="Make bookmaker"/>
+                    <input type="hidden" name="username" value="${user.username}">
+                    <input type="submit" value="<fmt:message key="jsp.button.bookmaker" bundle="${var}"/>"/>
                 </form>
             </td>
             <td>
-                <form name="deleteRaceForm" method="POST" action="/jsp/controller">
+                <form name="deleteRaceForm" method="POST" action="${pageContext.request.contextPath}/jsp/controller">
                     <input type="hidden" name="command" value="banuser"/>
-                    <input type="hidden" name="username" value="${user.getUsername()}">
-                    <input type="submit" value="Ban user"/>
+                    <input type="hidden" name="username" value="${user.username}">
+                    <input type="submit" value="<fmt:message key="jsp.button.ban" bundle="${var}"/>"/>
                 </form>
             </td>
         </tr>

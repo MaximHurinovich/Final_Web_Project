@@ -2,6 +2,7 @@ package by.gurinovich.webproject.logic;
 
 import by.gurinovich.webproject.dao.*;
 import by.gurinovich.webproject.entity.*;
+import by.gurinovich.webproject.exception.DAOException;
 import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.util.Validator;
@@ -12,36 +13,36 @@ import java.util.ArrayList;
 public class UserLogic {
 
     public Race getRace(int id) throws LogicalException {
-        RacesDAO dao = new RacesDAO();
+        RaceDAO dao = new RaceDAO();
         Race race = null;
         try {
             race = dao.getRace(id, true);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
         return race;
     }
 
     public ArrayList<Horse> getHorses(int raceId) throws LogicalException {
-        HorsesDAO dao = new HorsesDAO();
+        HorseDAO dao = new HorseDAO();
         ArrayList<Horse> horses;
         try {
             horses = dao.getHorses(raceId);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
         return horses;
     }
 
     public boolean addNewBet(String username, int raceId, int horseId, String betType, Double amount) throws LogicalException {
-        BetsDAO dao = new BetsDAO();
+        BetDAO dao = new BetDAO();
         if (amount <= 0 || betType.isEmpty() || horseId == 0) {
             return false;
         }
         try {
             return dao.addNewBet(username, raceId, horseId, betType, amount);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
     }
 
@@ -51,8 +52,8 @@ public class UserLogic {
             if (bet <= amount && bet > 0) {
                 return dao.updateAccountBet(username, amount, bet);
             }
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
         return false;
     }
@@ -65,8 +66,8 @@ public class UserLogic {
         CardDAO dao = new CardDAO();
         try {
             return checkMoney(amount, cardAmount) && dao.updateCardToAccount(cardNumber, cardAmount, amount, currentAmount);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
     }
 
@@ -74,8 +75,8 @@ public class UserLogic {
         CardDAO dao = new CardDAO();
         try {
             return checkMoney(amount, currentAmount) && dao.updateAccountToCard(cardNumber, cardAmount, amount, currentAmount);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
     }
 
@@ -84,8 +85,8 @@ public class UserLogic {
         double amount;
         try {
             amount = dao.getAccountAmount(cardNumber);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
         return amount;
     }
@@ -95,8 +96,8 @@ public class UserLogic {
         double amount;
         try {
             amount = dao.getCardAmount(cardNumber);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
         return amount;
     }
@@ -122,19 +123,19 @@ public class UserLogic {
         EditDAO dao = new EditDAO();
         try {
             return dao.updateProfile(userName, firstName, secondName, email, cardNumber);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
     }
 
 
     public ArrayList<Odd> getActiveOdds(String username) throws LogicalException {
-        BetsDAO dao = new BetsDAO();
+        BetDAO dao = new BetDAO();
         ArrayList<Odd> odds;
         try {
             odds = dao.getOdds(username);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
         ArrayList<Odd> out = new ArrayList<>();
         if (odds != null) {
@@ -147,12 +148,12 @@ public class UserLogic {
     }
 
     public ArrayList<Odd> getPassiveOdds(String username) throws LogicalException {
-        BetsDAO dao = new BetsDAO();
+        BetDAO dao = new BetDAO();
         ArrayList<Odd> odds;
         try {
             odds = dao.getOdds(username);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
         ArrayList<Odd> out = new ArrayList<>();
         if (odds != null) {
@@ -165,12 +166,12 @@ public class UserLogic {
     }
 
     public ArrayList<Race> results() throws LogicalException {
-        ResultsDAO dao = new ResultsDAO();
+        ResultDAO dao = new ResultDAO();
         ArrayList<Race> results;
         try {
             results = dao.getResults();
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
         return results;
     }

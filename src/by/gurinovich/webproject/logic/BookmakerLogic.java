@@ -1,9 +1,10 @@
 package by.gurinovich.webproject.logic;
 
-import by.gurinovich.webproject.dao.BetsDAO;
-import by.gurinovich.webproject.dao.RacesDAO;
+import by.gurinovich.webproject.dao.BetDAO;
+import by.gurinovich.webproject.dao.RaceDAO;
 import by.gurinovich.webproject.entity.Horse;
 import by.gurinovich.webproject.entity.Race;
+import by.gurinovich.webproject.exception.DAOException;
 import by.gurinovich.webproject.exception.LogicalException;
 
 import java.sql.SQLException;
@@ -12,11 +13,11 @@ import java.util.ArrayList;
 public class BookmakerLogic {
 
     public ArrayList<Race> getRaces() throws LogicalException {
-        RacesDAO racesDAO = new RacesDAO();
+        RaceDAO raceDAO = new RaceDAO();
         try {
-            return racesDAO.getBookmakerRaces();
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+            return raceDAO.getBookmakerRaces();
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
         }
     }
 
@@ -24,7 +25,7 @@ public class BookmakerLogic {
         Double[] winBets = new Double[race.getHorses().size()];
         Double[] top3Bets = new Double[race.getHorses().size()];
         Double[] outsiderBets = new Double[race.getHorses().size()];
-        BetsDAO dao = new BetsDAO();
+        BetDAO dao = new BetDAO();
         for (int i = 0; i < winBets.length; i++){
             winBets[i] = Double.valueOf(wins[i]);
             top3Bets[i] = Double.valueOf(top3s[i]);
@@ -37,8 +38,8 @@ public class BookmakerLogic {
         }
         try {
             return dao.setBets(horsesID, winBets, top3Bets, outsiderBets, bookmakerID);
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage());
         }
     }
 }

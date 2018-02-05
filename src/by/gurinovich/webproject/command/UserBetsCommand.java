@@ -10,7 +10,7 @@ import by.gurinovich.webproject.util.Constant;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class MyBetsCommand implements ActionCommand {
+public class UserBetsCommand implements ActionCommand {
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
         Router router = new Router();
@@ -24,7 +24,7 @@ public class MyBetsCommand implements ActionCommand {
         try {
             request.getSession().setAttribute(Constant.ATTRIBUTE_NAME_NONACTIVE_ODDS, userLogic.getPassiveOdds(username));
         } catch (LogicalException e) {
-            throw new CommandException(e.getMessage());
+            throw new CommandException(e.getMessage(), e);
         }
         router.setPage(ConfigurationManager.getProperty("path.page.mybets"));
         return router;

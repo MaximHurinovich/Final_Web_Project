@@ -9,11 +9,11 @@
 </head>
 
 <body>
-<%@include file="../layout/high_menu_bar.jsp"%>
-<fmt:message key="jsp.error.requestfrom" /> ${pageContext.errorData.requestURI} <fmt:message key="jsp.error.failed" /> <br/>
-<fmt:message key="jsp.error.name" /> ${pageContext.errorData.servletName} <br/>
-<fmt:message key="jsp.error.status" /> ${pageContext.errorData.statusCode} <br/>
-<fmt:message key="jsp.error.exception" /> ${pageContext.errorData.throwable}
+<%@include file="../layout/i18n_bar.jsp"%>
+<fmt:message key="jsp.error.requestfrom" bundle="${var}"/> ${pageContext.errorData.requestURI} <fmt:message key="jsp.error.failed" bundle="${var}"/> <br/>
+<fmt:message key="jsp.error.name" bundle="${var}"/> ${pageContext.errorData.servletName} <br/>
+<fmt:message key="jsp.error.status" bundle="${var}"/> ${pageContext.errorData.statusCode} <br/>
+<fmt:message key="jsp.error.exception" bundle="${var}"/> ${pageContext.errorData.throwable}
 
 </body>
 </html>

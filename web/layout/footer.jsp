@@ -9,7 +9,7 @@
 <html>
 <body>
 <footer class="footer">
-    All rights reserved. 2018(c) Gurinovich M.A.
+    <fmt:message key="jsp.footer" bundle="${var}"/>
 </footer>
 </body>
 </html>

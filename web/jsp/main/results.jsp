@@ -21,29 +21,29 @@
 <%@include file="/layout/header.jsp"%>
 <aside class="placeholder">
 </aside>
-<h2><b>Races results:</b></h2>
+<h2><b><fmt:message key="jsp.mybets.results" bundle="${var}"/></b></h2>
 <br/>
 <table class="maintable">
     <tr>
-        <th>Cards</th>
-        <th>Dates</th>
-        <th>Horses</th>
+        <th><fmt:message key="jsp.main.cards" bundle="${var}"/></th>
+        <th><fmt:message key="jsp.main.dates" bundle="${var}"/></th>
+        <th><fmt:message key="jsp.main.horses" bundle="${var}"/></th>
     </tr>
     <c:forEach items="${resultList}" var="race" varStatus="status">
         <tr>
-            <td>${race.getCard()}</td>
-            <td>${race.getDate()}</td>
+            <td>${race.card}</td>
+            <td>${race.date}</td>
             <td>
                 <table class="horsestable">
                     <tr>
-                        <th>Place</th>
-                        <th>Name</th>
+                        <th><fmt:message key="jsp.main.place" bundle="${var}"/></th>
+                        <th><fmt:message key="jsp.mybets.horse" bundle="${var}"/></th>
                     </tr>
-                    <c:forEach items="${race.getHorses()}" var="horse" varStatus="status">
+                    <c:forEach items="${race.horses}" var="horse" varStatus="status">
                         <tr>
-                            <td>${horse.getPlace()}</td>
+                            <td>${horse.place}</td>
                             <td>
-                                ${horse.getName()}
+                                ${horse.name}
                             </td>
                         </tr>
                     </c:forEach>

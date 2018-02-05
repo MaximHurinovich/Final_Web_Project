@@ -19,17 +19,17 @@
 <body>
 <%@include file="/layout/header.jsp" %>
 <aside class="placeholder"></aside>
-<h3><b>Add money</b></h3>
+<h3><b><fmt:message key="jsp.addmoney.title" bundle="${var}"/> </b></h3>
 <br/>
 
-<form  method="post" action="/jsp/controller">
+<form  method="post" action="${pageContext.request.contextPath}/jsp/controller">
     <table>
         <tr>
             <td>
                 <table>
                     <tr>
                         <td>
-                            <b>Current amount:</b>
+                            <b><fmt:message key="jsp.addmoney.current" bundle="${var}"/></b>
                         </td>
                         <td>
                             <%out.print(((User) request.getSession().getAttribute("userfull")).getAmount());%>
@@ -37,7 +37,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <b>Card amount:</b>
+                            <b><fmt:message key="jsp.addmoney.card" bundle="${var}"/></b>
                         </td>
                         <td>
                             ${cardAmount}
@@ -45,7 +45,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <b>Add to account</b>
+                            <b><fmt:message key="jsp.addmoney.toaccount" bundle="${var}"/></b>
                         </td>
                         <td>
                             <label>
@@ -57,7 +57,7 @@
             </td>
             <td>
                     <input type="hidden" name="command" value="acceptadd">
-                    <input type="submit" value="Add">
+                    <input type="submit" value="<fmt:message key="jsp.button.add" bundle="${var}"/>">
 
             </td>
             <td>
@@ -66,11 +66,11 @@
     </table>
 
 </form><br/>
-<form class="edit" method="post" action="/jsp/controller">
+<form class="edit" method="post" action="${pageContext.request.contextPath}/jsp/controller">
     <table>
         <tr>
             <td>
-                <b>Return from account:</b>
+                <b><fmt:message key="jsp.addmoney.return" bundle="${var}"/></b>
             </td>
             <td>
                 <label>
@@ -79,7 +79,7 @@
             </td>
             <td>
                 <input type="hidden" name="command" value="returnmoney">
-                <input type="submit" value="Return">
+                <input type="submit" value="<fmt:message key="jsp.button.return" bundle="${var}"/>">
             </td>
         </tr>
     </table>

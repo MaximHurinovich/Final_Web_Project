@@ -16,17 +16,17 @@
 
             <ul>
                 <li>
-                    <%@include file="../layout/high_menu_bar.jsp" %>
+                    <%@include file="../layout/i18n_bar.jsp" %>
                 </li>
-                <li><span style="color: white; padding-top: 10px"><b>Welcome</b>,<br/> ${user}!</span></li>
-                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/main/main.jsp" data-scroll>Home</a></li>
-                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/controller?command=results" data-scroll>Results</a></li>
-                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/controller?command=mybets" data-scroll>My Bets</a></li>
-                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/main/about.jsp" data-scroll>About</a>
+                <li><span style="color: white; padding-top: 10px"><b><fmt:message key="jsp.header.welcome" bundle="${var}"/></b>,<br/> ${user}!</span></li>
+                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/main/main.jsp" data-scroll><fmt:message key="jsp.header.home" bundle="${var}"/></a></li>
+                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/controller?command=results" data-scroll><fmt:message key="jsp.mybets.results" bundle="${var}"/></a></li>
+                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/controller?command=mybets" data-scroll><fmt:message key="jsp.mybets.title" bundle="${var}"/></a></li>
+                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/main/about.jsp" data-scroll><fmt:message key="jsp.about.title" bundle="${var}"/></a>
                 </li>
-                <li class="menu-item"><a href="<c:url value="/jsp/main/accountinfo.jsp"/>" data-scroll>Account</a></li>
+                <li class="menu-item"><a href="<c:url value="/jsp/main/accountinfo.jsp"/>" data-scroll><fmt:message key="jsp.header.account" bundle="${var}"/></a></li>
                 <li class="menu-item">
-                    <a href="<c:url value="/jsp/controller?command=logout"/>">Log out</a>
+                    <a href="<c:url value="/jsp/controller?command=logout"/>"><fmt:message key="jsp.header.logout" bundle="${var}"/></a>
                 </li>
             </ul>
         </nav>

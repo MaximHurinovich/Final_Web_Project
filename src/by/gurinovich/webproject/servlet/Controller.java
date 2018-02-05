@@ -48,6 +48,7 @@ public class Controller extends HttpServlet {
         }
         } catch (CommandException e) {
             page = ConfigurationManager.getProperty("path.page.error");
+            request.getSession().setAttribute(Constant.ATTRIBUTE_NULL_PAGE, MessageManager.getProperty("message.nullpage"));
             response.sendRedirect(request.getContextPath() + page);}
     }
 }

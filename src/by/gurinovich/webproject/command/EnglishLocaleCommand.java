@@ -7,25 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class I18nCommand implements ActionCommand {
+public class EnglishLocaleCommand implements ActionCommand {
     private static final String REG_EX_JSP = "/jsp.+";
     private static final String PARAM_CHANGE_LANGUAGE = "changeLanguage";
     private static final String PARAM_PAGE_PATH = "pagePath";
 
     @Override
-    public Router execute(HttpServletRequest request) throws CommandException{
+    public Router execute(HttpServletRequest request) throws CommandException {
         Router router = new Router();
         if (request.getSession().getAttribute(PARAM_CHANGE_LANGUAGE) == null){
             request.getSession().setAttribute(PARAM_CHANGE_LANGUAGE , "ru");
         }
-        if ("en".equals(request.getSession().getAttribute(PARAM_CHANGE_LANGUAGE))){
-            request.getSession().setAttribute(PARAM_CHANGE_LANGUAGE , "ru");
-        }
-        else{
-            request.getSession().setAttribute(PARAM_CHANGE_LANGUAGE , "en");
-        }
-
-
+        request.getSession().setAttribute(PARAM_CHANGE_LANGUAGE , "en");
         String page = null;
         Pattern p = Pattern.compile(REG_EX_JSP);
         Matcher m = p.matcher(request.getParameter(PARAM_PAGE_PATH));
@@ -33,8 +26,6 @@ public class I18nCommand implements ActionCommand {
             page = m.group();
         }
         router.setPage(request.getContextPath()+page);
-        router.setRoute(Router.RouteType.REDIRECT);
         return router;
     }
 }
-

@@ -25,15 +25,14 @@
         </style>
     </head>
     <body>
-    <%@include file="/layout/high_menu_bar.jsp"%>
 
     <br/>
     <form>
 
-        <input class="login" type="button" value="<fmt:message key = "jsp.index.login" />" onClick='location.href="/jsp/login.jsp"'>
+        <input class="login" type="button" value="Войти" onClick='location.href="/jsp/login.jsp"'>
     </form>
     <form>
-        <input class="login" type="button" value="<fmt:message key = "jsp.login.signup" />" onClick='location.href="/jsp/register.jsp"'>
+        <input class="login" type="button" value="Нужна регистрация?" onClick='location.href="/jsp/register.jsp"'>
     </form>
     </body>
     </html>

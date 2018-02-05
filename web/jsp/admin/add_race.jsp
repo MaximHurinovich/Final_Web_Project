@@ -9,7 +9,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Add Horse</title>
+    <title>Add race</title>
     <style type="text/css">
         <%@include file="/resources/css/index.css"%>
     </style>
@@ -23,11 +23,11 @@
 </aside>
 ${addRaceMessage}
 <br/>
-<form method="post" action="/jsp/controller">
+<form method="post" action="${pageContext.request.contextPath}/jsp/controller">
     <input type="hidden" name="command" value="addhorse">
     <table>
         <tr>
-            <th>Horse name:</th>
+            <th><fmt:message key="jsp.mybets.horse" bundle="${var}"/></th>
             <td>
                 <label>
                     <input type="text" name="horsename" value="">
@@ -40,10 +40,10 @@ ${addRaceMessage}
         </tr>
     </table>
 </form>
-<form method="post" action="/jsp/controller">
+<form method="post" action="${pageContext.request.contextPath}/jsp/controller">
     <table class="maintable">
         <tr>
-            <th>Card:</th>
+            <th><fmt:message key="jsp.main.cards" bundle="${var}"/></th>
             <td>
                 <label>
                     <input type="text" name="card" value="">
@@ -51,7 +51,7 @@ ${addRaceMessage}
             </td>
         </tr>
         <tr>
-            <th>Date:</th>
+            <th><fmt:message key="jsp.main.dates" bundle="${var}"/></th>
             <td>
                 <label class="dateForm">
                     <input type="text" name="date" value="">
@@ -62,7 +62,7 @@ ${addRaceMessage}
     ${horseMessage}<br/>
     <input type="hidden" name="horses" value="${horsesList}">
     <input type="hidden" name="command" value="addrace">
-    <input type="submit" value="Submit">
+    <input type="submit" value="<fmt:message key="jsp.button.submit" bundle="${var}"/>">
 </form>
 <aside class="placeholder">
 </aside>

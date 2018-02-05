@@ -2,6 +2,7 @@ package by.gurinovich.webproject.command;
 
 
 import by.gurinovich.webproject.exception.CommandException;
+import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.logic.DefaultLogic;
 import by.gurinovich.webproject.logic.UserLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
@@ -33,17 +34,21 @@ public class RegisterCommand implements ActionCommand {
         String email = request.getParameter(PARAM_NAME_EMAIL);
         String cardNumber = request.getParameter(PARAM_NAME_CARD_NUMBER);
         String cardPassword = request.getParameter(PARAM_NAME_CARD_PASSWORD);
-        if (logic.checkRegistration(firstName, secondName, userName, password, email, cardNumber, cardPassword)) {
-            request.setAttribute(Constant.ATTRIBUTE_SUCCESS_MESSAGE, MessageManager.getProperty("message.registration_success"));
-            page = ConfigurationManager.getProperty("path.page.login");
-            router.setPage(page);
-            router.setRoute(Router.RouteType.REDIRECT);
-        } else {
-            request.setAttribute(Constant.ATTRIBUTE_ERROR_LOGIN_MESSAGE, logic.invalidateMessage(firstName, secondName, userName, password, email, cardNumber, cardPassword));
-            page = ConfigurationManager.getProperty("path.page.register");
-            router.setPage(page);
+        try {
+            if (logic.checkRegistration(firstName, secondName, userName, password, email, cardNumber, cardPassword)) {
+                request.setAttribute(Constant.ATTRIBUTE_SUCCESS_MESSAGE, MessageManager.getProperty("message.registration_success"));
+                page = ConfigurationManager.getProperty("path.page.login");
+                router.setPage(page);
+                router.setRoute(Router.RouteType.REDIRECT);
+            } else {
+                request.setAttribute(Constant.ATTRIBUTE_ERROR_LOGIN_MESSAGE, logic.invalidateMessage(firstName, secondName, userName, password, email, cardNumber, cardPassword));
+                page = ConfigurationManager.getProperty("path.page.register");
+                router.setPage(page);
+            }
+            return router;
         }
-
-        return router;
+        catch(LogicalException e){
+                throw new CommandException(e.getMessage(), e);
+            }
     }
 }

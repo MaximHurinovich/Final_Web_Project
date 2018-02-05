@@ -40,7 +40,7 @@ public class ConnectionPool {
     }
 
 
-    public void releaseConnection(ProxyConnection connection) {
+    void releaseConnection(ProxyConnection connection) {
         try {
             if (connection.getAutoCommit()) {
 
@@ -54,7 +54,7 @@ public class ConnectionPool {
     }
 
 
-    public ProxyConnection getConnection() {
+    public ProxyConnection createConnection() {
         ProxyConnection connection = null;
         try {
             connection = connectionQueue.take();
@@ -74,6 +74,11 @@ public class ConnectionPool {
             } catch (InterruptedException | SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            DriverManager.deregisterDriver(new com.mysql.jdbc.Driver());
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -29,20 +29,20 @@
 <%@include file="/layout/bookmaker_header.jsp"%>
 <aside class="placeholder">
 </aside>
-<h2><b>Book race:</b></h2>
+<h2><b><fmt:message key="jsp.booker.race" bundle="${var}"/></b></h2>
 
 <br/>
 <form name="runRaceForm" method="POST" action="${pageContext.request.contextPath}/jsp/controller">
 <table class="maintable">
     <tr>
-        <th>Horse</th>
-        <th>Win</th>
-        <th>Top 3</th>
-        <th>Outsider</th>
+        <th><fmt:message key="jsp.main.horses" bundle="${var}"/></th>
+        <th><fmt:message key="jsp.main.win" bundle="${var}"/></th>
+        <th><fmt:message key="jsp.main.top3" bundle="${var}"/></th>
+        <th><fmt:message key="jsp.main.outsider" bundle="${var}"/></th>
     </tr>
     <c:forEach items="${horsesList}" var="horse" varStatus="status">
         <tr>
-            <td>${horse.getName()}</td>
+            <td>${horse.name}</td>
             <td>
                 <label>
                     <input type="text" name="winList" value="" required pattern="^(\d+\.?\d+)|\d+$">
@@ -63,7 +63,7 @@
     <tr>
             <td>
                     <input type="hidden" name="command" value="setbooking"/>
-                    <input type="submit" value="Book race"/>
+                    <input type="submit" value="<fmt:message key="jsp.button.submit" bundle="${var}"/>"/>
 
             </td>
     </tr>

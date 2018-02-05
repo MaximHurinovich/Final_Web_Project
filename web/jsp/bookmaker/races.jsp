@@ -23,33 +23,33 @@
 <%@include file="/layout/bookmaker_header.jsp"%>
 <aside class="placeholder">
 </aside>
-<h2><b>Available races:</b></h2>
+<h2><b><fmt:message key="jsp.main.title" bundle="${var}"/></b></h2>
 
 <br/>
 <table class="maintable">
     <tr>
-        <th>Cards</th>
-        <th>Dates</th>
-        <th>Horses</th>
+        <th><fmt:message key="jsp.main.cards" bundle="${var}"/></th>
+        <th><fmt:message key="jsp.main.dates" bundle="${var}"/></th>
+        <th><fmt:message key="jsp.main.horses" bundle="${var}"/></th>
     </tr>
     <c:forEach items="${bookraces}" var="race" varStatus="status">
         <tr>
-            <td>${race.getCard()}</td>
-            <td>${race.getDate()}</td>
+            <td>${race.card}</td>
+            <td>${race.date}</td>
             <td>
                 <table class="horsestable">
-                    <c:forEach items="${race.getHorses()}" var="horse" varStatus="status">
+                    <c:forEach items="${race.horses}" var="horse" varStatus="status">
                         <tr>
-                            <td>${horse.getName()}</td>
+                            <td>${horse.name}</td>
                         </tr>
                     </c:forEach>
                 </table>
             </td>
             <td>
-                <form name="runRaceForm" method="POST" action="/jsp/controller">
+                <form name="runRaceForm" method="POST" action="${pageContext.request.contextPath}/jsp/controller">
                     <input type="hidden" name="command" value="bookrace"/>
-                    <input type="hidden" name="race_id" value="${race.getId()}">
-                    <input type="submit" value="Book race"/>
+                    <input type="hidden" name="race_id" value="${race.id}">
+                    <input type="submit" value="<fmt:message key="jsp.booker.race" bundle="${var}"/>"/>
                 </form>
             </td>
         </tr>

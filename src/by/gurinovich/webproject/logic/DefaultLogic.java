@@ -1,10 +1,11 @@
 package by.gurinovich.webproject.logic;
 
-import by.gurinovich.webproject.dao.UsersDAO;
-import by.gurinovich.webproject.dao.RacesDAO;
+import by.gurinovich.webproject.dao.UserDAO;
+import by.gurinovich.webproject.dao.RaceDAO;
 import by.gurinovich.webproject.dao.RegistrationDAO;
 import by.gurinovich.webproject.entity.Person;
 import by.gurinovich.webproject.entity.Race;
+import by.gurinovich.webproject.exception.DAOException;
 import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.util.Validator;
@@ -13,70 +14,69 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DefaultLogic {
-    public boolean checkLogin(String enterLogin, String enterPass) {
-        UsersDAO dao = new UsersDAO();
+    public boolean checkLogin(String enterLogin, String enterPass) throws LogicalException {
+        UserDAO dao = new UserDAO();
         try {
             return dao.authenticateUser(enterLogin, enterPass);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
-        return false;
     }
 
-    public String userName(String login, String password) {
-        UsersDAO dao = new UsersDAO();
-        String username = null;
+    public String userName(String login, String password) throws LogicalException {
+        UserDAO dao = new UserDAO();
+        String username;
         try {
             username = dao.userName(login, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return username;
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
-        return username;
     }
 
-    public Person createUser(String login, String password) {
-        UsersDAO dao = new UsersDAO();
-        Person user = null;
+    public Person createUser(String login, String password) throws LogicalException {
+        UserDAO dao = new UserDAO();
+        Person user;
         try {
             user = dao.createUser(login, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return user;
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
-        return user;
     }
 
-    public boolean checkRegistration(String firstName, String secondName, String userName, String password, String email, String cardNumber, String cardPassword) {
+    public boolean checkRegistration(String firstName, String secondName, String userName, String password, String email, String cardNumber, String cardPassword) throws LogicalException {
         RegistrationDAO dao = new RegistrationDAO();
         try {
             if (dao.checkCard(cardNumber, cardPassword) && dao.checkUserName(userName)) {
                 return dao.registerUser(firstName, secondName, userName, password, email, cardNumber, cardPassword);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (DAOException e){
+            throw new LogicalException(e.getMessage(), e);
         }
         return false;
     }
 
     public ArrayList<Race> getRaces() throws LogicalException {
-        RacesDAO dao = new RacesDAO();
-        ArrayList<Race> races = null;
+        RaceDAO dao = new RaceDAO();
+        ArrayList<Race> races;
         try {
             races = dao.getRaces();
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+            return races;
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
-        return races;
     }
 
     public ArrayList<Person> getUsers() throws LogicalException {
-        UsersDAO dao = new UsersDAO();
+        UserDAO dao = new UserDAO();
         ArrayList<Person> users;
         try {
             users = dao.getUsers();
-        } catch (SQLException e) {
-            throw new LogicalException(e.getMessage() + e.getSQLState());
+            return users;
+        } catch (DAOException e) {
+            throw new LogicalException(e.getMessage(), e);
         }
-        return users;
     }
 
     public String invalidateMessage(String firstName, String secondName, String userName, String password, String email, String cardNumber, String cardPassword) {

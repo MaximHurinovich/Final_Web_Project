@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Index</title>
+    <title>Login</title>
 
     <style type="text/css">
         body{
@@ -23,22 +23,22 @@
     </style>
 </head>
 <body>
-    <%@include file="../layout/high_menu_bar.jsp"%>
+    <%@include file="../layout/i18n_bar.jsp"%>
     <div class="loginForm">
-    <form name="loginForm" method="POST" action="controller">
+    <form name="loginForm" method="POST" action="${pageContext.request.contextPath}/jsp/controller">
         <input type="hidden" name="command" value="login"/>
-        <fmt:message key = "jsp.login.login" /><br/>
+        <fmt:message key = "jsp.login.login" bundle="${var}"/><br/>
         <label class="login">
             <input type="text" name="login" value=""/>
         </label>
-        <br/><fmt:message key = "jsp.login.password" /><br/>
+        <br/><fmt:message key = "jsp.login.password" bundle="${var}"/><br/>
         <label>
             <input type="password" name="password" value=""/>
         </label><br/>
-            <input type="submit" value="<fmt:message key = "jsp.login.submit" />">
+            <input type="submit" value="<fmt:message key = "jsp.login.submit" bundle="${var}"/>">
         <br/> ${successMessage} <br/> ${errorLoginPassMessage} <br/> ${wrongAction} <br/> ${nullPage} <br/>
     </form>
     </div>
-<hr/>    <a href="${pageContext.request.contextPath}/jsp/register.jsp"><fmt:message key = "jsp.login.signup" /></a>
+<hr/>    <a href="${pageContext.request.contextPath}/jsp/register.jsp"><fmt:message key = "jsp.login.signup" bundle="${var}"/></a>
 </body>
 </html>

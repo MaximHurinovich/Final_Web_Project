@@ -1,15 +1,17 @@
 package by.gurinovich.webproject.dao;
 
 import by.gurinovich.webproject.entity.*;
-import by.gurinovich.webproject.id.IDGenerator;
+import by.gurinovich.webproject.exception.DAOException;
+import by.gurinovich.webproject.util.IDGenerator;
 import by.gurinovich.webproject.pool.ConnectionPool;
 import by.gurinovich.webproject.pool.ProxyConnection;
 import by.gurinovich.webproject.util.Constant;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Random;
 
-public class UsersDAO {
+public class UserDAO {
     private final String SQL_SELECT_USER =
             "SELECT * FROM horseraces_db.personal_info WHERE username =? AND password =?";
     private final String SQL_SELECT_AMOUNT =
@@ -27,29 +29,34 @@ public class UsersDAO {
     private ResultSet resultSet;
     private ConnectionPool pool = ConnectionPool.getInstance();
 
-    public boolean authenticateUser(String login, String password) throws SQLException {
-        connection = pool.getConnection();
-        preparedStatement = connection.prepareStatement(SQL_SELECT_USER);
+    public boolean authenticateUser(String login, String password) throws DAOException {
+        connection = pool.createConnection();
+        try {
+            preparedStatement = connection.prepareStatement(SQL_SELECT_USER);
         preparedStatement.setString(1, login);
         preparedStatement.setString(2, password);
         resultSet = preparedStatement.executeQuery();
         boolean check = resultSet.next();
-
         if (preparedStatement != null) {
             preparedStatement.close();
         }
-        if (connection != null) {
-            connection.close();
-        }
         return check;
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage()+e.getSQLState(), e);
+        }finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
 
     }
 
 
-    public String userName(String login, String password) throws SQLException {
+    public String userName(String login, String password) throws DAOException {
         StringBuilder buffer = new StringBuilder();
-        connection = pool.getConnection();
-        preparedStatement = connection.prepareStatement(SQL_SELECT_USER);
+        connection = pool.createConnection();
+        try {
+            preparedStatement = connection.prepareStatement(SQL_SELECT_USER);
         preparedStatement.setString(1, login);
         preparedStatement.setString(2, password);
         resultSet = preparedStatement.executeQuery();
@@ -59,21 +66,25 @@ public class UsersDAO {
         if (preparedStatement != null) {
             preparedStatement.close();
         }
-        if (connection != null) {
-            connection.close();
-        }
-
         return buffer.toString();
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage()+e.getSQLState(), e);
+        }finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
 
     }
 
-    public Person createUser(String userName, String password) throws SQLException {
+    public Person createUser(String userName, String password) throws DAOException {
         Person user;
         String firstName, secondName, cardNumber, email;
         double amount;
 
-        connection = pool.getConnection();
-        preparedStatement = connection.prepareStatement(SQL_SELECT_USER);
+        connection = pool.createConnection();
+        try {
+            preparedStatement = connection.prepareStatement(SQL_SELECT_USER);
         preparedStatement.setString(1, userName);
         preparedStatement.setString(2, password);
         resultSet = preparedStatement.executeQuery();
@@ -98,17 +109,23 @@ public class UsersDAO {
         if (preparedStatement != null) {
             preparedStatement.close();
         }
-        connection.close();
         return user;
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage()+e.getSQLState(),e);
+        }finally {
+            connection.close();
+        }
     }
 
-    public ArrayList<Person> getUsers() throws SQLException {
+    public ArrayList<Person> getUsers() throws DAOException {
         ArrayList<Person> users = new ArrayList<>();
         String username, firstName, secondName, email, password, role;
         Person user;
-        connection = pool.getConnection();
+        connection = pool.createConnection();
         String SQL_SELECT_ALL_USERS = "SELECT * FROM horseraces_db.personal_info WHERE role='u' AND is_banned='0'";
-        Statement statement = connection.prepareStatement(SQL_SELECT_ALL_USERS);
+        Statement statement = null;
+        try {
+            statement = connection.prepareStatement(SQL_SELECT_ALL_USERS);
         resultSet = statement.executeQuery(SQL_SELECT_ALL_USERS);
         while (resultSet.next()) {
             username = resultSet.getString(1);
@@ -124,49 +141,74 @@ public class UsersDAO {
             users.add(user);
         }
         statement.close();
-        if (connection != null) {
-            connection.close();
-        }
         return users;
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage()+e.getSQLState(), e);
+        }finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
-    public boolean banUser(String username) throws SQLException {
-        connection = pool.getConnection();
-        preparedStatement = connection.prepareStatement(SQL_BAN_USER);
+    public boolean banUser(String username) throws DAOException {
+        connection = pool.createConnection();
+        try {
+            preparedStatement = connection.prepareStatement(SQL_BAN_USER);
         preparedStatement.setString(1, username);
         int result = preparedStatement.executeUpdate();
-        preparedStatement.close();
-        if (connection != null) {
-            connection.close();
+        if(preparedStatement!=null) {
+            preparedStatement.close();
         }
         return result != 0;
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage()+e.getSQLState(), e);
+        }finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
-    public boolean makeAdmin(String username) throws SQLException {
-        connection = pool.getConnection();
-        preparedStatement = connection.prepareStatement(SQL_MAKE_ADMIN);
+    public boolean makeAdmin(String username) throws DAOException {
+        connection = pool.createConnection();
+        try {
+            preparedStatement = connection.prepareStatement(SQL_MAKE_ADMIN);
         preparedStatement.setString(1, username);
         int result = preparedStatement.executeUpdate();
         preparedStatement.close();
-        connection.close();
         return result != 0;
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage()+e.getSQLState(), e);
+        }finally {
+            connection.close();
+        }
     }
 
-    public boolean makeBookmaker(String username) throws SQLException {
-        connection = pool.getConnection();
-        preparedStatement = connection.prepareStatement(SQL_MAKE_BOOKMAKER);
-        preparedStatement.setInt(1, IDGenerator.generateID());
+    public boolean makeBookmaker(String username) throws DAOException {
+        connection = pool.createConnection();
+        try {
+            preparedStatement = connection.prepareStatement(SQL_MAKE_BOOKMAKER);
+        preparedStatement.setInt(1, IDGenerator.generateID()+ new Random().nextInt(1000));
         preparedStatement.setString(2, username);
         int result = preparedStatement.executeUpdate();
         preparedStatement.close();
-        connection.close();
         return result != 0;
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage()+e.getSQLState(), e);
+        }finally {
+            if (connection!=null) {
+                connection.close();
+            }
+        }
+
+
     }
 
-    public boolean winningBet(String username, double odd, int horseId, String type) throws SQLException {
-        BetsDAO betsDAO = new BetsDAO();
+    public boolean winningBet(String username, double odd, int horseId, String type) throws DAOException {
+        BetDAO betDAO = new BetDAO();
         Bet bet;
-        bet = betsDAO.getBet(horseId);
+        bet = betDAO.getBet(horseId);
         double win = odd;
         if (Constant.SQL_WINNER_BET.equals(type)) {
             win *= bet.getWinner();
@@ -175,8 +217,9 @@ public class UsersDAO {
         } else {
             win *= bet.getOutsider();
         }
-        connection = pool.getConnection();
-        preparedStatement = connection.prepareStatement(SQL_SELECT_AMOUNT);
+        connection = pool.createConnection();
+        try {
+            preparedStatement = connection.prepareStatement(SQL_SELECT_AMOUNT);
         preparedStatement.setString(1, username);
         resultSet = preparedStatement.executeQuery();
         resultSet.next();
@@ -186,9 +229,13 @@ public class UsersDAO {
         preparedStatement.setString(2, username);
         int result = preparedStatement.executeUpdate();
         preparedStatement.close();
-        if (connection != null) {
-            connection.close();
-        }
         return result > 0;
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage()+e.getSQLState(), e);
+        }finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 }

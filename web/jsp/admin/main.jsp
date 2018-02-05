@@ -25,9 +25,9 @@
 </aside>
 <table class="upperadmin">
     <tr>
-        <td><h2><b>Available races:</b></h2></td>
+        <td><h2><b><fmt:message key="jsp.main.title" bundle="${var}"/></b></h2></td>
         <td>
-            <input class="addRace" type="button" value="Add race" onClick='location.href="/jsp/admin/add_race.jsp"'>
+            <input class="addRace" type="button" value="<fmt:message key="jsp.addrace.title" bundle="${var}"/>" onClick='location.href="/jsp/admin/add_race.jsp"'>
         </td>
     </tr>
 </table>
@@ -35,34 +35,34 @@
 <br/>
 <table class="maintable">
     <tr>
-        <th>Cards</th>
-        <th>Dates</th>
-        <th>Horses</th>
+        <th><fmt:message key="jsp.main.cards" bundle="${var}"/></th>
+        <th><fmt:message key="jsp.main.dates" bundle="${var}"/></th>
+        <th><fmt:message key="jsp.main.horses" bundle="${var}"/></th>
     </tr>
     <c:forEach items="${racesList}" var="race" varStatus="status">
         <tr>
-            <td>${race.getCard()}</td>
-            <td>${race.getDate()}</td>
+            <td>${race.card}</td>
+            <td>${race.date}</td>
             <td>
                 <table class="horsestable">
                     <tr>
-                        <th>Name</th>
-                        <th>Coeffitients</th>
+                        <th><fmt:message key="jsp.mybets.horse" bundle="${var}"/></th>
+                        <th><fmt:message key="jsp.main.coeffs" bundle="${var}"/></th>
                     </tr>
-                    <c:forEach items="${race.getHorses()}" var="horse" varStatus="status">
+                    <c:forEach items="${race.horses}" var="horse" varStatus="status">
                         <tr>
-                            <td>${horse.getName()}</td>
+                            <td>${horse.name}</td>
                             <td>
                                 <table class="betstable">
                                     <tr>
-                                        <th>Winner</th>
-                                        <th>Top 3</th>
-                                        <th>Outsider</th>
+                                        <th><fmt:message key="jsp.main.win" bundle="${var}"/></th>
+                                        <th><fmt:message key="jsp.main.top3" bundle="${var}"/></th>
+                                        <th><fmt:message key="jsp.main.outsider" bundle="${var}"/></th>
                                     </tr>
                                     <tr>
-                                        <td>${horse.getBets().getWinner()}</td>
-                                        <td>${horse.getBets().getTop3()}</td>
-                                        <td>${horse.getBets().getOutsider()}</td>
+                                        <td>${horse.bets.winner}</td>
+                                        <td>${horse.bets.top3}</td>
+                                        <td>${horse.bets.outsider}</td>
                                     </tr>
                                 </table>
                             </td>
@@ -72,17 +72,17 @@
 
             </td>
             <td>
-                <form name="runRaceForm" method="POST" action="/jsp/controller">
+                <form name="runRaceForm" method="POST" action="${pageContext.request.contextPath}/jsp/controller">
                     <input type="hidden" name="command" value="runrace"/>
-                    <input type="hidden" name="race_id" value="${race.getId()}">
-                    <input type="submit" value="Run"/>
+                    <input type="hidden" name="race_id" value="${race.id}">
+                    <input type="submit" value="<fmt:message key="jsp.button.run" bundle="${var}"/>"/>
                 </form>
             </td>
             <td>
-                <form name="deleteRaceForm" method="POST" action="/jsp/controller">
+                <form name="deleteRaceForm" method="POST" action="${pageContext.request.contextPath}/jsp/controller">
                     <input type="hidden" name="command" value="deleterace"/>
-                    <input type="hidden" name="race_id" value="${race.getId()}">
-                    <input type="submit" value="Delete"/>
+                    <input type="hidden" name="race_id" value="${race.id}">
+                    <input type="submit" value="<fmt:message key="jsp.button.delete" bundle="${var}"/>"/>
                 </form>
             </td>
         </tr>

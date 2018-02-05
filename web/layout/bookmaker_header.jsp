@@ -16,14 +16,14 @@
 
             <ul>
                 <li>
-                    <%@include file="../layout/high_menu_bar.jsp" %>
+                    <%@include file="../layout/i18n_bar.jsp" %>
                 </li>
-                <li><span style="color: white; padding-top: 10px"><b>Welcome</b>,<br/> ${user}!</span></li>
-                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/bookmaker/main.jsp" data-scroll>Home</a></li>
-                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/controller?command=bookraces" data-scroll>Book races</a> </li>
-                <li class="menu-item"><a href="<c:url value="/jsp/bookmaker/account_info.jsp"/>" data-scroll>Account</a></li>
+                <li><span style="color: white; padding-top: 10px"><b><fmt:message key="jsp.header.users" bundle="${var}"/></b>,<br/> ${user}!</span></li>
+                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/bookmaker/main.jsp" data-scroll><fmt:message key="jsp.header.home" bundle="${var}"/></a></li>
+                <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/controller?command=bookraces" data-scroll><fmt:message key="jsp.header.book" bundle="${var}"/></a> </li>
+                <li class="menu-item"><a href="<c:url value="/jsp/bookmaker/account_info.jsp"/>" data-scroll><fmt:message key="jsp.header.account" bundle="${var}"/></a></li>
                 <li class="menu-item">
-                    <a href="<c:url value="/jsp/controller?command=logout"/>">Log out</a>
+                    <a href="<c:url value="/jsp/controller?command=logout"/>"><fmt:message key="jsp.header.logout" bundle="${var}"/></a>
                 </li>
             </ul>
         </nav>

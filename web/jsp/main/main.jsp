@@ -24,39 +24,39 @@
 <aside class="placeholder">
 </aside>
 ${betMessage}
-<h2><b>Available races:</b></h2>
+<h2><b><fmt:message key="jsp.main.title" bundle="${var}"/></b></h2>
 <br/>
 <table class="maintable">
 <tr>
-    <th>Cards</th>
-    <th>Dates</th>
-    <th>Horses</th>
-    <th>Make A Bet</th>
+    <th><fmt:message key="jsp.main.cards" bundle="${var}"/></th>
+    <th><fmt:message key="jsp.main.dates" bundle="${var}"/></th>
+    <th><fmt:message key="jsp.main.horses" bundle="${var}"/></th>
+    <th><fmt:message key="jsp.main.makebet" bundle="${var}"/></th>
 </tr>
 <c:forEach items="${racesList}" var="race" varStatus="status">
     <tr>
-    <td>${race.getCard()}</td>
-    <td>${race.getDate()}</td>
+    <td>${race.card}</td>
+    <td>${race.date}</td>
     <td>
     <table class="horsestable">
     <tr>
-    <th>Name</th>
-    <th>Coeffitients</th>
+    <th><fmt:message key="jsp.main.name" bundle="${var}"/></th>
+    <th><fmt:message key="jsp.main.coeffs" bundle="${var}"/></th>
     </tr>
-    <c:forEach items="${race.getHorses()}" var="horse" varStatus="status">
+    <c:forEach items="${race.horses}" var="horse" varStatus="status">
         <tr>
-            <td>${horse.getName()}</td>
+            <td>${horse.name}</td>
             <td>
                 <table class="betstable">
                     <tr>
-                        <th>Winner</th>
-                        <th>Top 3</th>
-                        <th>Outsider</th>
+                        <th><fmt:message key="jsp.main.win" bundle="${var}"/></th>
+                        <th><fmt:message key="jsp.main.top3" bundle="${var}"/></th>
+                        <th><fmt:message key="jsp.main.outsider" bundle="${var}"/></th>
                     </tr>
                     <tr>
-                        <td>${horse.getBets().getWinner()}</td>
-                        <td>${horse.getBets().getTop3()}</td>
-                        <td>${horse.getBets().getOutsider()}</td>
+                        <td>${horse.bets.winner}</td>
+                        <td>${horse.bets.top3}</td>
+                        <td>${horse.bets.outsider}</td>
                     </tr>
                 </table>
             </td>
@@ -66,9 +66,9 @@ ${betMessage}
 
         </td>
         <td>
-            <form name="betForm" method="POST" action="/jsp/controller">
+            <form name="betForm" method="POST" action="${pageContext.request.contextPath}/jsp/controller">
                 <input type="hidden" name="command" value="bet"/>
-                <input type="hidden" name="race_id" value="${race.getId()}">
+                <input type="hidden" name="race_id" value="${race.id}">
                 <input type="submit" value="" class="button"/>
             </form>
         </td>

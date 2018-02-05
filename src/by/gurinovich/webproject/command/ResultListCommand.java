@@ -9,7 +9,7 @@ import by.gurinovich.webproject.util.Constant;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class ResultsCommand implements ActionCommand {
+public class ResultListCommand implements ActionCommand {
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
         Router router = new Router();

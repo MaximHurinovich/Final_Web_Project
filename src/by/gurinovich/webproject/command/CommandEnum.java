@@ -12,7 +12,7 @@ public enum CommandEnum {
         }
     }, MYBETS {
         {
-            this.command = new MyBetsCommand();
+            this.command = new UserBetsCommand();
         }
     }, BANUSER {
         {
@@ -86,6 +86,10 @@ public enum CommandEnum {
         {
             this.command = new BookmakerEditCommand();
         }
+    }, LOCALE{
+        {
+            this.command = new I18nCommand();
+        }
     },LOGIN {
         {
             this.command = new LoginCommand();
@@ -96,7 +100,7 @@ public enum CommandEnum {
         }
     }, RESULTS {
         {
-            this.command = new ResultsCommand();
+            this.command = new ResultListCommand();
         }
     }, SIGNUP {
         {
