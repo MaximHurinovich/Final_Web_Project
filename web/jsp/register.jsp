@@ -31,7 +31,7 @@
 <h4><b><fmt:message key="jsp.register.registration" bundle="${var}"/> </b></h4>
 <hr/>
 <div class="signForm">
-<form name="signForm" method="POST" action="/jsp/controller">
+<form name="signForm" method="POST" action="${pageContext.request.contextPath}/jsp/controller">
     <input type="hidden" name="command" value="signup"/>
     <fmt:message key="jsp.register.firstname" bundle="${var}"/><br/>
     <label class="first_name">
