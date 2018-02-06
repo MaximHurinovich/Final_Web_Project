@@ -9,16 +9,19 @@ import by.gurinovich.webproject.exception.DAOException;
 import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.util.Validator;
-
-import java.sql.SQLException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 
 public class DefaultLogic {
+
+    private final static Logger LOGGER = LogManager.getLogger(DefaultLogic.class);
     public boolean checkLogin(String enterLogin, String enterPass) throws LogicalException {
         UserDAO dao = new UserDAO();
         try {
             return dao.authenticateUser(enterLogin, enterPass);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
     }
@@ -30,6 +33,7 @@ public class DefaultLogic {
             username = dao.userName(login, password);
             return username;
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
     }
@@ -41,20 +45,27 @@ public class DefaultLogic {
             user = dao.createUser(login, password);
             return user;
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
     }
 
     public boolean checkRegistration(String firstName, String secondName, String userName, String password, String email, String cardNumber, String cardPassword) throws LogicalException {
         RegistrationDAO dao = new RegistrationDAO();
+        boolean check = true;
+        Validator validator = new Validator();
+        if (!validator.checkString(firstName, Validator.NAME_REGEX) || !validator.checkString(secondName, Validator.NAME_REGEX)||
+                !validator.checkString(userName, Validator.USERNAME_REGEX) || !validator.checkString(password, Validator.PASSWORD_REGEX)||
+                !validator.checkString(email, Validator.EMAIL_REGEX) || !validator.checkString(cardNumber, Validator.CARD_REGEX)){
+            check = false;
+        }
         try {
-            if (dao.checkCard(cardNumber, cardPassword) && dao.checkUserName(userName)) {
-                return dao.registerUser(firstName, secondName, userName, password, email, cardNumber, cardPassword);
-            }
+            return dao.checkCard(cardNumber, cardPassword) && dao.checkUserName(userName) && check
+                    && dao.registerUser(firstName, secondName, userName, password, email, cardNumber, cardPassword);
         } catch (DAOException e){
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
-        return false;
     }
 
     public ArrayList<Race> getRaces() throws LogicalException {
@@ -64,6 +75,7 @@ public class DefaultLogic {
             races = dao.getRaces();
             return races;
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
     }
@@ -75,6 +87,7 @@ public class DefaultLogic {
             users = dao.getUsers();
             return users;
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
     }

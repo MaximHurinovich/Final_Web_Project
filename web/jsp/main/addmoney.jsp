@@ -57,7 +57,7 @@
             </td>
             <td>
                     <input type="hidden" name="command" value="acceptadd">
-                    <input type="submit" value="<fmt:message key="jsp.button.add" bundle="${var}"/>">
+                    <input type="submit" value="<fmt:message key="jsp.button.add" bundle="${var}"/>" pattern="^\d+|\d+.?d+$">
 
             </td>
             <td>
@@ -79,7 +79,7 @@
             </td>
             <td>
                 <input type="hidden" name="command" value="returnmoney">
-                <input type="submit" value="<fmt:message key="jsp.button.return" bundle="${var}"/>">
+                <input type="submit" value="<fmt:message key="jsp.button.return" bundle="${var}"/>" pattern="^\d+|\d+.?d?$>
             </td>
         </tr>
     </table>

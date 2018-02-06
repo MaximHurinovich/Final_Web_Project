@@ -26,11 +26,11 @@
 <label style="background-color: antiquewhite">
     <input type="hidden" name="command" value="acceptedit">
     <b><fmt:message key="jsp.register.firstname" bundle="${var}"/></b><br/>
-    <input type="text" name="firstname" value="<%out.print(((User) request.getSession().getAttribute("userfull")).getFirstName());%>"><br/>
+    <input type="text" name="firstname" value="<%out.print(((User) request.getSession().getAttribute("userfull")).getFirstName());%>" required><br/>
     <b><fmt:message key="jsp.register.secondname" bundle="${var}"/></b><br/>
-    <input type="text" name="secondname" value="<%out.print(((User) request.getSession().getAttribute("userfull")).getSecondName());%>"><br/>
+    <input type="text" name="secondname" value="<%out.print(((User) request.getSession().getAttribute("userfull")).getSecondName());%>" required><br/>
     <b><fmt:message key="jsp.register.email" bundle="${var}"/></b><br/>
-    <input type="text" name="email" value="<%out.print(((User) request.getSession().getAttribute("userfull")).getEmail());%>"><br/>
+    <input type="text" name="email" value="<%out.print(((User) request.getSession().getAttribute("userfull")).getEmail());%>" required><br/>
     <input type="hidden" name="cardnumber" value="<%out.print(((User) request.getSession().getAttribute("userfull")).getCardNumber());%>"><br/>
 </label>
     <input type="submit" value="<fmt:message key="jsp.button.submit" bundle="${var}"/>">

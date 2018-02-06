@@ -3,10 +3,8 @@ package by.gurinovich.webproject.dao;
 import by.gurinovich.webproject.entity.Horse;
 import by.gurinovich.webproject.entity.Race;
 import by.gurinovich.webproject.exception.DAOException;
-import by.gurinovich.webproject.util.IDGenerator;
 import by.gurinovich.webproject.pool.ConnectionPool;
 import by.gurinovich.webproject.pool.ProxyConnection;
-import by.gurinovich.webproject.util.Validator;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -154,10 +152,8 @@ public class RaceDAO {
     }
 
     public int addNewRace(String card, String date) throws DAOException {
-        Validator validator = new Validator();
-        if (!validator.checkString(date, Validator.DATE_REGEX)) {
-            return 0;
-        }
+        String newDate = date.replace('.', '-');
+        date = newDate + ":00";
         connection = pool.createConnection();
         PreparedStatement preparedStatement;
         try {
@@ -186,7 +182,7 @@ public class RaceDAO {
 
     public int addResults(Race race) throws DAOException {
         connection = pool.createConnection();
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_PREVIOUS_ID_RESULTS);
         resultSet = preparedStatement.executeQuery();

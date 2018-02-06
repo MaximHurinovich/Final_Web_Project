@@ -3,7 +3,6 @@ package by.gurinovich.webproject.command;
 import by.gurinovich.webproject.entity.Horse;
 import by.gurinovich.webproject.entity.Race;
 import by.gurinovich.webproject.exception.CommandException;
-import by.gurinovich.webproject.logic.BookmakerLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;

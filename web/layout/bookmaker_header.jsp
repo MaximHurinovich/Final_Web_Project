@@ -18,7 +18,7 @@
                 <li>
                     <%@include file="../layout/i18n_bar.jsp" %>
                 </li>
-                <li><span style="color: white; padding-top: 10px"><b><fmt:message key="jsp.header.users" bundle="${var}"/></b>,<br/> ${user}!</span></li>
+                <li><span style="color: white; padding-top: 10px"><b><fmt:message key="jsp.header.welcome" bundle="${var}"/></b>,<br/> ${user}!</span></li>
                 <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/bookmaker/main.jsp" data-scroll><fmt:message key="jsp.header.home" bundle="${var}"/></a></li>
                 <li class="menu-item"><a href="${pageContext.request.contextPath}/jsp/controller?command=bookraces" data-scroll><fmt:message key="jsp.header.book" bundle="${var}"/></a> </li>
                 <li class="menu-item"><a href="<c:url value="/jsp/bookmaker/account_info.jsp"/>" data-scroll><fmt:message key="jsp.header.account" bundle="${var}"/></a></li>

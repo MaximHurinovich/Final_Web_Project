@@ -1,8 +1,6 @@
-
-
-
 package by.gurinovich.webproject.filter;
 
+import by.gurinovich.webproject.entity.Person;
 import by.gurinovich.webproject.util.Constant;
 
 import javax.servlet.*;
@@ -12,9 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/jsp/main/*", "/jsp/admin/*", "/jsp/bookmaker/*"},
+@WebFilter(urlPatterns = {"/jsp/admin/*"},
         initParams = {@WebInitParam(name = "INDEX_PATH", value = "/index.jsp")})
-public class PageRedirectSecurityFilter implements Filter{
+public class PageRedirectAdminSecurityFilter implements Filter{
     private String indexPath;
 
     public void init(FilterConfig fConfig) throws ServletException {
@@ -25,7 +23,7 @@ public class PageRedirectSecurityFilter implements Filter{
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        if (httpRequest.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)==null) {
+        if (httpRequest.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)==null || !"a".equals(((Person)httpRequest.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).getRole())) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPath);
         }else{
             chain.doFilter(request, response);

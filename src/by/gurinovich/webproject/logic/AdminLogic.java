@@ -10,18 +10,21 @@ import by.gurinovich.webproject.entity.Race;
 import by.gurinovich.webproject.exception.DAOException;
 import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.util.Constant;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
 public class AdminLogic {
-
+    private final static Logger LOGGER = LogManager.getLogger(AdminLogic.class);
     public boolean deleteRace(int id) throws LogicalException {
         RaceDAO dao = new RaceDAO();
         try {
             return dao.deleteRace(id);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
     }
@@ -31,6 +34,7 @@ public class AdminLogic {
         try {
             return dao.banUser(username);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage());
         }
     }
@@ -40,6 +44,7 @@ public class AdminLogic {
         try {
             return dao.makeAdmin(username);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage());
         }
     }
@@ -49,6 +54,7 @@ public class AdminLogic {
         try {
             return dao.makeBookmaker(username);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage());
         }
     }
@@ -60,6 +66,7 @@ public class AdminLogic {
         try {
             raceID = raceDAO.addNewRace(card, date);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage());
 
         }
@@ -69,6 +76,7 @@ public class AdminLogic {
         try {
             return horseDAO.addHorses(raceID, horses);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage());
 
         }
@@ -79,16 +87,18 @@ public class AdminLogic {
         HorseDAO horseDAO = new HorseDAO();
         UserDAO userDAO = new UserDAO();
         RaceDAO raceDAO = new RaceDAO();
-        ArrayList<Odd> raceOdds = new ArrayList<>();
+        ArrayList<Odd> raceOdds;
         try {
             raceOdds = betDAO.getOdds(raceId);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage());
         }
         ArrayList<Horse> horses;
         try {
             horses = horseDAO.getHorses(raceId);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage());
         }
         ArrayList<Integer> places = new ArrayList<>();
@@ -108,7 +118,7 @@ public class AdminLogic {
                         odd.setSuccess(true);
                     } else if (Constant.SQL_TOP3_BET.equals(odd.getType()) && horse.getPlace() >= 1 && horse.getPlace() <= 3) {
                         odd.setSuccess(true);
-                    } else if (Constant.SQL_OUTSIDER_BET.equals(odd.getType()) && horse.getPlace() == horses.size() - 1) {
+                    } else if (Constant.SQL_OUTSIDER_BET.equals(odd.getType()) && horse.getPlace() == horses.size()) {
                         odd.setSuccess(true);
                     }
                 }
@@ -117,6 +127,7 @@ public class AdminLogic {
                 try {
                     userDAO.winningBet(odd.getUsername(), odd.getOdd(), odd.getHorseId(), odd.getType());
                 } catch (DAOException e) {
+                    LOGGER.error(e.getMessage(), e);
                     throw new LogicalException(e.getMessage());
                 }
             }
@@ -127,17 +138,20 @@ public class AdminLogic {
             race = raceDAO.getRace(raceId, true);
             resultId = raceDAO.addResults(race);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage());
         }
         try {
             horseDAO.addResultHorses(horses, resultId);
             betDAO.updateOdds(raceOdds, raceId, resultId);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage());
         }
         try {
             return raceDAO.deleteRace(raceId);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage());
         }
     }
@@ -148,6 +162,7 @@ public class AdminLogic {
         try {
             odds = dao.getOdds();
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage());
         }
         return odds;

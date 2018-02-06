@@ -6,11 +6,13 @@ import by.gurinovich.webproject.exception.DAOException;
 import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.util.Validator;
-
-import java.sql.SQLException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 
 public class UserLogic {
+
+    private final static Logger LOGGER = LogManager.getLogger(UserLogic.class);
 
     public Race getRace(int id) throws LogicalException {
         RaceDAO dao = new RaceDAO();
@@ -18,6 +20,7 @@ public class UserLogic {
         try {
             race = dao.getRace(id, true);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
         return race;
@@ -29,6 +32,7 @@ public class UserLogic {
         try {
             horses = dao.getHorses(raceId);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
         return horses;
@@ -42,6 +46,7 @@ public class UserLogic {
         try {
             return dao.addNewBet(username, raceId, horseId, betType, amount);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
     }
@@ -53,6 +58,7 @@ public class UserLogic {
                 return dao.updateAccountBet(username, amount, bet);
             }
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
         return false;
@@ -67,6 +73,7 @@ public class UserLogic {
         try {
             return checkMoney(amount, cardAmount) && dao.updateCardToAccount(cardNumber, cardAmount, amount, currentAmount);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
     }
@@ -76,6 +83,7 @@ public class UserLogic {
         try {
             return checkMoney(amount, currentAmount) && dao.updateAccountToCard(cardNumber, cardAmount, amount, currentAmount);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
     }
@@ -86,6 +94,7 @@ public class UserLogic {
         try {
             amount = dao.getAccountAmount(cardNumber);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
         return amount;
@@ -97,6 +106,7 @@ public class UserLogic {
         try {
             amount = dao.getCardAmount(cardNumber);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
         return amount;
@@ -124,6 +134,7 @@ public class UserLogic {
         try {
             return dao.updateProfile(userName, firstName, secondName, email, cardNumber);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
     }
@@ -135,6 +146,7 @@ public class UserLogic {
         try {
             odds = dao.getOdds(username);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
         ArrayList<Odd> out = new ArrayList<>();
@@ -153,6 +165,7 @@ public class UserLogic {
         try {
             odds = dao.getOdds(username);
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
         ArrayList<Odd> out = new ArrayList<>();
@@ -171,6 +184,7 @@ public class UserLogic {
         try {
             results = dao.getResults();
         } catch (DAOException e) {
+            LOGGER.error(e.getMessage(), e);
             throw new LogicalException(e.getMessage(), e);
         }
         return results;

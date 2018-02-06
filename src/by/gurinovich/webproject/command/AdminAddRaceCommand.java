@@ -9,7 +9,6 @@ import by.gurinovich.webproject.servlet.Router;
 import by.gurinovich.webproject.util.Constant;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class AdminAddRaceCommand implements ActionCommand {
@@ -22,8 +21,8 @@ public class AdminAddRaceCommand implements ActionCommand {
         String date = request.getParameter(Constant.PARAM_NAME_DATE);
         HashSet<String> horses;
         horses = (HashSet<String>) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_HORSES);
-        if (card == null || date == null || horses.isEmpty()) {
-            request.setAttribute(Constant.ATTRIBUTE_ADD_RACE_MESSAGE, MessageManager.getProperty("message.wrongaction"));
+        if (card == null || date == null || horses.size() < 4) {
+            request.setAttribute(Constant.ATTRIBUTE_ADD_RACE_MESSAGE, MessageManager.getProperty("message.infoerror"));
             router.setPage(ConfigurationManager.getProperty("path.page.admin.addrace"));
             return router;
         } else try {
@@ -39,7 +38,6 @@ public class AdminAddRaceCommand implements ActionCommand {
             }
         } catch (LogicalException e) {
             throw new CommandException(e.getMessage());
-
         }
 
     }

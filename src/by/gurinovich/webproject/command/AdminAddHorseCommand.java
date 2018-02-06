@@ -1,6 +1,5 @@
 package by.gurinovich.webproject.command;
 
-import by.gurinovich.webproject.entity.Horse;
 import by.gurinovich.webproject.exception.CommandException;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
@@ -8,9 +7,7 @@ import by.gurinovich.webproject.servlet.Router;
 import by.gurinovich.webproject.util.Constant;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 public class AdminAddHorseCommand implements ActionCommand {
 

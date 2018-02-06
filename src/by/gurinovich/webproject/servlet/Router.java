@@ -15,7 +15,7 @@ public class Router {
         this.page = page;
     }
 
-    public RouteType getRoute() {
+    RouteType getRoute() {
         return route;
     }
 

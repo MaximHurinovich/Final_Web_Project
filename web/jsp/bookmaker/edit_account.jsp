@@ -27,11 +27,11 @@
     <label style="background-color: antiquewhite">
         <input type="hidden" name="command" value="bookmaker_edit">
         <b><fmt:message key="jsp.register.firstname" bundle="${var}"/></b><br/>
-        <input type="text" name="firstname" value="<%out.print(((Bookmaker) request.getSession().getAttribute("userfull")).getFirstName());%>"><br/>
+        <input type="text" name="firstname" value="<%out.print(((Bookmaker) request.getSession().getAttribute("userfull")).getFirstName());%>" required><br/>
         <b><fmt:message key="jsp.accountinfo.secondname" bundle="${var}"/></b><br/>
-        <input type="text" name="secondname" value="<%out.print(((Bookmaker) request.getSession().getAttribute("userfull")).getSecondName());%>"><br/>
+        <input type="text" name="secondname" value="<%out.print(((Bookmaker) request.getSession().getAttribute("userfull")).getSecondName());%>" required><br/>
         <b><fmt:message key="jsp.register.email" bundle="${var}"/></b><br/>
-        <input type="text" name="email" value="<%out.print(((Bookmaker) request.getSession().getAttribute("userfull")).getEmail());%>"><br/>
+        <input type="text" name="email" value="<%out.print(((Bookmaker) request.getSession().getAttribute("userfull")).getEmail());%>" required><br/>
     </label>
     <input type="submit" value="<fmt:message key="jsp.button.submit" bundle="${var}"/>">
 </form><br/>

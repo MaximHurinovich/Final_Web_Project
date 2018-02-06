@@ -6,14 +6,20 @@ import by.gurinovich.webproject.servlet.Router;
 import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class I18nCommand implements ActionCommand {
+
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private static final String REG_EX_JSP = "/jsp.+";
     private static final String PARAM_CHANGE_LANGUAGE = "changeLanguage";
     private static final String PARAM_PAGE_PATH = "pagePath";
 
     @Override
     public Router execute(HttpServletRequest request) throws CommandException{
+        LOGGER.info("lkjhgf");
         Router router = new Router();
         if (request.getSession().getAttribute(PARAM_CHANGE_LANGUAGE) == null){
             request.getSession().setAttribute(PARAM_CHANGE_LANGUAGE , "ru");

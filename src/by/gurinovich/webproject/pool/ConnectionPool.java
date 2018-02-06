@@ -1,5 +1,8 @@
 package by.gurinovich.webproject.pool;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -7,6 +10,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool {
+
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
+
     private ArrayBlockingQueue<ProxyConnection> connectionQueue;
     private final int POOL_SIZE = 20;
     private static AtomicBoolean instanceCreated = new AtomicBoolean();
@@ -35,7 +41,7 @@ public class ConnectionPool {
                 connectionQueue.offer(connection);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage()+ e.getSQLState(), e);
         }
     }
 
@@ -47,7 +53,7 @@ public class ConnectionPool {
                 connectionQueue.put(connection);
             }
         } catch (InterruptedException | SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
 
 
@@ -59,7 +65,7 @@ public class ConnectionPool {
         try {
             connection = connectionQueue.take();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
         return connection;
     }
@@ -72,13 +78,13 @@ public class ConnectionPool {
                 connection = connectionQueue.take();
                 connection.closeConnection();
             } catch (InterruptedException | SQLException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
             }
         }
         try {
             DriverManager.deregisterDriver(new com.mysql.jdbc.Driver());
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
     }
 }

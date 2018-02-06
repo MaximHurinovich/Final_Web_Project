@@ -1,6 +1,5 @@
 package by.gurinovich.webproject.command;
 
-import by.gurinovich.webproject.entity.Admin;
 import by.gurinovich.webproject.entity.Bookmaker;
 import by.gurinovich.webproject.exception.CommandException;
 import by.gurinovich.webproject.exception.LogicalException;

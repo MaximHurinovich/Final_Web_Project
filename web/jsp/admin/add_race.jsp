@@ -46,7 +46,7 @@ ${addRaceMessage}
             <th><fmt:message key="jsp.main.cards" bundle="${var}"/></th>
             <td>
                 <label>
-                    <input type="text" name="card" value="">
+                    <input type="text" name="card" value="" required>
                 </label>
             </td>
         </tr>
@@ -54,7 +54,7 @@ ${addRaceMessage}
             <th><fmt:message key="jsp.main.dates" bundle="${var}"/></th>
             <td>
                 <label class="dateForm">
-                    <input type="text" name="date" value="">
+                    <input type="datetime-local" name="date" value="" required>
                 </label>
             </td>
         </tr>

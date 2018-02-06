@@ -30,25 +30,25 @@ public class Controller extends HttpServlet {
 
         ActionFactory client = new ActionFactory();
         try {
-        ActionCommand command = client.defineCommand(request);
-        Router router;
+            ActionCommand command = client.defineCommand(request);
+            Router router;
             router = command.execute(request);
 
-        if (router.getPage() != null) {
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(router.getPage());
-            if (router.getRoute() == Router.RouteType.FORWARD) {
-                dispatcher.forward(request, response);
+            if (router.getPage() != null) {
+                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(router.getPage());
+                if (router.getRoute() == Router.RouteType.FORWARD) {
+                    dispatcher.forward(request, response);
+                } else {
+                    response.sendRedirect(request.getContextPath() + router.getPage());
+                }
             } else {
-                response.sendRedirect(request.getContextPath() + router.getPage());
+                page = ConfigurationManager.getProperty("path.page.index");
+                request.getSession().setAttribute(Constant.ATTRIBUTE_NULL_PAGE, MessageManager.getProperty("message.nullpage"));
+                response.sendRedirect(request.getContextPath() + page);
             }
-        } else {
-            page = ConfigurationManager.getProperty("path.page.index");
-            request.getSession().setAttribute(Constant.ATTRIBUTE_NULL_PAGE, MessageManager.getProperty("message.nullpage"));
-            response.sendRedirect(request.getContextPath() + page);
-        }
         } catch (CommandException e) {
             page = ConfigurationManager.getProperty("path.page.error");
-            request.getSession().setAttribute(Constant.ATTRIBUTE_NULL_PAGE, MessageManager.getProperty("message.nullpage"));
-            response.sendRedirect(request.getContextPath() + page);}
+            response.sendRedirect(request.getContextPath() + page);
+        }
     }
 }

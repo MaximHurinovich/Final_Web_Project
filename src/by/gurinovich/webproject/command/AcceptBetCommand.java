@@ -9,6 +9,7 @@ import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
 import by.gurinovich.webproject.util.Constant;
+import by.gurinovich.webproject.util.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -28,7 +29,9 @@ public class AcceptBetCommand implements ActionCommand {
             router.setPage(ConfigurationManager.getProperty("path.page.bet"));
             return router;
         }
-        Double amount = Double.valueOf(amountParameter);
+        Double amount = null;
+        if(amountParameter.matches(Validator.DIGITS_REGEX))
+            amount = Double.valueOf(amountParameter);
 
         Integer raceId = (Integer) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_RACE_ID);
         ArrayList<Horse> horses;
@@ -46,8 +49,11 @@ public class AcceptBetCommand implements ActionCommand {
         }
         User user = (User) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER);
         try {
-            if (userLogic.addNewBet(user.getUsername(), raceId, horse_id, bet, amount) && userLogic.updateAccountBet(user.getUsername(), user.getAmount(), amount)) {
+            if (amount!=null && userLogic.addNewBet(user.getUsername(), raceId, horse_id, bet, amount) && userLogic.updateAccountBet(user.getUsername(), user.getAmount(), amount)) {
                 request.setAttribute(Constant.ATTRIBUTE_BET_MESSAGE, MessageManager.getProperty("message.betsuccess"));
+                double current = user.getAmount();
+                user.setAmount(current - amount);
+                request.setAttribute(Constant.ATTRIBUTE_NAME_USER, user);
                 router.setPage(ConfigurationManager.getProperty("path.page.main"));
                 router.setRoute(Router.RouteType.REDIRECT);
                 return router;

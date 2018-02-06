@@ -4,7 +4,6 @@ package by.gurinovich.webproject.command;
 import by.gurinovich.webproject.exception.CommandException;
 import by.gurinovich.webproject.exception.LogicalException;
 import by.gurinovich.webproject.logic.DefaultLogic;
-import by.gurinovich.webproject.logic.UserLogic;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
