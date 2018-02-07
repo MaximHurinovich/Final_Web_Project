@@ -10,10 +10,13 @@ import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
 import by.gurinovich.webproject.util.Constant;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class AcceptBookRaceCommand implements ActionCommand {
+    private final static Logger LOGGER = LogManager.getLogger(AcceptBookRaceCommand.class);
 
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
@@ -54,6 +57,7 @@ public class AcceptBookRaceCommand implements ActionCommand {
             if(logic.setBets(race, winBets, top3Bets, outsiderBets, bookmakerID)){
                 request.setAttribute(Constant.ATTRIBUTE_BOOKMAKER_MESSAGE, MessageManager.getProperty("message.betsuccess"));
                 request.setAttribute(Constant.ATTRIBUTE_NAME_RACES_LIST, new DefaultLogic().getRaces());
+                LOGGER.info("race with id" + race.getId() + " booked.");
                 router.setPage(ConfigurationManager.getProperty("path.page.bookmaker.main"));
             }
         } catch (LogicalException e) {

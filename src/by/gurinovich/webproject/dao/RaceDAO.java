@@ -68,7 +68,7 @@ public class RaceDAO {
         ArrayList<Race> races = new ArrayList<>();
         Race race;
         connection = pool.createConnection();
-        Statement statement = null;
+        Statement statement;
         try {
             statement = connection.prepareStatement(SQL_SELECT_RACE);
 
@@ -94,7 +94,7 @@ public class RaceDAO {
     }
 
     public Race getRace(int id, boolean isActive) throws DAOException {
-        Race race = null;
+        Race race;
         PreparedStatement preparedStatement;
         connection = pool.createConnection();
         try {
@@ -114,7 +114,7 @@ public class RaceDAO {
             return race;
         } catch (SQLException e) {
             throw new DAOException(e.getMessage() + e.getSQLState(), e);
-        }finally {
+        } finally {
             if (connection != null)
                 connection.close();
         }
@@ -125,29 +125,36 @@ public class RaceDAO {
         connection = pool.createConnection();
         HorseDAO dao = new HorseDAO();
         ArrayList<Horse> horses = dao.getHorses(id);
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
+            connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(SQL_DELETE_BETS);
-        for (Horse horse : horses) {
-            preparedStatement.setInt(1, horse.getHorseId());
+            for (Horse horse : horses) {
+                preparedStatement.setInt(1, horse.getHorseId());
+                preparedStatement.executeUpdate();
+            }
+            preparedStatement = connection.prepareStatement(SQL_DELETE_ACTIVE_HORSES);
+            preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-        }
-        preparedStatement = connection.prepareStatement(SQL_DELETE_ACTIVE_HORSES);
-        preparedStatement.setInt(1, id);
-        preparedStatement.executeUpdate();
-        preparedStatement = connection.prepareStatement(SQL_DELETE_ACTIVE_RACE);
-        preparedStatement.setInt(1, id);
-        if (preparedStatement.executeUpdate() == 0) {
-            check = false;
-        }
-        preparedStatement.close();
-        return check;
+            preparedStatement = connection.prepareStatement(SQL_DELETE_ACTIVE_RACE);
+            preparedStatement.setInt(1, id);
+            if (preparedStatement.executeUpdate() == 0) {
+                check = false;
+            }
+            connection.commit();
+            preparedStatement.close();
+            return check;
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage()+e.getSQLState(), e);
-        }finally {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                throw new DAOException(e1.getMessage() + e1.getSQLState(), e1);
+            }
+            throw new DAOException(e.getMessage() + e.getSQLState(), e);
+        } finally {
             if (connection != null) {
                 connection.close();
-             }
+            }
         }
     }
 
@@ -158,23 +165,23 @@ public class RaceDAO {
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_PREVIOUS_ID_HORSE);
-        ResultSet resultSet =  preparedStatement.executeQuery();
-        resultSet.next();
-        int raceId = resultSet.getInt(1)+1;
-        preparedStatement = connection.prepareStatement(SQL_ADD_RACE);
-        preparedStatement.setInt(1, raceId);
-        preparedStatement.setString(2, card);
-        preparedStatement.setString(3, date);
-        int result = preparedStatement.executeUpdate();
-        preparedStatement.close();
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            int raceId = resultSet.getInt(1) + 1;
+            preparedStatement = connection.prepareStatement(SQL_ADD_RACE);
+            preparedStatement.setInt(1, raceId);
+            preparedStatement.setString(2, card);
+            preparedStatement.setString(3, date);
+            int result = preparedStatement.executeUpdate();
+            preparedStatement.close();
             if (result > 0)
                 return raceId;
             else {
                 throw new SQLException();
             }
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage()+e.getSQLState(), e);
-        }finally {
+            throw new DAOException(e.getMessage() + e.getSQLState(), e);
+        } finally {
             if (connection != null)
                 connection.close();
         }
@@ -185,23 +192,23 @@ public class RaceDAO {
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_PREVIOUS_ID_RESULTS);
-        resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        int resultId = resultSet.getInt(1) + 1;
-        preparedStatement = connection.prepareStatement(SQL_ADD_RESULT_RACE);
-        preparedStatement.setInt(1, resultId);
-        preparedStatement.setString(2, race.getCard());
-        preparedStatement.setString(3, race.getDate());
-        int result = preparedStatement.executeUpdate();
-        if (result > 0) {
-            return resultId;
-        } else {
-            throw new SQLException();
-        }
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            int resultId = resultSet.getInt(1) + 1;
+            preparedStatement = connection.prepareStatement(SQL_ADD_RESULT_RACE);
+            preparedStatement.setInt(1, resultId);
+            preparedStatement.setString(2, race.getCard());
+            preparedStatement.setString(3, race.getDate());
+            int result = preparedStatement.executeUpdate();
+            if (result > 0) {
+                return resultId;
+            } else {
+                throw new SQLException();
+            }
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage()+e.getSQLState(), e);
-        }finally {
-            if(connection!=null){
+            throw new DAOException(e.getMessage() + e.getSQLState(), e);
+        } finally {
+            if (connection != null) {
                 connection.close();
             }
         }

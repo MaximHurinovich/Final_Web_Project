@@ -8,12 +8,15 @@ import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
 import by.gurinovich.webproject.util.Constant;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 public class AdminDeleteRaceCommand implements ActionCommand {
     private AdminLogic adminLogic = new AdminLogic();
+    private final static Logger LOGGER = LogManager.getLogger(AdminDeleteRaceCommand.class);
 
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
@@ -33,6 +36,7 @@ public class AdminDeleteRaceCommand implements ActionCommand {
                     races.remove(race);
                 }
             }
+            LOGGER.info("race #" + id + " deleted");
             request.getSession().setAttribute(Constant.ATTRIBUTE_NAME_RACES_LIST, races);
             router.setRoute(Router.RouteType.REDIRECT);
         } else {

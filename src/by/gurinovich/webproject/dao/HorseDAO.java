@@ -23,39 +23,39 @@ public class HorseDAO {
     private ConnectionPool pool = ConnectionPool.getInstance();
 
     public ArrayList<Horse> getHorses(int race) throws DAOException {
-        ArrayList<Horse> horses= new ArrayList<>();
+        ArrayList<Horse> horses = new ArrayList<>();
         Horse horse;
         connection = pool.createConnection();
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(SQL_SELECT_HORSES);
-        statement.setString(1, String.valueOf(race));
-        ResultSet resultSet = statement.executeQuery();
-        BetDAO betDAO = new BetDAO();
-        ArrayList<Bet> bets = betDAO.getBets();
-        int i = 0;
-        while(resultSet.next()) {
-            Bet temp = null;
-            for(Bet bet: bets){
-                if (bet.getHorseID()==resultSet.getInt(1)){
-                    temp = bet;
-                    break;
+            statement.setString(1, String.valueOf(race));
+            ResultSet resultSet = statement.executeQuery();
+            BetDAO betDAO = new BetDAO();
+            ArrayList<Bet> bets = betDAO.getBets();
+            int i = 0;
+            while (resultSet.next()) {
+                Bet temp = null;
+                for (Bet bet : bets) {
+                    if (bet.getHorseID() == resultSet.getInt(1)) {
+                        temp = bet;
+                        break;
+                    }
                 }
+                if (temp == null) {
+                    return null;
+                }
+                horse = new Horse(resultSet.getInt(2), resultSet.getString(3), temp);
+                horse.setHorseId(resultSet.getInt(1));
+                horses.add(horse);
+                i++;
             }
-            if(temp==null){
-                return null;
-            }
-            horse = new Horse(resultSet.getInt(2), resultSet.getString(3), temp);
-            horse.setHorseId(resultSet.getInt(1));
-            horses.add(horse);
-            i++;
-        }
-        statement.close();
-        return horses;
+            statement.close();
+            return horses;
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage()+e.getSQLState(), e);
-        }finally {
-            if(connection!=null)
+            throw new DAOException(e.getMessage() + e.getSQLState(), e);
+        } finally {
+            if (connection != null)
                 connection.close();
         }
     }
@@ -64,37 +64,35 @@ public class HorseDAO {
         ArrayList<Horse> horses = new ArrayList<>();
         Horse horse;
         connection = pool.createConnection();
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         try {
             statement = connection.prepareStatement(SQL_SELECT_HORSES);
-        statement.setString(1, String.valueOf(race));
-        ResultSet resultSet = statement.executeQuery();
-        BetDAO betDAO = new BetDAO();
-        ArrayList<Bet> bets = betDAO.getBets();
-        int i = 0;
-        while(resultSet.next()) {
-            Bet temp = null;
-            for(Bet bet: bets){
-                if (bet.getHorseID()==resultSet.getInt(1)){
-                    temp = bet;
-                    break;
+            statement.setString(1, String.valueOf(race));
+            ResultSet resultSet = statement.executeQuery();
+            BetDAO betDAO = new BetDAO();
+            ArrayList<Bet> bets = betDAO.getBets();
+            while (resultSet.next()) {
+                Bet temp = null;
+                for (Bet bet : bets) {
+                    if (bet.getHorseID() == resultSet.getInt(1)) {
+                        temp = bet;
+                        break;
+                    }
+                }
+                if (temp == null) {
+                    horse = new Horse(resultSet.getInt(2), resultSet.getString(3), null);
+                    horse.setHorseId(resultSet.getInt(1));
+                    horses.add(horse);
+                } else {
+                    return null;
                 }
             }
-            if(temp==null){
-                horse = new Horse(resultSet.getInt(2), resultSet.getString(3), temp);
-                horse.setHorseId(resultSet.getInt(1));
-                horses.add(horse);
-                i++;
-            }else{
-                return null;
-            }
-        }
-        statement.close();
-        return horses;
+            statement.close();
+            return horses;
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage()+e.getSQLState(), e);
-        }finally {
-            if(connection!=null)
+            throw new DAOException(e.getMessage() + e.getSQLState(), e);
+        } finally {
+            if (connection != null)
                 connection.close();
         }
 
@@ -102,47 +100,48 @@ public class HorseDAO {
 
     public boolean addHorses(int raceId, HashSet<String> names) throws DAOException {
         connection = pool.createConnection();
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_PREVIOUS_ID_HORSE);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             int horseId = resultSet.getInt(1);
             preparedStatement = connection.prepareStatement(SQL_ADD_HORSES);
-        preparedStatement.setInt(2, raceId);
-        int result = 0;
-        for(String name: names){
-            preparedStatement.setInt(1, ++horseId);
-            preparedStatement.setString(3, name);
-            result = preparedStatement.executeUpdate();
-        }
-        preparedStatement.close();
-            return result>0;
+            preparedStatement.setInt(2, raceId);
+            int result = 0;
+            for (String name : names) {
+                preparedStatement.setInt(1, ++horseId);
+                preparedStatement.setString(3, name);
+                result = preparedStatement.executeUpdate();
+            }
+            preparedStatement.close();
+            return result > 0;
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage()+e.getSQLState(), e);
-        }finally {
-            connection.close();
+            throw new DAOException(e.getMessage() + e.getSQLState(), e);
+        } finally {
+            if (connection != null)
+                connection.close();
         }
     }
 
     public void addResultHorses(ArrayList<Horse> horses, int resultId) throws DAOException {
         connection = pool.createConnection();
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_ADD_RESULT_HORSES);
-        preparedStatement.setInt(3, resultId);
-        int result = 0;
-        for(Horse horse: horses){
-            preparedStatement.setInt(1, horse.getHorseId());
-            preparedStatement.setString(2, horse.getName());
-            preparedStatement.setInt(4, horse.getPlace());
-            result = preparedStatement.executeUpdate();
-        }
-        preparedStatement.close();
+            preparedStatement.setInt(3, resultId);
+            for (Horse horse : horses) {
+                preparedStatement.setInt(1, horse.getHorseId());
+                preparedStatement.setString(2, horse.getName());
+                preparedStatement.setInt(4, horse.getPlace());
+                preparedStatement.executeUpdate();
+            }
+            preparedStatement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage()+e.getSQLState(), e);
-        }finally {
-            connection.close();
+            throw new DAOException(e.getMessage() + e.getSQLState(), e);
+        } finally {
+            if (connection != null)
+                connection.close();
         }
 
     }

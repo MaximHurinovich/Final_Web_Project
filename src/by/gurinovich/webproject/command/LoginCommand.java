@@ -25,7 +25,6 @@ public class LoginCommand implements ActionCommand {
         String pass = request.getParameter(Constant.PARAM_NAME_PASSWORD);
         try {
             if (logic.checkLogin(login, pass)) {
-                LOGGER.info(login + " entered account");
                 request.getSession().setAttribute(Constant.ATTRIBUTE_USER_NAME, logic.userName(login, pass));
                 request.getSession().setAttribute(Constant.ATTRIBUTE_NAME_RACES_LIST, logic.getRaces());
 
@@ -35,6 +34,7 @@ public class LoginCommand implements ActionCommand {
                     router.setPage(ConfigurationManager.getProperty("path.page.login"));
                     return router;
                 }
+                LOGGER.info(login + " entered account");
                 request.getSession().setAttribute(Constant.ATTRIBUTE_NAME_USER, user);
                 if (Constant.BOOKMAKER_ROLE.equals(user.getRole()))
                     page = ConfigurationManager.getProperty("path.page.bookmaker.main");

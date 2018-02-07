@@ -8,10 +8,13 @@ import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
 import by.gurinovich.webproject.util.Constant;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class AcceptEditCommand implements ActionCommand {
+    private final static Logger LOGGER = LogManager.getLogger(AcceptEditCommand.class);
 
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
@@ -30,6 +33,7 @@ public class AcceptEditCommand implements ActionCommand {
                     ((User) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setSecondName(secondName);
                     ((User) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setEmail(email);
                     ((User) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setCardNumber(cardNumber);
+                    LOGGER.info(firstName + " " + secondName + "updated account");
                     page = ConfigurationManager.getProperty("path.page.account");
                     router.setPage(page);
                 } else {

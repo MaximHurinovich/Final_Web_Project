@@ -27,18 +27,18 @@ public class CardDAO {
         connection = pool.createConnection();
         try {
             preparedStatement = connection.prepareStatement(SQL_SELECT_PROFILE_AMOUNT);
-        preparedStatement.setString(1, cardNumber);
-        resultSet = preparedStatement.executeQuery();
+            preparedStatement.setString(1, cardNumber);
+            resultSet = preparedStatement.executeQuery();
 
-        resultSet.last();
-        amount = resultSet.getDouble(1);
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        return amount;
+            resultSet.last();
+            amount = resultSet.getDouble(1);
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            return amount;
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage()+e.getSQLState(), e);
-        }finally {
+            throw new DAOException(e.getMessage() + e.getSQLState(), e);
+        } finally {
             if (connection != null)
                 connection.close();
         }
@@ -49,18 +49,18 @@ public class CardDAO {
         connection = pool.createConnection();
         try {
             preparedStatement = connection.prepareStatement(SQL_SELECT_CARD);
-        preparedStatement.setString(1, cardNumber);
-        resultSet = preparedStatement.executeQuery();
+            preparedStatement.setString(1, cardNumber);
+            resultSet = preparedStatement.executeQuery();
 
-        resultSet.next();
-        amount = resultSet.getDouble(1);
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        return amount;
+            resultSet.next();
+            amount = resultSet.getDouble(1);
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            return amount;
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage()+e.getSQLState(), e);
-        }finally {
+            throw new DAOException(e.getMessage() + e.getSQLState(), e);
+        } finally {
             if (connection != null)
                 connection.close();
         }
@@ -70,21 +70,28 @@ public class CardDAO {
     public boolean updateCardToAccount(String cardNumber, double amount, double sum, double accountSum) throws DAOException {
         connection = pool.createConnection();
         try {
+            connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(SQL_UPDATE_MONEY_CARD);
-        preparedStatement.setDouble(1, amount - sum);
-        preparedStatement.setString(2, cardNumber);
-        int i = preparedStatement.executeUpdate();
-        preparedStatement = connection.prepareStatement(SQL_UPDATE_MONEY_PROFILE);
-        preparedStatement.setDouble(1, accountSum + sum);
-        preparedStatement.setString(2, cardNumber);
-        int y = preparedStatement.executeUpdate();
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        return i > 0 && y > 0;
+            preparedStatement.setDouble(1, amount - sum);
+            preparedStatement.setString(2, cardNumber);
+            int i = preparedStatement.executeUpdate();
+            preparedStatement = connection.prepareStatement(SQL_UPDATE_MONEY_PROFILE);
+            preparedStatement.setDouble(1, accountSum + sum);
+            preparedStatement.setString(2, cardNumber);
+            int y = preparedStatement.executeUpdate();
+            connection.commit();
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            return i > 0 && y > 0;
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage()+e.getSQLState(), e);
-        }finally {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                throw new DAOException(e1.getMessage() + e1.getSQLState(), e);
+            }
+            throw new DAOException(e.getMessage() + e.getSQLState(), e);
+        } finally {
             if (connection != null) {
                 connection.close();
             }
@@ -100,14 +107,14 @@ public class CardDAO {
         connection = pool.createConnection();
         try {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_MONEY_BET);
-        preparedStatement.setDouble(1, currentAmount - bet);
-        preparedStatement.setString(2, userName);
-        int i = preparedStatement.executeUpdate();
-        preparedStatement.close();
-        return i > 0;
+            preparedStatement.setDouble(1, currentAmount - bet);
+            preparedStatement.setString(2, userName);
+            int i = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return i > 0;
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage()+e.getSQLState(), e);
-        }finally {
+            throw new DAOException(e.getMessage() + e.getSQLState(), e);
+        } finally {
             if (connection != null)
                 connection.close();
         }

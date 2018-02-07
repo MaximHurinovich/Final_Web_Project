@@ -16,7 +16,7 @@ public class UserLogic {
 
     public Race getRace(int id) throws LogicalException {
         RaceDAO dao = new RaceDAO();
-        Race race = null;
+        Race race;
         try {
             race = dao.getRace(id, true);
         } catch (DAOException e) {

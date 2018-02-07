@@ -8,11 +8,13 @@ import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
 import by.gurinovich.webproject.util.Constant;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class ReturnMoneyCommand implements ActionCommand {
-
+    private static final Logger LOGGER = LogManager.getLogger(ReturnMoneyCommand.class);
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
         Router router = new Router();
@@ -30,6 +32,7 @@ public class ReturnMoneyCommand implements ActionCommand {
                     user.getCardNumber())) {
                 user.setAmount(logic.getAccountAmount(user.getCardNumber()));
                 request.getSession().setAttribute(Constant.ATTRIBUTE_NAME_USER, user);
+                LOGGER.info(user.getUsername() + " returned money to card.");
                 router.setPage(ConfigurationManager.getProperty("path.page.account"));
                 router.setRoute(Router.RouteType.REDIRECT);
             } else {

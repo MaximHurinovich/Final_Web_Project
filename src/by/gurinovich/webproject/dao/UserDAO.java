@@ -12,18 +12,21 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class UserDAO {
-    private final String SQL_SELECT_USER =
+    private final static String SQL_SELECT_USER =
             "SELECT * FROM horseraces_db.personal_info WHERE username =? AND password =?";
-    private final String SQL_SELECT_AMOUNT =
+    private final static String SQL_SELECT_AMOUNT =
             "SELECT amount FROM horseraces_db.personal_info WHERE username =?";
-    private final String SQL_BAN_USER =
+    private final static String SQL_BAN_USER =
             "UPDATE horseraces_db.personal_info SET is_banned='1' WHERE username =?";
-    private final String SQL_MAKE_ADMIN =
+    private final static String SQL_MAKE_ADMIN =
             "UPDATE horseraces_db.personal_info SET role='a',id_card=NULL,amount=NULL WHERE username=?";
-    private final String SQL_MAKE_BOOKMAKER =
+    private final static  String SQL_MAKE_BOOKMAKER =
             "UPDATE horseraces_db.personal_info SET role='b',id_card=NULL,amount=NULL,id_bookmaker=? WHERE username=?";
-    private final String SQL_USER_WIN =
+    private final static  String SQL_USER_WIN =
             "UPDATE horseraces_db.personal_info SET amount=ROUND(?,2) WHERE username =?";
+    private final static String SQL_SELECT_ALL_USERS =
+            "SELECT * FROM horseraces_db.personal_info WHERE role='u' AND is_banned='0'";
+
     private ProxyConnection connection = null;
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet;
@@ -122,8 +125,7 @@ public class UserDAO {
         String username, firstName, secondName, email, password, role;
         Person user;
         connection = pool.createConnection();
-        String SQL_SELECT_ALL_USERS = "SELECT * FROM horseraces_db.personal_info WHERE role='u' AND is_banned='0'";
-        Statement statement = null;
+        PreparedStatement statement;
         try {
             statement = connection.prepareStatement(SQL_SELECT_ALL_USERS);
         resultSet = statement.executeQuery(SQL_SELECT_ALL_USERS);
@@ -205,7 +207,7 @@ public class UserDAO {
 
     }
 
-    public boolean winningBet(String username, double odd, int horseId, String type) throws DAOException {
+    public void winningBet(String username, double odd, int horseId, String type) throws DAOException {
         BetDAO betDAO = new BetDAO();
         Bet bet;
         bet = betDAO.getBet(horseId);
@@ -227,9 +229,8 @@ public class UserDAO {
         preparedStatement = connection.prepareStatement(SQL_USER_WIN);
         preparedStatement.setDouble(1, currentAmount + win);
         preparedStatement.setString(2, username);
-        int result = preparedStatement.executeUpdate();
+        preparedStatement.executeUpdate();
         preparedStatement.close();
-        return result > 0;
         } catch (SQLException e) {
             throw new DAOException(e.getMessage()+e.getSQLState(), e);
         }finally {

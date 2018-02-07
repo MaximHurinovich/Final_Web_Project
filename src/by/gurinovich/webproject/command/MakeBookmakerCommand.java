@@ -8,11 +8,15 @@ import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
 import by.gurinovich.webproject.util.Constant;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 public class MakeBookmakerCommand implements ActionCommand {
+    private static final Logger LOGGER = LogManager.getLogger(MakeBookmakerCommand.class);
+
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
         AdminLogic logic = new AdminLogic();
@@ -27,6 +31,7 @@ public class MakeBookmakerCommand implements ActionCommand {
                         break;
                     }
                 }
+                LOGGER.info(username + " is bookmaker now");
                 request.getSession().setAttribute(Constant.ATTRIBUTE_NAME_USER_LIST, users);
             } else {
                 request.setAttribute(Constant.ATTRIBUTE_ADMIN_MESSAGE, MessageManager.getProperty("message.unknowncommand"));

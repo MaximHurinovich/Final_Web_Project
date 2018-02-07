@@ -35,7 +35,7 @@ public class AdminLogic {
             return dao.banUser(username);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new LogicalException(e.getMessage());
+            throw new LogicalException(e.getMessage(), e);
         }
     }
 
@@ -45,7 +45,7 @@ public class AdminLogic {
             return dao.makeAdmin(username);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new LogicalException(e.getMessage());
+            throw new LogicalException(e.getMessage(), e);
         }
     }
 
@@ -55,19 +55,19 @@ public class AdminLogic {
             return dao.makeBookmaker(username);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new LogicalException(e.getMessage());
+            throw new LogicalException(e.getMessage(), e);
         }
     }
 
     public boolean addNewRace(String card, String date, HashSet<String> horses) throws LogicalException {
         RaceDAO raceDAO = new RaceDAO();
         HorseDAO horseDAO = new HorseDAO();
-        int raceID = 0;
+        int raceID;
         try {
             raceID = raceDAO.addNewRace(card, date);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new LogicalException(e.getMessage());
+            throw new LogicalException(e.getMessage(), e);
 
         }
         if (raceID == 0) {
@@ -77,7 +77,7 @@ public class AdminLogic {
             return horseDAO.addHorses(raceID, horses);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new LogicalException(e.getMessage());
+            throw new LogicalException(e.getMessage(), e);
 
         }
     }
@@ -92,14 +92,14 @@ public class AdminLogic {
             raceOdds = betDAO.getOdds(raceId);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new LogicalException(e.getMessage());
+            throw new LogicalException(e.getMessage(), e);
         }
         ArrayList<Horse> horses;
         try {
             horses = horseDAO.getHorses(raceId);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new LogicalException(e.getMessage());
+            throw new LogicalException(e.getMessage(), e);
         }
         ArrayList<Integer> places = new ArrayList<>();
         for (int i = 0; i < horses.size(); i++) {
@@ -128,7 +128,7 @@ public class AdminLogic {
                     userDAO.winningBet(odd.getUsername(), odd.getOdd(), odd.getHorseId(), odd.getType());
                 } catch (DAOException e) {
                     LOGGER.error(e.getMessage(), e);
-                    throw new LogicalException(e.getMessage());
+                    throw new LogicalException(e.getMessage(), e);
                 }
             }
         }
@@ -139,20 +139,20 @@ public class AdminLogic {
             resultId = raceDAO.addResults(race);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new LogicalException(e.getMessage());
+            throw new LogicalException(e.getMessage(), e);
         }
         try {
             horseDAO.addResultHorses(horses, resultId);
             betDAO.updateOdds(raceOdds, raceId, resultId);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new LogicalException(e.getMessage());
+            throw new LogicalException(e.getMessage(), e);
         }
         try {
             return raceDAO.deleteRace(raceId);
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new LogicalException(e.getMessage());
+            throw new LogicalException(e.getMessage(), e);
         }
     }
 
@@ -163,7 +163,7 @@ public class AdminLogic {
             odds = dao.getOdds();
         } catch (DAOException e) {
             LOGGER.error(e.getMessage(), e);
-            throw new LogicalException(e.getMessage());
+            throw new LogicalException(e.getMessage(), e);
         }
         return odds;
     }

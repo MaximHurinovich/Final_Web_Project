@@ -13,22 +13,19 @@ public class EditDAO {
     private ConnectionPool pool = ConnectionPool.getInstance();
 
     public boolean updateProfile(String userName, String firstName, String secondName, String email, String cardNumber) throws DAOException {
-        ProxyConnection connection = pool.createConnection();
         PreparedStatement preparedStatement = null;
-        try {
+        try (ProxyConnection connection = pool.createConnection()) {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_PROFILE);
-        preparedStatement.setString(1, firstName);
-        preparedStatement.setString(2, secondName);
-        preparedStatement.setString(3, email);
-        preparedStatement.setString(4, cardNumber);
-        preparedStatement.setString(5, userName);
-        int i = preparedStatement.executeUpdate();
-        preparedStatement.close();
-        return i > 0;
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, secondName);
+            preparedStatement.setString(3, email);
+            preparedStatement.setString(4, cardNumber);
+            preparedStatement.setString(5, userName);
+            int i = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return i > 0;
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage()+e.getSQLState(), e);
-        }finally {
-            connection.close();
+            throw new DAOException(e.getMessage() + e.getSQLState(), e);
         }
     }
 }

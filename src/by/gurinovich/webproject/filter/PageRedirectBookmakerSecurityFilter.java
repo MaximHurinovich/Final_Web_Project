@@ -23,7 +23,8 @@ public class PageRedirectBookmakerSecurityFilter implements Filter{
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        if (httpRequest.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)==null || !"b".equals(((Person)httpRequest.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).getRole())) {
+        if (httpRequest.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)==null ||
+                !Constant.BOOKMAKER_ROLE.equals(((Person)httpRequest.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).getRole())) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPath);
         }else{
             chain.doFilter(request, response);

@@ -10,11 +10,14 @@ import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
 import by.gurinovich.webproject.util.Constant;
 import by.gurinovich.webproject.util.Validator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 public class AcceptBetCommand implements ActionCommand {
+    private final static Logger LOGGER = LogManager.getLogger(AcceptBetCommand.class);
 
 
     @Override
@@ -54,6 +57,7 @@ public class AcceptBetCommand implements ActionCommand {
                 double current = user.getAmount();
                 user.setAmount(current - amount);
                 request.setAttribute(Constant.ATTRIBUTE_NAME_USER, user);
+                LOGGER.info("bet added by" + user.getUsername());
                 router.setPage(ConfigurationManager.getProperty("path.page.main"));
                 router.setRoute(Router.RouteType.REDIRECT);
                 return router;

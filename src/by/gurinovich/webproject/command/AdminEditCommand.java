@@ -8,10 +8,14 @@ import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
 import by.gurinovich.webproject.util.Constant;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class AdminEditCommand implements ActionCommand {
+    private final static Logger LOGGER = LogManager.getLogger(AdminEditCommand.class);
+
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
         Router router = new Router();
@@ -28,6 +32,7 @@ public class AdminEditCommand implements ActionCommand {
                     ((Admin) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setFirstName(firstName);
                     ((Admin) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setSecondName(secondName);
                     ((Admin) request.getSession().getAttribute(Constant.ATTRIBUTE_NAME_USER)).setEmail(email);
+                    LOGGER.info(firstName + " " + secondName + " updated profile");
                     page = ConfigurationManager.getProperty("path.page.admin.accountinfo");
                     router.setPage(page);
                 } else {

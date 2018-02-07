@@ -45,4 +45,10 @@ public class ValidatorTest {
         boolean cardNumber = validator.checkString(user.getCardNumber(), Validator.CARD_REGEX);
         Assert.assertTrue(cardNumber);
     }
+
+    @Test
+    public void passwordTest(){
+        boolean password = validator.checkString(user.getPassword(), Validator.PASSWORD_REGEX);
+        Assert.assertTrue(password);
+    }
 }

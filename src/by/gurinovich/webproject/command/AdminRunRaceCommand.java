@@ -8,10 +8,14 @@ import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.resource.MessageManager;
 import by.gurinovich.webproject.servlet.Router;
 import by.gurinovich.webproject.util.Constant;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class AdminRunRaceCommand implements ActionCommand {
+    private final static Logger LOGGER = LogManager.getLogger(AdminRunRaceCommand.class);
+
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
         Router router = new Router();
@@ -27,6 +31,7 @@ public class AdminRunRaceCommand implements ActionCommand {
             if (logic.runRace(raceId)) {
                 request.getSession().setAttribute(Constant.ATTRIBUTE_NAME_RACES_LIST, defaultLogic.getRaces());
                 request.getSession().setAttribute(Constant.ATTRIBUTE_ADMIN_MESSAGE, MessageManager.getProperty("message.racesuccess"));
+                LOGGER.info("race #" + raceId + " started");
                 router.setPage(ConfigurationManager.getProperty("path.page.admin.main"));
                 router.setRoute(Router.RouteType.REDIRECT);
             } else {

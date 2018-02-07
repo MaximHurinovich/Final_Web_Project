@@ -3,10 +3,13 @@ package by.gurinovich.webproject.command;
 import by.gurinovich.webproject.exception.CommandException;
 import by.gurinovich.webproject.resource.ConfigurationManager;
 import by.gurinovich.webproject.servlet.Router;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class LogoutCommand implements ActionCommand {
+
     @Override
     public Router execute(HttpServletRequest request) throws CommandException{
         Router router = new Router();

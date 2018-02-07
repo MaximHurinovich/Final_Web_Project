@@ -40,7 +40,7 @@ public class BetDAO {
         ArrayList<Bet> bets = new ArrayList<>();
         Bet bet;
         connection = pool.createConnection();
-        Statement statement = null;
+        Statement statement;
         try {
             statement = connection.prepareStatement(SQL_SELECT_BETS);
         resultSet = statement.executeQuery(SQL_SELECT_BETS);
@@ -171,7 +171,7 @@ public class BetDAO {
         RaceDAO dao = new RaceDAO();
         PreparedStatement preparedStatement;
         connection = pool.createConnection();
-        Statement statement = null;
+        Statement statement;
         try {
             statement = connection.prepareStatement(SQL_SELECT_USER_ODDS);
         resultSet = statement.executeQuery(SQL_SELECT_USER_ODDS);
@@ -201,7 +201,7 @@ public class BetDAO {
 
     public boolean addNewBet(String username, int raceId, int horseId, String betType, double amount) throws DAOException {
         connection = pool.createConnection();
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_ADD_BET);
         preparedStatement.setString(1, username);
@@ -221,22 +221,20 @@ public class BetDAO {
 
     }
 
-    public boolean updateOdds(ArrayList<Odd> odds, int raceID, int resultID) throws DAOException {
+    public void updateOdds(ArrayList<Odd> odds, int raceID, int resultID) throws DAOException {
         connection = pool.createConnection();
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_ODDS);
-        int result = 0;
         for (Odd odd : odds) {
             preparedStatement.setString(1, odd.isSuccess() ? "true" : "false");
             preparedStatement.setInt(2, resultID);
             preparedStatement.setInt(3, raceID);
             preparedStatement.setInt(4, odd.getHorseId());
             preparedStatement.setString(5, odd.getType());
-            result = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         }
         preparedStatement.close();
-        return result > 0;
         } catch (SQLException e) {
             throw new DAOException(e.getMessage()+e.getSQLState(), e);
         }finally {
